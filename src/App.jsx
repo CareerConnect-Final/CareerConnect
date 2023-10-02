@@ -15,13 +15,14 @@ import Profile from "./pages/profile/Profile";
 import "./style.scss";
 import { useContext } from "react";
 import { DarkModeContext } from "./context/darkModeContext";
-import { AuthContext } from "./context/authContext";
+import { AuthContext } from "./context/auth/authContext";
+import LoginPage from "./pages/loginPage/loginPage";
 
 function App() {
-  const {currentUser} = useContext(AuthContext);
-
+  const { currentUser } = useContext(AuthContext);
+  const { isLoggedIn } = useContext(AuthContext);
   const { darkMode } = useContext(DarkModeContext);
-
+  console.log(isLoggedIn);
   const Layout = () => {
     return (
       <div className={`theme-${darkMode ? "dark" : "light"}`}>
@@ -66,11 +67,11 @@ function App() {
     },
     {
       path: "/login",
-      element: <Login />,
+      element: <LoginPage />,
     },
     {
       path: "/register",
-      element: <Register />,
+      element: <LoginPage />,
     },
   ]);
 
