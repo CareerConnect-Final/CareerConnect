@@ -1,6 +1,9 @@
 import { createContext, useEffect, useState } from "react";
-
 export const AuthContext = createContext();
+
+import cookie from "react-cookies";
+const userAPI= "https://final-backend-nvf1.onrender.com/profile"
+const userPostsAPI= "https://final-backend-nvf1.onrender.com/home/userposts/2"
 
 export const AuthContextProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(

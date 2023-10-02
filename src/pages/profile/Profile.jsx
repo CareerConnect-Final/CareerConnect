@@ -9,8 +9,21 @@ import LanguageIcon from "@mui/icons-material/Language";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Posts from "../../components/posts/Posts"
-
+import { useEffect } from "react";
+import axios from "axios";
+const userAPI= "https://final-backend-nvf1.onrender.com/profile"
+// const userPostsAPI= "https://final-backend-nvf1.onrender.com/home/userposts/2"
+const userPostsAPI= "https://final-backend-nvf1.onrender.com/api/v1/users/2/posts"
 const Profile = () => {
+
+  useEffect(()=>{
+    axios.get(userPostsAPI)
+    .then((result)=>{
+      console.log(result.data)
+      console.log("hello")
+    })
+  },[])
+
   return (
     <div className="profile">
       <div className="images">
