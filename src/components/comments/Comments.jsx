@@ -1,46 +1,62 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import "./comments.scss";
 import { AuthContext } from "../../context/auth/authContext";
+import { StateContext } from "../../context/state";
 
-const Comments = () => {
-  const { currentUser } = useContext(AuthContext);
-  console.log("----------->", currentUser);
-  //Temporary
-  const comments = [
-    {
-      id: 1,
-      desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem nequeaspernatur ullam aperiam. Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem nequeaspernatur ullam aperiam",
-      name: "John Doe",
-      userId: 1,
-      profilePicture:
-        "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    },
-    {
-      id: 2,
-      desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem nequeaspernatur ullam aperiam",
-      name: "Jane Doe",
-      userId: 2,
-      profilePicture:
-        "https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg?auto=compress&cs=tinysrgb&w=1600",
-    },
-  ];
+import cookie from "react-cookies";
+
+import axios from "axios";
+const Comments = (props) => {
+  const user = cookie.load("user");
+
+  const newComments = useContext(StateContext);
+
+  const [newComment, setNewComment] = useState("");
+  console.log(props.id);
+  const addNewComment = () => {
+    console.log("HELLO");
+    const obj = {
+      profilePicture: user.profilePicture,
+      user_id: user.id,
+      post_id: props.id,
+      content: newComment,
+    };
+    axios
+      .post("https://final-backend-nvf1.onrender.com/api/v1/comments", obj)
+      .then((data) => {
+        setNewComment("");
+        newComments.addComment(data.data);
+      })
+      .catch((error) => {
+        console.error("Error creating post:", error);
+      });
+  };
   return (
     <div className="comments">
       <div className="write">
-        <img src={currentUser.profilePic} alt="" />
-        <input type="text" placeholder="write a comment" />
-        <button>Send</button>
+        <img src={user.profilePicture} alt="" />
+        <input
+          type="text"
+          placeholder="write a comment"
+          value={newComment}
+          onChange={(e) => setNewComment(e.target.value)}
+        />
+        <button onClick={addNewComment}>Send</button>
       </div>
-      {comments.map((comment) => (
-        <div className="comment">
-          <img src={comment.profilePicture} alt="" />
-          <div className="info">
-            <span>{comment.name}</span>
-            <p>{comment.desc}</p>
-          </div>
-          <span className="date">1 hour ago</span>
-        </div>
-      ))}
+      {props.comments.map((comment, idx) => {
+        if (comment.post_id === props.id) {
+          return (
+            <div className="comment" key={idx}>
+              <img src={comment.profilePicture} alt="" />
+              <div className="info">
+                <span>{comment.username}</span>
+                <p>{comment.content}</p>
+              </div>
+              <span className="date">1 hour ago</span>
+            </div>
+          );
+        }
+      })}
     </div>
   );
 };
