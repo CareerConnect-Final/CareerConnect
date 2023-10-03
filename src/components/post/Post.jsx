@@ -10,7 +10,11 @@ import { useState, useContext } from "react";
 import axios from "axios";
 import { StateContext } from "../../context/state";
 import PostModal from "../postModal/PostModal";
+import cookie from "react-cookies";
+
 const Post = (props) => {
+  const user=cookie.load("user")
+
   const deletePost = useContext(StateContext);
   const [commentOpen, setCommentOpen] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
@@ -48,9 +52,10 @@ const Post = (props) => {
       <div className="container">
         <div className="user">
           <div className="userInfo">
+           
             <img
               src={
-                "https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg?auto=compress&cs=tinysrgb&w=1600"
+                props.post.profilePicture
               }
               alt=""
             />
@@ -64,7 +69,7 @@ const Post = (props) => {
               <span className="date">1 min ago</span>
             </div>
           </div>
-          {props.post.user_id === 2 && (
+          {props.post.user_id ===user.id && (
             <div className="menu-container">
               <MoreHorizIcon onClick={toggleMenu} />
               {showMenu && (
