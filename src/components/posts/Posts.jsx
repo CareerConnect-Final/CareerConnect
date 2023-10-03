@@ -2,9 +2,14 @@ import Post from "../post/Post";
 import "./posts.scss";
 import { useContext } from "react";
 import { StateContext } from "../../context/state";
-
+// import { useContext, useEffect ,useState} from "react";
 const Posts = () => {
+
+
+
+
   const state=useContext(StateContext)
+  // const[userPosts,setUserPosts]=use
   const posts = [
     {
       id: 1,
@@ -29,12 +34,11 @@ const Posts = () => {
   //   {posts.map(post=>(
   //     <Post post={post} key={post.id}/>
   //   ))}
-  console.log(props.userPosts)
+  // console.log(props.userPosts)
   return <div className="posts">
-    {props.userPosts.map(post=>(
-      <Post  post={post} key={post.id}/>
-    // {state.posts.map(post=>(
-    //   <Post post={post} key={post.id}/>
+
+     {state.posts.map(post=>(
+      <Post post={post} key={post.id}/>
     ))}
   </div>;
 };

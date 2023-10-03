@@ -10,7 +10,7 @@ import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Posts from "../../components/posts/Posts"
 import { useContext, useEffect ,useState} from "react";
-
+import Post from "../../components/post/Post";
 const userAPI= "https://final-backend-nvf1.onrender.com/profile"
 const userPostsAPI= "https://final-backend-nvf1.onrender.com/home/userposts/2"
 // const userPostsAPI= "https://final-backend-nvf1.onrender.com/api/v1/users/2/posts"
@@ -108,8 +108,14 @@ const Profile = () => {
               < MoreVertIcon />
               </div> */}
         </div>
-      <Posts currentUser={currentUser} userPosts={userPosts}  check="userposts"/>
-      </div>
+      {/* <Posts  check="userposts"/> */}
+    
+    {userPosts.map(post=>(
+      <Post  post={post} key={post.id}/>
+
+    ))}
+  </div>;
+      
     </div>
   );
 };
