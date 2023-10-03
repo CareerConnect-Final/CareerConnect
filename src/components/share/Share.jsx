@@ -7,14 +7,18 @@ import { AuthContext } from "../../context/auth/authContext";
 import { StateContext } from "../../context/state";
 import { useState } from "react";
 import axios from "axios";
+import cookie from "react-cookies";
+
 const Share = () => {
   const newPost = useContext(StateContext);
   const [postContent, setPostContent] = useState("");
+ const user=cookie.load("user")
   const handleAdd = () => {
     const obj = {
-      user_id: 3,
-      username: "majd",
+      user_id: user.id,
+      username: user.firstName,
       content: postContent,
+      profilePicture:user.profilePicture
     };
 
     axios
@@ -33,7 +37,7 @@ const Share = () => {
     <div className="share">
       <div className="container">
         <div className="top">
-          <img src={currentUser.profilePic} alt="" />
+          <img src={user.profilePicture} alt="" />
           <input
             type="text"
             placeholder={`What's on your mind ${currentUser.name}?`}
@@ -47,7 +51,7 @@ const Share = () => {
             <input type="file" id="file" style={{ display: "none" }} />
             <label htmlFor="file">
               <div className="item">
-                <img src={Image} alt="" />
+                <img src={user.profilePicture} alt="" />
                 <span>Add Image</span>
               </div>
             </label>
