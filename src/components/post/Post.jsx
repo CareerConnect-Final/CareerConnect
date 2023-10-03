@@ -15,16 +15,20 @@ import cookie from "react-cookies";
 const Post = (props) => {
   const user=cookie.load("user")
 
-  const deletePost = useContext(StateContext);
+  const state = useContext(StateContext);
+  const [counter,setCounter]=useState(0)
   const [commentOpen, setCommentOpen] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
   // const [remove, setRemove]= useState('')
-
+  const commentCount = state.comments.filter(comment => comment.post_id === props.post.id).length;
   // console.log(props.post.user_id);
   // console.log(remove)
   //TEMPORARY
+  // let counter=0
+  //  const newArr=state.comments.filter((item)=>item.post_id==props.post.id)
+  //  counter=newArr.length
   const liked = false;
   const toggleMenu = () => {
     setShowMenu(!showMenu);
@@ -41,7 +45,7 @@ const Post = (props) => {
     axios
       .delete(`https://final-backend-nvf1.onrender.com/api/v1/posts/${id}`)
       .then(() => {
-        deletePost.deletePost(id);
+        state.deletePost(id);
       })
       .catch((error) => {
         console.error("Error", error);
@@ -110,7 +114,15 @@ const Post = (props) => {
           </div>
           <div className="item" onClick={() => setCommentOpen(!commentOpen)}>
             <TextsmsOutlinedIcon />
-            12 Comments
+           {/* {state.comments.map((comment,idx)=>{
+            if(comment.post_id===props.post.id){
+              return(
+                 setCounter(counter+1)
+               )
+            }
+       
+           })} */}
+       {commentCount}
           </div>
           <div className="item">
             <ShareOutlinedIcon />
@@ -118,7 +130,7 @@ const Post = (props) => {
           </div>
         </div>
         {/* {console.log(commentOpen)} */}
-        {commentOpen && <Comments />}
+        {commentOpen && <Comments comments={state.comments} id={props.post.id}/>}
         {showModal && (
   <PostModal
   id={props.post.id}

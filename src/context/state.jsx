@@ -6,6 +6,7 @@ export const StateContext = React.createContext();
 
 export default function State(props) {
   const [posts, setPosts] = useState([]);
+  const [comments, setComments] = useState([]);
   const [userData, setUserData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -35,29 +36,40 @@ export default function State(props) {
 
 
     }
+    if(authToken===null){
+      throw new Error("Authentication token not found.");
+
+    }else if(authToken!=null){
+      
+
+      const headers = {
+        Authorization: `Bearer ${authToken}`,
+      };
+
+      axios
+        .get("https://final-backend-nvf1.onrender.com/home/comments", { headers })
+        .then((response) => {
+        
+
+          setComments(response.data);
+        })
+        .catch((error) => {
+          setError(error);
+        });
+
+
+    }
    
   }, []);
-  // useEffect(() => {
-  //   if (!authToken) {
-  //     throw new Error("Authentication token not found.");
-  //   }
-  //   const headers = {
-  //     Authorization: `Bearer ${authToken}`,
-  //   };
 
-  //   axios
-  //     .get("https://final-backend-nvf1.onrender.com/home/users", { headers })
-  //     .then((response) => {
-  //       setUserData(response.data);
-  //     })
-  //     .catch((error) => {
-  //       setError(error);
-  //     });
-  // }, []);
 
   const addPost = (newPost) => {
     setPosts([newPost, ...posts]);
   };
+  const addComment = (newComment) => {
+    setComments([newComment, ...comments]);
+  };
+
   
   const editPost = (editedPost) => {
     setPosts((prevPosts) => {
@@ -73,14 +85,14 @@ export default function State(props) {
     let newPosts = state.posts.filter((item) => item.id != id);
     setPosts(newPosts);
   };
-// console.log(userData)
+
   const state = {
     posts: posts,
-    // userData:userData,
-    // comments: [],
+    comments: comments,
     addPost: addPost,
     deletePost: deletePost,
     editPost: editPost,
+    addComment:addComment
   };
 
   return (
