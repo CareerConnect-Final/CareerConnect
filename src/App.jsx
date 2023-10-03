@@ -25,6 +25,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 
 import { AuthContext } from "./context/auth/authContext";
 import LoginPage from "./pages/loginPage/loginPage";
+import CVForm from "./components/CVForm/CVForm"
 
 function App() {
   const state = useContext(StateContext);
@@ -71,6 +72,10 @@ function App() {
         {
           path: "/profile/:id",
           element: <Profile />,
+        },
+        {
+          path: "/generate-cv",
+          element: <CVForm />, 
         },
       ],
     },
