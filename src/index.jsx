@@ -10,10 +10,12 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <DarkModeContextProvider>
-      <AuthContextProvider>
+      {/* <AuthContextProvider> */}
+       <AuthProvider>
+       <StateContext> <App /></StateContext>
+       </AuthProvider>
        
-        <StateContext> <App /></StateContext>
-      </AuthContextProvider>
+      {/* </AuthContextProvider> */}
       {/* <AuthProvider>
         <App />
       </AuthProvider> */}

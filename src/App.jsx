@@ -15,7 +15,7 @@ import Profile from "./pages/profile/Profile";
 import "./style.scss";
 import { useContext } from "react";
 import { DarkModeContext } from "./context/darkModeContext";
-import { AuthContext } from "./context/authContext";
+// import { AuthContext } from "./context/authContext";
 import { StateContext } from "./context/state";
 import 'bootstrap/dist/css/bootstrap.min.css'
 
@@ -31,7 +31,7 @@ function App() {
   const { currentUser } = useContext(AuthContext);
   const { isLoggedIn } = useContext(AuthContext);
   const { darkMode } = useContext(DarkModeContext);
-  console.log(isLoggedIn);
+  // console.log(isLoggedIn);
   const Layout = () => {
     return (
       <div className={`theme-${darkMode ? "dark" : "light"}`}>
