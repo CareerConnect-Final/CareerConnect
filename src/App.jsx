@@ -17,6 +17,7 @@ import { useContext } from "react";
 import { DarkModeContext } from "./context/darkModeContext";
 import { AuthContext } from "./context/auth/authContext";
 import LoginPage from "./pages/loginPage/loginPage";
+import CVForm from "./components/CVForm/CVForm"
 
 function App() {
   const { currentUser } = useContext(AuthContext);
@@ -62,6 +63,10 @@ function App() {
         {
           path: "/profile/:id",
           element: <Profile />,
+        },
+        {
+          path: "/generate-cv",
+          element: <CVForm />, 
         },
       ],
     },
