@@ -1,8 +1,10 @@
 import Post from "../post/Post";
 import "./posts.scss";
+import { useContext } from "react";
+import { StateContext } from "../../context/state";
 
 const Posts = () => {
-  //TEMPORARY
+  const state=useContext(StateContext)
   const posts = [
     {
       id: 1,
@@ -24,7 +26,7 @@ const Posts = () => {
   ];
 
   return <div className="posts">
-    {posts.map(post=>(
+    {state.posts.map(post=>(
       <Post post={post} key={post.id}/>
     ))}
   </div>;
