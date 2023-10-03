@@ -19,12 +19,19 @@ import { AuthContext } from "./context/authContext";
 import { StateContext } from "./context/state";
 import 'bootstrap/dist/css/bootstrap.min.css'
 
+// function App() {
+  // const {currentUser} = useContext(AuthContext);
+
+
+import { AuthContext } from "./context/auth/authContext";
+import LoginPage from "./pages/loginPage/loginPage";
+
 function App() {
-  const {currentUser} = useContext(AuthContext);
   const state = useContext(StateContext);
-
+  const { currentUser } = useContext(AuthContext);
+  const { isLoggedIn } = useContext(AuthContext);
   const { darkMode } = useContext(DarkModeContext);
-
+  console.log(isLoggedIn);
   const Layout = () => {
     return (
       <div className={`theme-${darkMode ? "dark" : "light"}`}>
@@ -69,11 +76,11 @@ function App() {
     },
     {
       path: "/login",
-      element: <Login />,
+      element: <LoginPage />,
     },
     {
       path: "/register",
-      element: <Register />,
+      element: <LoginPage />,
     },
   ]);
 

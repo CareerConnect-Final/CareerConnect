@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 
 import App from "./App";
-import { AuthContextProvider } from "./context/authContext";
+import AuthProvider from "./context/auth/authContext";
 import { DarkModeContextProvider } from "./context/darkModeContext";
 import StateContext  from "./context/state";
 
@@ -14,6 +14,9 @@ root.render(
        
         <StateContext> <App /></StateContext>
       </AuthContextProvider>
+      {/* <AuthProvider>
+        <App />
+      </AuthProvider> */}
     </DarkModeContextProvider>
   </React.StrictMode>
 );
