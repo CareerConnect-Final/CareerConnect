@@ -4,24 +4,47 @@ import Map from "../../assets/map.png";
 import Friend from "../../assets/friend.png";
 import { useContext } from "react";
 import { AuthContext } from "../../context/authContext";
-
+import { StateContext } from "../../context/state";
+import { useState } from "react";
+import axios from "axios";
 const Share = () => {
+  const newPost = useContext(StateContext);
+  const [postContent, setPostContent] = useState("");
+  const handleAdd = () => {
+    const obj = {
+      user_id: 3,
+      username: "majd",
+      content: postContent,
+    };
 
-  const {currentUser} = useContext(AuthContext)
+    axios
+      .post("https://final-backend-nvf1.onrender.com/api/v1/posts", obj)
+      .then((data) => {
+        setPostContent("");
+        newPost.addPost(data.data);
+      })
+      .catch((error) => {
+        console.error("Error creating post:", error);
+      });
+  };
+
+  const { currentUser } = useContext(AuthContext);
   return (
     <div className="share">
       <div className="container">
         <div className="top">
-          <img
-            src={currentUser.profilePic}
-            alt=""
+          <img src={currentUser.profilePic} alt="" />
+          <input
+            type="text"
+            placeholder={`What's on your mind ${currentUser.name}?`}
+            value={postContent}
+            onChange={(e) => setPostContent(e.target.value)}
           />
-          <input type="text" placeholder={`What's on your mind ${currentUser.name}?`} />
         </div>
         <hr />
         <div className="bottom">
           <div className="left">
-            <input type="file" id="file" style={{display:"none"}} />
+            <input type="file" id="file" style={{ display: "none" }} />
             <label htmlFor="file">
               <div className="item">
                 <img src={Image} alt="" />
@@ -38,7 +61,7 @@ const Share = () => {
             </div>
           </div>
           <div className="right">
-            <button>Share</button>
+            <button onClick={handleAdd}>Share</button>
           </div>
         </div>
       </div>

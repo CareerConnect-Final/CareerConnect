@@ -16,9 +16,12 @@ import "./style.scss";
 import { useContext } from "react";
 import { DarkModeContext } from "./context/darkModeContext";
 import { AuthContext } from "./context/authContext";
+import { StateContext } from "./context/state";
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 function App() {
   const {currentUser} = useContext(AuthContext);
+  const state = useContext(StateContext);
 
   const { darkMode } = useContext(DarkModeContext);
 
@@ -49,9 +52,9 @@ function App() {
     {
       path: "/",
       element: (
-        <ProtectedRoute>
+        // <ProtectedRoute>
           <Layout />
-        </ProtectedRoute>
+        // </ProtectedRoute>
       ),
       children: [
         {
