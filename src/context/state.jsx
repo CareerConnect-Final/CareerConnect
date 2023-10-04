@@ -51,9 +51,7 @@ export default function State(props) {
   
   useEffect(() => {
     if (authToken === null) {
-    if (authToken === null) {
       throw new Error("Authentication token not found.");
-    } else if (authToken != null) {
     } else if (authToken != null) {
       const headers = {
         Authorization: `Bearer ${authToken}`,
@@ -133,7 +131,6 @@ export default function State(props) {
     setLikes(newLikes);
   };
 
-  const state = {
 
 
     const state = {
@@ -147,6 +144,11 @@ export default function State(props) {
     acceptFriendRequest,
     declineFriendRequest,
     myFriends: myFriends,
+    deleteLike: deleteLike,
+    deleteComment: deleteComment,
+    editComments:editComments,
+    addComment:addComment,
+    addLike:addLike
   };
 
   return (
