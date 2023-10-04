@@ -113,6 +113,7 @@ const Post = (props) => {
         )}
         {showModal && (
           <PostModal
+          check="posts"
             id={props.post.id}
             showFlag={showModal}
             handleclose={handleClose}
