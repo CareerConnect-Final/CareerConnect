@@ -15,6 +15,7 @@ const userAPI= "https://final-backend-nvf1.onrender.com/profile"
 const userPostsAPI= "https://final-backend-nvf1.onrender.com/home/userposts/2"
 // const userPostsAPI= "https://final-backend-nvf1.onrender.com/api/v1/users/2/posts"
 
+import { useLocation, useNavigate } from "react-router-dom";
 import cookie from "react-cookies";
 import { AuthContext } from "../../context/auth/authContext";
 
@@ -28,6 +29,11 @@ const Profile = () => {
     const user =  cookieUser ;
     console.log("user from cookie", user);
 
+
+    
+  const location = useLocation().pathname
+  const [pageType, setPageType] = useState(location);
+  console.log(pageType);
     const { currentUser, getUserPosts } = useContext(AuthContext);
   const [userPosts, setUserPosts] = useState([]);
 
@@ -43,6 +49,10 @@ const Profile = () => {
         });
     }
   }, [currentUser.id, getUserPosts]); // this to get the new posts if added 
+
+
+
+
 
 
   return (

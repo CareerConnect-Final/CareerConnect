@@ -13,7 +13,7 @@ import PostModal from "../postModal/PostModal";
 import cookie from "react-cookies";
 
 const Post = (props) => {
-  const user=cookie.load("user")
+  const user = cookie.load("user");
 
   const state = useContext(StateContext);
   const [commentOpen, setCommentOpen] = useState(false);
@@ -26,13 +26,12 @@ const Post = (props) => {
   const liked = false;
   const toggleMenu = () => {
     setShowMenu(!showMenu);
- 
   };
   const handleShow = () => {
     setShowModal(true);
   };
-  const handleClose  = () => {
-    setShowModal(false); 
+  const handleClose = () => {
+    setShowModal(false);
   };
 
   const handleDelete = (id) => {
@@ -50,13 +49,7 @@ const Post = (props) => {
       <div className="container">
         <div className="user">
           <div className="userInfo">
-           
-            <img
-              src={
-                props.post.profilePicture
-              }
-              alt=""
-            />
+            <img src={props.post.profilePicture} alt="" />
             <div className="details">
               <Link
                 to={`/profile/${props.post.user_id}`}
@@ -67,7 +60,7 @@ const Post = (props) => {
               <span className="date">1 min ago</span>
             </div>
           </div>
-          {props.post.user_id ===user.id && (
+          {props.post.user_id === user.id && (
             <div className="menu-container">
               <MoreHorizIcon onClick={toggleMenu} />
               {showMenu && (
@@ -108,32 +101,23 @@ const Post = (props) => {
           </div>
           <div className="item" onClick={() => setCommentOpen(!commentOpen)}>
             <TextsmsOutlinedIcon />
-           {/* {state.comments.map((comment,idx)=>{
-            if(comment.post_id===props.post.id){
-              return(
-                 setCounter(counter+1)
-               )
-            }
-       
-           })} */}
-       {commentCount}
+            {commentCount}
           </div>
           <div className="item">
             <ShareOutlinedIcon />
             Share
           </div>
         </div>
-        {/* {console.log(commentOpen)} */}
-       {state.comments.map}
-        {commentOpen && <Comments comments={state.comments} user_id={props.post.user_id} id={props.post.id}/>}
+        {commentOpen && (
+          <Comments comments={state.comments} id={props.post.id} />
+        )}
         {showModal && (
-  <PostModal
-  check="posts"
-  id={props.post.id}
-  showFlag={showModal}
-  handleclose={handleClose}
-  />
-)}
+          <PostModal
+            id={props.post.id}
+            showFlag={showModal}
+            handleclose={handleClose}
+          />
+        )}
       </div>
     </div>
   );
