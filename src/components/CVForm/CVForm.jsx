@@ -1,22 +1,21 @@
 // src/components/CVForm.js
-import React, { useState } from 'react';
-import { PDFDocument } from 'pdf-lib';
+import React, { useState } from "react";
+import { PDFDocument } from "pdf-lib";
 
 const CVForm = () => {
   const [formData, setFormData] = useState({
-    full_name: '',
-    email: '',  
-    phone_number: '',  
-    languages: '', 
-    github_profile: '',  
-    linkedin_profile: '',  
-    skills: '',
-    institute_name: '',
-    graduation_year: '',
-    degree_pursued: '',
-    short_description: '',
+    full_name: "",
+    email: "",
+    phone_number: "",
+    languages: "",
+    github_profile: "",
+    linkedin_profile: "",
+    skills: "",
+    institute_name: "",
+    graduation_year: "",
+    degree_pursued: "",
+    short_description: "",
   });
-
 
   const [cvData, setCvData] = useState(null);
 
@@ -35,10 +34,10 @@ const CVForm = () => {
   const generatePDF = async (data) => {
     const pdfDoc = await PDFDocument.create();
     const page = pdfDoc.addPage();
-  
+
     const { width, height } = page.getSize();
     const fontSize = 12;
-  
+
     const content = `
       ${data.full_name}
       Email: ${data.email}
@@ -52,21 +51,21 @@ const CVForm = () => {
       Degree Pursued: ${data.degree_pursued}
       Short Description: ${data.short_description}
     `;
-  
+
     // Remove curly braces and double quotations
-    const formattedContent = content.replace(/[\{\}"]/g, '');
-  
+    const formattedContent = content.replace(/[\{\}"]/g, "");
+
     page.drawText(formattedContent, { x: 50, y: height - 50, fontSize });
-  
+
     return pdfDoc.save();
   };
 
   const downloadPdf = () => {
     if (cvData) {
-      const blob = new Blob([cvData], { type: 'application/pdf' });
-      const link = document.createElement('a');
+      const blob = new Blob([cvData], { type: "application/pdf" });
+      const link = document.createElement("a");
       link.href = window.URL.createObjectURL(blob);
-      link.download = 'cv.pdf';
+      link.download = "cv.pdf";
       link.click();
     }
   };
@@ -91,64 +90,72 @@ const CVForm = () => {
             value={formData.email}
             onChange={handleInputChange}
           />
-        </label><label>
-        phone_number:
+        </label>
+        <label>
+          phone_number:
           <input
             type="text"
             name="phone_number"
             value={formData.phone_number}
             onChange={handleInputChange}
           />
-        </label><label>
-        languages:
+        </label>
+        <label>
+          languages:
           <input
             type="text"
             name="languages"
             value={formData.languages}
             onChange={handleInputChange}
           />
-        </label><label>
-        github_profile:
+        </label>
+        <label>
+          github_profile:
           <input
             type="text"
             name="github_profile"
             value={formData.github_profile}
             onChange={handleInputChange}
           />
-        </label><label>
-        linkedin_profile:
+        </label>
+        <label>
+          linkedin_profile:
           <input
             type="text"
             name="linkedin_profile"
             value={formData.linkedin_profile}
             onChange={handleInputChange}
           />
-        </label><label>
-        skills:
+        </label>
+        <label>
+          skills:
           <input
             type="text"
             name="skills"
             value={formData.skills}
             onChange={handleInputChange}
           />
-        </label><label>
-        institute_name:
+        </label>
+        <label>
+          institute_name:
           <input
             type="text"
             name="institute_name"
             value={formData.institute_name}
             onChange={handleInputChange}
           />
-        </label><label>
-        graduation_year:
+        </label>
+        <label>
+          graduation_year:
           <input
             type="text"
             name="graduation_year"
             value={formData.graduation_year}
             onChange={handleInputChange}
           />
-        </label><label>
-        degree_pursued:
+        </label>
+        <label>
+          degree_pursued:
           <input
             type="text"
             name="degree_pursued"
@@ -157,79 +164,88 @@ const CVForm = () => {
           />
         </label>
         <label>
-        short_description:
+          short_description:
           <input
             type="text"
             name="short_description"
             value={formData.short_description}
             onChange={handleInputChange}
           />
-        </label><label>
-        degree_pursued:
+        </label>
+        <label>
+          degree_pursued:
           <input
             type="text"
             name="degree_pursued"
             value={formData.degree_pursued}
             onChange={handleInputChange}
           />
-        </label><label>
-        degree_pursued:
+        </label>
+        <label>
+          degree_pursued:
           <input
             type="text"
             name="degree_pursued"
             value={formData.degree_pursued}
             onChange={handleInputChange}
           />
-        </label><label>
-        degree_pursued:
+        </label>
+        <label>
+          degree_pursued:
           <input
             type="text"
             name="degree_pursued"
             value={formData.degree_pursued}
             onChange={handleInputChange}
           />
-        </label><label>
-        degree_pursued:
+        </label>
+        <label>
+          degree_pursued:
           <input
             type="text"
             name="degree_pursued"
             value={formData.degree_pursued}
             onChange={handleInputChange}
           />
-        </label><label>
-        degree_pursued:
+        </label>
+        <label>
+          degree_pursued:
           <input
             type="text"
             name="degree_pursued"
             value={formData.degree_pursued}
             onChange={handleInputChange}
           />
-        </label><label>
-        degree_pursued:
+        </label>
+        <label>
+          degree_pursued:
           <input
             type="text"
             name="degree_pursued"
             value={formData.degree_pursued}
             onChange={handleInputChange}
           />
-        </label><label>
-        degree_pursued:
+        </label>
+        <label>
+          degree_pursued:
           <input
             type="text"
             name="degree_pursued"
             value={formData.degree_pursued}
             onChange={handleInputChange}
           />
-        </label><label>
-        degree_pursued:
+        </label>
+        <label>
+          degree_pursued:
           <input
             type="text"
             name="degree_pursued"
             value={formData.degree_pursued}
             onChange={handleInputChange}
           />
-        </label><label>
-        degree_pursued:
+        </label>
+        <label>
+          degree_pursued:
           <input
             type="text"
             name="degree_pursued"
@@ -243,7 +259,13 @@ const CVForm = () => {
       {cvData && (
         <div>
           <h2>Generated CV</h2>
-          <div style={{ border: '1px solid #ccc', padding: '10px', margin: '10px' }}>
+          <div
+            style={{
+              border: "1px solid #ccc",
+              padding: "10px",
+              margin: "10px",
+            }}
+          >
             <p>Download your CV:</p>
             <button onClick={downloadPdf}>Download CV</button>
           </div>

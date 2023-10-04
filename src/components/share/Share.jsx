@@ -12,13 +12,13 @@ import cookie from "react-cookies";
 const Share = () => {
   const newPost = useContext(StateContext);
   const [postContent, setPostContent] = useState("");
- const user=cookie.load("user")
+  const user = cookie.load("user");
   const handleAdd = () => {
     const obj = {
       user_id: user.id,
       username: user.firstName,
       content: postContent,
-      profilePicture:user.profilePicture
+      profilePicture: user.profilePicture,
     };
 
     axios

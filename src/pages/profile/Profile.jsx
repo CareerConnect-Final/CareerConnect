@@ -8,9 +8,14 @@ import PlaceIcon from "@mui/icons-material/Place";
 import LanguageIcon from "@mui/icons-material/Language";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import Posts from "../../components/posts/Posts"
-
+import Posts from "../../components/posts/Posts";
+import cookie from "react-cookies";
 const Profile = () => {
+  const cookieToken = cookie.load("auth");
+  const cookieUser = cookie.load("user"); // this is not a good practice
+  const token = cookieToken;
+  const user = cookieUser;
+  console.log("user from cookie", user);
   return (
     <div className="profile">
       <div className="images">
@@ -63,7 +68,7 @@ const Profile = () => {
             <MoreVertIcon />
           </div>
         </div>
-      <Posts/>
+        <Posts />
       </div>
     </div>
   );

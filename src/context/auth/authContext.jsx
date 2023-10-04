@@ -76,7 +76,9 @@ function AuthProvider(props) {
     cookie.save("auth", Token);
     cookie.save("user", User);
   };
-
+  const logout = () => {
+    setLoginState(false, null, {});
+  };
   useEffect(() => {
     const qs = new URLSearchParams(window.location.search);
     const cookieToken = cookie.load("auth");
@@ -96,6 +98,7 @@ function AuthProvider(props) {
     signup,
     login,
     currentUser,
+    logout,
   };
 
   return (
