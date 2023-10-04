@@ -1,10 +1,11 @@
 import axios from "axios";
+import React from "react";
 import cookie from "react-cookies";
 import jwt_decode from "jwt-decode";
 import base64 from "base-64";
 import { createContext, useEffect, useState } from "react";
 /* ---------------- */
-export const AuthContext = createContext();
+export const AuthContext = React.createContext();
 /* ---------------- */
 
 function AuthProvider(props) {
@@ -17,6 +18,7 @@ function AuthProvider(props) {
   });
   const [error, setError] = useState(null);
   const [token, setToken] = useState(undefined);
+  const [userPost, setUserPost] = useState({});
 
   let signup = async (username, password, role, email) => {
     const obj = {
@@ -77,15 +79,47 @@ function AuthProvider(props) {
     cookie.save("user", User);
   };
 
+  // +++++++++++++++++ get user posts+++++++++++++++++++++++
+
+    const getUserPosts = async (userId) => {
+      try {
+        const authToken = cookie.load("auth"); 
+        if (!authToken) {
+          
+          throw new Error("Authentication token not found.");
+        }
+  
+        const url = `https://final-backend-nvf1.onrender.com/home/userposts/${userId}`;
+        const headers = {
+          Authorization: `Bearer ${authToken}`,
+        };
+  
+        const response = await axios.get(url, { headers });
+  
+        if (response.status === 200) {
+          const userPosts = response.data;
+          console.log("=============>",userPosts)
+          return userPosts;
+        } else {
+          throw new Error("Failed to fetch user posts");
+        }
+      } catch (error) {
+        console.error("Error fetching user posts:", error);
+        throw error; 
+      }
+    };
+  // ++++++++++++++++++++++++++++++++++++++++
+
   useEffect(() => {
     const qs = new URLSearchParams(window.location.search);
     const cookieToken = cookie.load("auth");
     const cookieUser = cookie.load("user"); // this is not a good practice
-    const token = qs.get("token") || cookieToken || null;
-    const user = qs.get("user") || cookieUser || null;
+    const token = qs.get("token") || cookieToken ;
+    const user = qs.get("user") || cookieUser ;
     console.log("user from cookie", user);
     console.log("hi");
     validateToken(token, user);
+  
   }, []);
 
   const sharedStates = {
@@ -96,6 +130,7 @@ function AuthProvider(props) {
     signup,
     login,
     currentUser,
+    getUserPosts
   };
 
   return (

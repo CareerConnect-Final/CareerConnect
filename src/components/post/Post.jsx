@@ -6,42 +6,84 @@ import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { Link } from "react-router-dom";
 import Comments from "../comments/Comments";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import { StateContext } from "../../context/state";
 import PostModal from "../postModal/PostModal";
 import cookie from "react-cookies";
 
 const Post = (props) => {
-  const user=cookie.load("user")
+  const user = cookie.load("user");
+  const authToken = cookie.load("auth");
 
-  const deletePost = useContext(StateContext);
+  const state = useContext(StateContext);
   const [commentOpen, setCommentOpen] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [showModal, setShowModal] = useState(false);
-
-  // const [remove, setRemove]= useState('')
-
-  // console.log(props.post.user_id);
-  // console.log(remove)
-  //TEMPORARY
-  const liked = false;
+  const likesCount = state.likes
+    ? state.likes
+        .filter((like) => like.post_id === props.post.id)
+        .length.toString()
+    : "0";
+  const commentCount = state.comments.filter(
+    (comment) => comment.post_id === props.post.id
+  ).length;
   const toggleMenu = () => {
     setShowMenu(!showMenu);
- 
   };
   const handleShow = () => {
     setShowModal(true);
   };
-  const handleClose  = () => {
+  const handleClose = () => {
     setShowModal(false);
-    
   };
+  const handleLikeClick = () => {
+    const userLike = state.likes.find(
+      (like) => like.post_id === props.post.id && user.id === like.user_id
+    );
+
+    const headers = {
+      Authorization: `Bearer ${authToken}`,
+    };
+
+    if (userLike) {
+      const likeId = userLike.id;
+      axios
+        .delete(
+          `https://final-backend-nvf1.onrender.com/home/likes/${likeId}`,
+          {
+            headers,
+          }
+        )
+        .then(() => {
+          state.deleteLike(likeId);
+        })
+        .catch((error) => {
+          console.error("Error", error);
+        });
+    } else {
+      const obj = {
+        post_id: props.post.id,
+      };
+
+      axios
+        .post(`https://final-backend-nvf1.onrender.com/home/likes`, obj, {
+          headers,
+        })
+        .then((data) => {
+          state.addLike(data.data); 
+        })
+        .catch((error) => {
+          console.error("Error", error);
+        });
+    }
+  };
+  
   const handleDelete = (id) => {
     axios
       .delete(`https://final-backend-nvf1.onrender.com/api/v1/posts/${id}`)
       .then(() => {
-        deletePost.deletePost(id);
+        state.deletePost(id);
       })
       .catch((error) => {
         console.error("Error", error);
@@ -52,13 +94,7 @@ const Post = (props) => {
       <div className="container">
         <div className="user">
           <div className="userInfo">
-           
-            <img
-              src={
-                props.post.profilePicture
-              }
-              alt=""
-            />
+            <img src={props.post.profilePicture} alt="" />
             <div className="details">
               <Link
                 to={`/profile/${props.post.user_id}`}
@@ -69,7 +105,7 @@ const Post = (props) => {
               <span className="date">1 min ago</span>
             </div>
           </div>
-          {props.post.user_id ===user.id && (
+          {props.post.user_id === user.id && (
             <div className="menu-container">
               <MoreHorizIcon onClick={toggleMenu} />
               {showMenu && (
@@ -97,35 +133,45 @@ const Post = (props) => {
         <div className="content">
           <p>{props.post.content}</p>
           <img
-            src={
-              "https://images.pexels.com/photos/4881619/pexels-photo-4881619.jpeg?auto=compress&cs=tinysrgb&w=1600"
+            src={props.post.photo
+              // "https://images.pexels.com/photos/4881619/pexels-photo-4881619.jpeg?auto=compress&cs=tinysrgb&w=1600"
             }
             alt=""
           />
         </div>
         <div className="info">
-          <div className="item">
-            {liked ? <FavoriteOutlinedIcon /> : <FavoriteBorderOutlinedIcon />}
-            12 Likes
+          <div className="item" onClick={handleLikeClick}>
+            {state.likes.filter(
+              (like) =>
+                like.post_id === props.post.id && user.id === like.user_id
+            ).length > 0 ? (
+              <FavoriteOutlinedIcon style={{ color: "red" }} />
+            ) : (
+              <FavoriteBorderOutlinedIcon />
+            )}
+
+            {likesCount}
           </div>
           <div className="item" onClick={() => setCommentOpen(!commentOpen)}>
             <TextsmsOutlinedIcon />
-            12 Comments
+            {commentCount}
           </div>
           <div className="item">
             <ShareOutlinedIcon />
             Share
           </div>
         </div>
-        {/* {console.log(commentOpen)} */}
-        {commentOpen && <Comments />}
+        {commentOpen && (
+          <Comments comments={state.comments} id={props.post.id} />
+        )}
         {showModal && (
-  <PostModal
-  id={props.post.id}
-  showFlag={showModal}
-  handleclose={handleClose}
-  />
-)}
+          <PostModal
+            check="posts"
+            id={props.post.id}
+            showFlag={showModal}
+            handleclose={handleClose}
+          />
+        )}
       </div>
     </div>
   );
