@@ -17,7 +17,6 @@ export default function State(props) {
 
   const acceptFriendRequest = async (receiver_id) => {
     try {
-      
       const response = await axios.post(
         `https://final-backend-nvf1.onrender.com/home/handle-friend-request/${receiver_id}`,
         { action: "accept" },
@@ -25,7 +24,7 @@ export default function State(props) {
           headers: { Authorization: `Bearer ${authToken}` },
         }
       );
-      window.location.reload()
+      window.location.reload();
     } catch (error) {
       console.error("Error accepting friend request:", error);
     }
@@ -35,7 +34,7 @@ export default function State(props) {
     try {
       const url = `https://final-backend-nvf1.onrender.com/home/handle-friend-request/${receiver_id}`;
       console.log("Declining friend request. URL:", url);
-  
+
       const response = await axios.post(
         url,
         { action: "decline" },
@@ -43,12 +42,12 @@ export default function State(props) {
           headers: { Authorization: `Bearer ${authToken}` },
         }
       );
-      window.location.reload()
+      window.location.reload();
     } catch (error) {
       console.error("Error declining friend request:", error);
     }
   };
-  
+
   useEffect(() => {
     if (authToken === null) {
       throw new Error("Authentication token not found.");
@@ -67,7 +66,9 @@ export default function State(props) {
         });
 
       axios
-        .get("https://final-backend-nvf1.onrender.com/home/friendsreq", { headers})
+        .get("https://final-backend-nvf1.onrender.com/home/friendsreq", {
+          headers,
+        })
         .then((response) => {
           setFriendRequests(response.data);
         })
@@ -75,17 +76,55 @@ export default function State(props) {
           setError(error);
         });
 
-        axios
-        .get("https://final-backend-nvf1.onrender.com/home/myfriends", { headers})
+      axios
+        .get("https://final-backend-nvf1.onrender.com/home/myfriends", {
+          headers,
+        })
         .then((response) => {
           setMyFriends(response.data);
         })
         .catch((error) => {
           setError(error);
-        }); 
+        });
     }
-  }, []);
 
+    if (authToken === null) {
+      throw new Error("Authentication token not found.");
+    } else if (authToken != null) {
+      const headers = {
+        Authorization: `Bearer ${authToken}`,
+      };
+
+      axios
+        .get("https://final-backend-nvf1.onrender.com/home/likes", { headers })
+        .then((response) => {
+          setLikes(response.data);
+        })
+        .catch((error) => {
+          setError(error);
+        });
+    }
+    if (authToken === null) {
+      throw new Error("Authentication token not found.");
+    } else if (authToken != null) {
+      const headers = {
+        Authorization: `Bearer ${authToken}`,
+      };
+
+      axios
+        .get("https://final-backend-nvf1.onrender.com/home/comments", {
+          headers,
+        })
+        .then((response) => {
+          setComments(response.data);
+        })
+        .catch((error) => {
+          setError(error);
+        });
+    }
+
+    // .get("https://final-backend-nvf1.onrender.com/home/comments", { headers })
+  }, []);
 
   const addPost = (newPost) => {
     setPosts([newPost, ...posts]);
@@ -131,14 +170,12 @@ export default function State(props) {
     setLikes(newLikes);
   };
 
-
-
-    const state = {
+  const state = {
     posts: posts,
     comments: comments,
     likes: likes,
     addPost: addPost,
-    friendRequests,
+    friendRequests:friendRequests,
     deletePost: deletePost,
     editPost: editPost,
     acceptFriendRequest,
@@ -146,9 +183,9 @@ export default function State(props) {
     myFriends: myFriends,
     deleteLike: deleteLike,
     deleteComment: deleteComment,
-    editComments:editComments,
-    addComment:addComment,
-    addLike:addLike
+    editComments: editComments,
+    addComment: addComment,
+    addLike: addLike,
   };
 
   return (
