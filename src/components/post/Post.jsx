@@ -6,7 +6,7 @@ import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { Link } from "react-router-dom";
 import Comments from "../comments/Comments";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import { StateContext } from "../../context/state";
 import PostModal from "../postModal/PostModal";
@@ -88,8 +88,8 @@ const Post = (props) => {
         <div className="content">
           <p>{props.post.content}</p>
           <img
-            src={
-              "https://images.pexels.com/photos/4881619/pexels-photo-4881619.jpeg?auto=compress&cs=tinysrgb&w=1600"
+            src={props.post.photo
+              // "https://images.pexels.com/photos/4881619/pexels-photo-4881619.jpeg?auto=compress&cs=tinysrgb&w=1600"
             }
             alt=""
           />
