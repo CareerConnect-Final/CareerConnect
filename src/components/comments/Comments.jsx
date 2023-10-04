@@ -1,18 +1,167 @@
+// import { useContext, useState } from "react";
+// import "./comments.scss";
+// import { AuthContext } from "../../context/auth/authContext";
+// import { StateContext } from "../../context/state";
+// import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+// import cookie from "react-cookies";
+// import PostModal from "../postModal/PostModal";
+// import axios from "axios";
+
+// const Comments = (props) => {
+//   // const [showModal, setShowModal] = useState(false);
+//   const [showModals, setShowModals] = useState({});
+//   const user = cookie.load("user");
+//   const newComments = useContext(StateContext);
+
+//   const [newComment, setNewComment] = useState("");
+//   console.log(props.id);
+
+//   // Maintain a separate state for showing the menu for each comment
+//   const [showMenus, setShowMenus] = useState(Array(props.comments.length).fill(false));
+
+//   const handleShow = () => {
+//     setShowModals({});
+//   };
+
+//   const handleClose = (commentId) => {
+//     setShowModals((prevModals) => ({
+//       ...prevModals,
+//       [commentId]: false,
+//     }));
+//   };
+
+  // const addNewComment = () => {
+  //   console.log("HELLO");
+  //   const obj = {
+  //     profilePicture: user.profilePicture,
+  //     user_id: user.id,
+  //     post_id: props.id,
+  //     content: newComment,
+  //   };
+  //   axios
+  //     .post("https://final-backend-nvf1.onrender.com/api/v1/comments", obj)
+  //     .then((data) => {
+  //       setNewComment("");
+  //       newComments.addComment(data.data);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error creating post:", error);
+  //     });
+  // };
+
+//   const toggleMenu = (idx) => {
+//     // Create a copy of the showMenus array and toggle the menu for the specific comment
+//     const updatedShowMenus = [...showMenus];
+//     updatedShowMenus[idx] = !updatedShowMenus[idx];
+//     setShowMenus(updatedShowMenus);
+//   };
+
+  // const handleDelete = (id) => {
+  //   axios
+  //     .delete(`https://final-backend-nvf1.onrender.com/api/v1/comments/${id}`)
+  //     .then(() => {
+  //       newComments.deleteComment(id);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error", error);
+  //     });
+  // };
+
+//   return (
+//     <div className="comments">
+//       <div className="write">
+//         <img src={user.profilePicture} alt="" />
+//         <input
+//           type="text"
+//           placeholder="write a comment"
+//           value={newComment}
+//           onChange={(e) => setNewComment(e.target.value)}
+//         />
+//         <button onClick={addNewComment}>Send</button>
+//       </div>
+//       {props.comments.map((comment, idx) => {
+//         if (comment.post_id === props.id) {
+//           return (
+//             <div className="comment" key={idx}>
+//               <img src={comment.profilePicture} alt="" />
+//               <div className="info">
+//                 <div>
+//                   {user.id === comment.user_id && (
+//                     <div className="menu-container">
+//                       <MoreHorizIcon onClick={() => toggleMenu(idx)} />
+//                       {showMenus[idx] && (
+//                         <div className="menu">
+//                           <div
+//                             className="menu-option"
+//                             style={{ color: "blue" }}
+//                             onClick={() => setShowModals({ [comment.id]: true })} // Open the modal for this specific comment
+//                           >
+//                             Edit
+//                           </div>
+//                           <div
+//                             className="menu-option"
+//                             style={{ color: "red" }}
+//                             onClick={() => handleDelete(comment.id)}
+//                           >
+//                             Delete
+//                           </div>
+//                         </div>
+//                       )}
+//                     </div>
+//                   )}
+//                 </div>
+//                 <span>{comment.username}</span>
+//                 <p>{comment.content}</p>
+//               </div>
+//               <span className="date">1 hour ago</span>
+//               {showModals[comment.id] && (
+//                 <PostModal
+//                   id={comment.id}
+//                   showFlag={showModals[comment.id]}
+//                   handleClose={() => handleClose(comment.id)}
+//                 />
+//               )}
+//             </div>
+//           );
+//         }
+//       })}
+//     </div>
+//   );
+// };
+
+// export default Comments;
+
 import { useContext, useState } from "react";
 import "./comments.scss";
 import { AuthContext } from "../../context/auth/authContext";
 import { StateContext } from "../../context/state";
-
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import cookie from "react-cookies";
-
+import PostModal from "../postModal/PostModal";
 import axios from "axios";
-const Comments = (props) => {
-  const user = cookie.load("user");
 
+const Comments = (props) => {
+  const [showModals, setShowModals] = useState({}); // Use an object to store the showModal state for each comment
+  const user = cookie.load("user");
   const newComments = useContext(StateContext);
 
   const [newComment, setNewComment] = useState("");
   console.log(props.id);
+
+  // Maintain a separate state for showing the menu for each comment
+  const [showMenus, setShowMenus] = useState(Array(props.comments.length).fill(false));
+
+  // const handleShow = () => {
+  //   setShowModals({});
+  // };
+
+  const handleClose = (commentId) => {
+    setShowModals((prevModals) => ({
+      ...prevModals,
+      [commentId]: false,
+    }));
+  };
+
   const addNewComment = () => {
     console.log("HELLO");
     const obj = {
@@ -25,12 +174,34 @@ const Comments = (props) => {
       .post("https://final-backend-nvf1.onrender.com/api/v1/comments", obj)
       .then((data) => {
         setNewComment("");
+
         newComments.addComment(data.data);
       })
       .catch((error) => {
         console.error("Error creating post:", error);
       });
+
   };
+
+
+  const toggleMenu = (idx) => {
+    // Create a copy of the showMenus array and toggle the menu for the specific comment
+    const updatedShowMenus = [...showMenus];
+    updatedShowMenus[idx] = !updatedShowMenus[idx];
+    setShowMenus(updatedShowMenus);
+  };
+
+  const handleDelete = (id) => {
+    axios
+      .delete(`https://final-backend-nvf1.onrender.com/api/v1/comments/${id}`)
+      .then(() => {
+        newComments.deleteComment(id);
+      })
+      .catch((error) => {
+        console.error("Error", error);
+      });
+  };
+
   return (
     <div className="comments">
       <div className="write">
@@ -49,10 +220,43 @@ const Comments = (props) => {
             <div className="comment" key={idx}>
               <img src={comment.profilePicture} alt="" />
               <div className="info">
+                <div>
+                  {user.id === comment.user_id && (
+                    <div className="menu-container">
+                      <MoreHorizIcon onClick={() => toggleMenu(idx)} />
+                      {showMenus[idx] && (
+                        <div className="menu">
+                          <div
+                            className="menu-option"
+                            style={{ color: "blue" }}
+                            onClick={() => setShowModals({ [comment.id]: true })} // Open the modal for this specific comment
+                          >
+                            Edit
+                          </div>
+                          <div
+                            className="menu-option"
+                            style={{ color: "red" }}
+                            onClick={() => handleDelete(comment.id)}
+                          >
+                            Delete
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
                 <span>{comment.username}</span>
                 <p>{comment.content}</p>
               </div>
               <span className="date">1 hour ago</span>
+              {showModals[comment.id] && (
+                <PostModal
+                check="comments"
+                id={comment.id}
+                showFlag={showModals[comment.id]}
+                handleclose={() => handleClose(comment.id)} // Pass the correct function
+                />
+              )}
             </div>
           );
         }

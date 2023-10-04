@@ -16,19 +16,13 @@ const Post = (props) => {
   const user=cookie.load("user")
 
   const state = useContext(StateContext);
-  const [counter,setCounter]=useState(0)
   const [commentOpen, setCommentOpen] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
-  // const [remove, setRemove]= useState('')
+
   const commentCount = state.comments.filter(comment => comment.post_id === props.post.id).length;
-  // console.log(props.post.user_id);
-  // console.log(remove)
-  //TEMPORARY
-  // let counter=0
-  //  const newArr=state.comments.filter((item)=>item.post_id==props.post.id)
-  //  counter=newArr.length
+
   const liked = false;
   const toggleMenu = () => {
     setShowMenu(!showMenu);
@@ -38,9 +32,9 @@ const Post = (props) => {
     setShowModal(true);
   };
   const handleClose  = () => {
-    setShowModal(false);
-    
+    setShowModal(false); 
   };
+
   const handleDelete = (id) => {
     axios
       .delete(`https://final-backend-nvf1.onrender.com/api/v1/posts/${id}`)
@@ -130,9 +124,11 @@ const Post = (props) => {
           </div>
         </div>
         {/* {console.log(commentOpen)} */}
-        {commentOpen && <Comments comments={state.comments} id={props.post.id}/>}
+       {state.comments.map}
+        {commentOpen && <Comments comments={state.comments} user_id={props.post.user_id} id={props.post.id}/>}
         {showModal && (
   <PostModal
+  check="posts"
   id={props.post.id}
   showFlag={showModal}
   handleclose={handleClose}
