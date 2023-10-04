@@ -9,8 +9,15 @@ import LanguageIcon from "@mui/icons-material/Language";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Posts from "../../components/posts/Posts"
+import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+
 
 const Profile = () => {
+  const location = useLocation().pathname
+  const [pageType, setPageType] = useState(location);
+  console.log(pageType);
+
   return (
     <div className="profile">
       <div className="images">

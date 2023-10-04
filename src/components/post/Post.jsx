@@ -13,33 +13,26 @@ import PostModal from "../postModal/PostModal";
 import cookie from "react-cookies";
 
 const Post = (props) => {
-  const user=cookie.load("user")
+  const user = cookie.load("user");
 
   const state = useContext(StateContext);
-  const [counter,setCounter]=useState(0)
   const [commentOpen, setCommentOpen] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
-  // const [remove, setRemove]= useState('')
-  const commentCount = state.comments.filter(comment => comment.post_id === props.post.id).length;
-  // console.log(props.post.user_id);
-  // console.log(remove)
-  //TEMPORARY
-  // let counter=0
-  //  const newArr=state.comments.filter((item)=>item.post_id==props.post.id)
-  //  counter=newArr.length
+  const commentCount = state.comments.filter(
+    (comment) => comment.post_id === props.post.id
+  ).length;
+
   const liked = false;
   const toggleMenu = () => {
     setShowMenu(!showMenu);
- 
   };
   const handleShow = () => {
     setShowModal(true);
   };
-  const handleClose  = () => {
+  const handleClose = () => {
     setShowModal(false);
-    
   };
   const handleDelete = (id) => {
     axios
@@ -56,13 +49,7 @@ const Post = (props) => {
       <div className="container">
         <div className="user">
           <div className="userInfo">
-           
-            <img
-              src={
-                props.post.profilePicture
-              }
-              alt=""
-            />
+            <img src={props.post.profilePicture} alt="" />
             <div className="details">
               <Link
                 to={`/profile/${props.post.user_id}`}
@@ -73,7 +60,7 @@ const Post = (props) => {
               <span className="date">1 min ago</span>
             </div>
           </div>
-          {props.post.user_id ===user.id && (
+          {props.post.user_id === user.id && (
             <div className="menu-container">
               <MoreHorizIcon onClick={toggleMenu} />
               {showMenu && (
@@ -114,30 +101,23 @@ const Post = (props) => {
           </div>
           <div className="item" onClick={() => setCommentOpen(!commentOpen)}>
             <TextsmsOutlinedIcon />
-           {/* {state.comments.map((comment,idx)=>{
-            if(comment.post_id===props.post.id){
-              return(
-                 setCounter(counter+1)
-               )
-            }
-       
-           })} */}
-       {commentCount}
+            {commentCount}
           </div>
           <div className="item">
             <ShareOutlinedIcon />
             Share
           </div>
         </div>
-        {/* {console.log(commentOpen)} */}
-        {commentOpen && <Comments comments={state.comments} id={props.post.id}/>}
+        {commentOpen && (
+          <Comments comments={state.comments} id={props.post.id} />
+        )}
         {showModal && (
-  <PostModal
-  id={props.post.id}
-  showFlag={showModal}
-  handleclose={handleClose}
-  />
-)}
+          <PostModal
+            id={props.post.id}
+            showFlag={showModal}
+            handleclose={handleClose}
+          />
+        )}
       </div>
     </div>
   );
