@@ -11,10 +11,31 @@ import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { DarkModeContext } from "../../context/darkModeContext";
 import { AuthContext } from "../../context/auth/authContext";
+import axios from "axios";
+import React, { useState } from "react";
+
 
 const Navbar = () => {
   const { toggle, darkMode } = useContext(DarkModeContext);
   const { currentUser } = useContext(AuthContext);
+
+  const [searchQuery, setSearchQuery] = useState("");
+  const [users, setUsers] = useState([]);
+
+  const handleSearch = async () => {
+    try {
+      const response = await axios.get(
+        `https://final-backend-nvf1.onrender.com/home/users`
+      );
+
+      setUsers(response.data);
+      users.map((user)=>
+       console.log(user.username)
+      )
+    } catch (error) {
+      console.error("Error searching users:", error);
+    }
+  };
 
   return (
     <div className="navbar">
@@ -30,8 +51,13 @@ const Navbar = () => {
         )}
         <GridViewOutlinedIcon />
         <div className="search">
-          <SearchOutlinedIcon />
-          <input type="text" placeholder="Search..." />
+          <SearchOutlinedIcon onClick={handleSearch} />
+          <input
+            type="text"
+            placeholder="Search..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
         </div>
       </div>
       <div className="right">

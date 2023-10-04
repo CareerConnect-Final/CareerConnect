@@ -20,7 +20,6 @@ const Share = () => {
       content: postContent,
       profilePicture:user.profilePicture
     };
-
     axios
       .post("https://final-backend-nvf1.onrender.com/api/v1/posts", obj)
       .then((data) => {
