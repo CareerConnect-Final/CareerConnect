@@ -9,14 +9,51 @@ import LanguageIcon from "@mui/icons-material/Language";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Posts from "../../components/posts/Posts"
-import { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useContext, useEffect ,useState} from "react";
+import Post from "../../components/post/Post";
+const userAPI= "https://final-backend-nvf1.onrender.com/profile"
+const userPostsAPI= "https://final-backend-nvf1.onrender.com/home/userposts/2"
+// const userPostsAPI= "https://final-backend-nvf1.onrender.com/api/v1/users/2/posts"
 
+import { useLocation, useNavigate } from "react-router-dom";
+import cookie from "react-cookies";
+import { AuthContext } from "../../context/auth/authContext";
 
 const Profile = () => {
+
+
+
+    const cookieToken = cookie.load("auth");
+    const cookieUser = cookie.load("user"); // this is not a good practice
+    const token =  cookieToken ;
+    const user =  cookieUser ;
+    console.log("user from cookie", user);
+
+
+    
   const location = useLocation().pathname
   const [pageType, setPageType] = useState(location);
   console.log(pageType);
+    const { currentUser, getUserPosts } = useContext(AuthContext);
+  const [userPosts, setUserPosts] = useState([]);
+
+  useEffect(() => {
+   
+    if (currentUser.id) {
+      getUserPosts(currentUser.id)
+        .then((posts) => {
+          setUserPosts(posts);
+        })
+        .catch((error) => {
+          console.error("Error fetching user posts:", error);
+        });
+    }
+  }, [currentUser.id, getUserPosts]); // this to get the new posts if added 
+
+
+
+
+
 
   return (
     <div className="profile">
@@ -34,9 +71,13 @@ const Profile = () => {
       </div>
       <div className="profileContainer">
         <div className="uInfo">
+        <div className="top-right">
+
+< MoreVertIcon />
+</div>
           <div className="left">
             <a href="http://facebook.com">
-              <FacebookTwoToneIcon fontSize="large" />
+              {/* <FacebookTwoToneIcon fontSize="large" />
             </a>
             <a href="http://facebook.com">
               <InstagramIcon fontSize="large" />
@@ -48,30 +89,43 @@ const Profile = () => {
               <LinkedInIcon fontSize="large" />
             </a>
             <a href="http://facebook.com">
-              <PinterestIcon fontSize="large" />
+              <PinterestIcon fontSize="large" /> */}
             </a>
           </div>
           <div className="center">
-            <span>Jane Doe</span>
+            <span>{user.firstName} {user.lastName}</span> 
+            {/* <span></span> */}
+                <div>{currentUser.bio}</div>
             <div className="info">
               <div className="item">
                 <PlaceIcon />
-                <span>USA</span>
+                <span>{currentUser.city}</span>
               </div>
               <div className="item">
                 <LanguageIcon />
-                <span>lama.dev</span>
+                <span>{currentUser.career}</span>
               </div>
             </div>
             <button>follow</button>
           </div>
           <div className="right">
             <EmailOutlinedIcon />
-            <MoreVertIcon />
+            
+            
           </div>
+              {/* <div className="top-right">
+
+              < MoreVertIcon />
+              </div> */}
         </div>
-      <Posts/>
-      </div>
+      {/* <Posts  check="userposts"/> */}
+    
+    {userPosts.map(post=>(
+      <Post  post={post} key={post.id}/>
+
+    ))}
+  </div>;
+      
     </div>
   );
 };

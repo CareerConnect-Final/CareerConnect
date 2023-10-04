@@ -20,9 +20,8 @@ const Post = (props) => {
   const [showMenu, setShowMenu] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
-  const commentCount = state.comments.filter(
-    (comment) => comment.post_id === props.post.id
-  ).length;
+
+  const commentCount = state.comments.filter(comment => comment.post_id === props.post.id).length;
 
   const liked = false;
   const toggleMenu = () => {
@@ -34,6 +33,7 @@ const Post = (props) => {
   const handleClose = () => {
     setShowModal(false);
   };
+
   const handleDelete = (id) => {
     axios
       .delete(`https://final-backend-nvf1.onrender.com/api/v1/posts/${id}`)
@@ -113,6 +113,7 @@ const Post = (props) => {
         )}
         {showModal && (
           <PostModal
+          check="posts"
             id={props.post.id}
             showFlag={showModal}
             handleclose={handleClose}

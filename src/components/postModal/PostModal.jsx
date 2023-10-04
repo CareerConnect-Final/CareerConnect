@@ -8,7 +8,10 @@ import axios from "axios";
 function PostModal(props) {
   const newPost = useContext(StateContext);
   const [newData, setNewData] = useState("");
+  
+  
   async function editPost() {
+    if(props.check =="posts"){
     const url = `https://final-backend-nvf1.onrender.com/api/v1/posts/${props.id}`;
     const data = {
       content: newData,
@@ -24,7 +27,27 @@ function PostModal(props) {
     } catch (error) {
       console.error("Error editing post", error);
     }
+ 
+}else if(props.check=="comments"){
+
+    const url = `https://final-backend-nvf1.onrender.com/api/v1/comments/${props.id}`;
+    const data = {
+      content: newData,
+    };
+
+    try {
+      const response = await axios.put(url, data);
+
+      newPost.editComments(response.data);
+
+      setNewData("");
+      props.handleclose();
+    } catch (error) {
+      console.error("Error editing post", error);
+    }
   }
+} 
+
   const handleCommentChange = (e) => {
     setNewData(e.target.value);
   };
@@ -38,7 +61,7 @@ function PostModal(props) {
           {/* <Image src={props.img} alt="cant show the pic!" /> */}
           <br></br>
           <br></br>
-          <label style={{ marginRight: "5px" }}>Edit post</label>
+          <label style={{ marginRight: "5px" }}>Edit content</label>
           <input type="text" onChange={handleCommentChange} />
         </Modal.Body>
         <Modal.Footer>

@@ -66,6 +66,7 @@ export default function State(props) {
   const addPost = (newPost) => {
     setPosts([newPost, ...posts]);
   };
+
   const addComment = (newComment) => {
     setComments([newComment, ...comments]);
   };
@@ -81,9 +82,23 @@ export default function State(props) {
       });
     });
   };
+  const editComments = (editedcomment) => {
+    setComments((prevComment) => {
+      return prevComment.map((comment) => {
+        if (comment.id === editedcomment.id) {
+          return editedcomment;
+        }
+        return comment;
+      });
+    });
+  };
   const deletePost = (id) => {
     let newPosts = state.posts.filter((item) => item.id != id);
     setPosts(newPosts);
+  };
+  const deleteComment = (id) => {
+    let newComments = state.comments.filter((item) => item.id != id);
+    setComments(newComments);
   };
 
   const state = {
@@ -92,7 +107,9 @@ export default function State(props) {
     addPost: addPost,
     deletePost: deletePost,
     editPost: editPost,
-    addComment:addComment
+    addComment:addComment,
+    deleteComment:deleteComment,
+    editComments:editComments
   };
 
   return (
