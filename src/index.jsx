@@ -5,6 +5,7 @@ import App from "./App";
 import AuthProvider from "./context/auth/authContext";
 import { DarkModeContextProvider } from "./context/darkModeContext";
 import StateContext  from "./context/state";
+import JobContext  from "./context/stateJob";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -12,7 +13,11 @@ root.render(
     <DarkModeContextProvider>
       {/* <AuthContextProvider> */}
        <AuthProvider>
-       <StateContext> <App /></StateContext>
+       <StateContext>
+       <JobContext>
+        <App />
+        </JobContext>
+         </StateContext>
        </AuthProvider>
        
       {/* </AuthContextProvider> */}
