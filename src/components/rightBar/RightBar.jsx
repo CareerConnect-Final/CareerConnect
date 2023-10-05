@@ -8,7 +8,7 @@ import { useContext } from "react";
 
 const RightBar = () => {
   const { friendRequests, acceptFriendRequest, declineFriendRequest} = useContext(StateContext);
- console.log(friendRequests)
+
 
   return (
     <div className="rightBar">

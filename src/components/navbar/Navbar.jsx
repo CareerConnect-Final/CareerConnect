@@ -13,7 +13,7 @@ import { DarkModeContext } from "../../context/darkModeContext";
 import { AuthContext } from "../../context/auth/authContext";
 import axios from "axios";
 import React, { useState } from "react";
-
+import WorkOutlineIcon from '@mui/icons-material/WorkOutline';
 
 const Navbar = () => {
   const { toggle, darkMode } = useContext(DarkModeContext);
@@ -49,9 +49,11 @@ const Navbar = () => {
         ) : (
           <DarkModeOutlinedIcon onClick={toggle} />
         )}
-        <GridViewOutlinedIcon />
+        <WorkOutlineIcon/>
+        {/* <GridViewOutlinedIcon /> */}
         <div className="search">
           <SearchOutlinedIcon onClick={handleSearch} />
+      
           <input
             type="text"
             placeholder="Search..."

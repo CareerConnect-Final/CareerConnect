@@ -18,7 +18,7 @@ import { DarkModeContext } from "./context/darkModeContext";
 // import { AuthContext } from "./context/authContext";
 import { StateContext } from "./context/state";
 import 'bootstrap/dist/css/bootstrap.min.css'
-
+import JobPage from "./pages/jobs/Job";
 // function App() {
   // const {currentUser} = useContext(AuthContext);
 
@@ -76,6 +76,10 @@ function App() {
         {
           path: "/generate-cv",
           element: <CVForm />, 
+        },
+        {
+          path: "/job",
+          element: <JobPage />, 
         },
       ],
     },
