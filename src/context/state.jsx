@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import cookie from "react-cookies";
 
-export const jobState = React.createContext();
+export const StateContext = React.createContext();
 
 export default function State(props) {
   const [posts, setPosts] = useState([]);
@@ -189,8 +189,8 @@ export default function State(props) {
   };
 
   return (
-    <jobState.Provider value={state}>
+    <StateContext.Provider value={state}>
       {props.children}
-    </jobState.Provider>
+    </StateContext.Provider>
   );
 }

@@ -66,7 +66,7 @@ const CommentsJob = (props) => {
 
   const handleDelete = (id) => {
     axios
-      .delete(`https://final-backend-nvf1.onrender.com/api/v1/comments/${id}`)
+      .delete(`https://final-backend-nvf1.onrender.com/api/v1/jobcomments/${id}`)
       .then(() => {
         newComments.deleteComment(id);
       })

@@ -1,4 +1,4 @@
-import "./jobPost.scss";
+// import "./jobPost.scss";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
 import TextsmsOutlinedIcon from "@mui/icons-material/TextsmsOutlined";
@@ -17,6 +17,7 @@ const JobPosts = (props) => {
   const authToken = cookie.load("auth");
 
   const state = useContext(JobContext);
+
   const [commentOpen, setCommentOpen] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -45,9 +46,12 @@ const JobPosts = (props) => {
     const headers = {
       Authorization: `Bearer ${authToken}`,
     };
-
+    
     if (userLike) {
       const likeId = userLike.id;
+      const headers = {
+        Authorization: `Bearer ${authToken}`,
+      };
       axios
         .delete(
           `https://final-backend-nvf1.onrender.com/careerjob/joblikes/${likeId}`,
@@ -80,8 +84,12 @@ const JobPosts = (props) => {
   };
   
   const handleDelete = (id) => {
+    
+    const headers = {
+      Authorization: `Bearer ${authToken}`,
+    };
     axios
-      .delete(`https://final-backend-nvf1.onrender.com/api/v1/posts/${id}`)
+      .delete(`https://final-backend-nvf1.onrender.com/careerjob/jobs/${id}`,{headers})
       .then(() => {
         state.deletePost(id);
       })
