@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import Comments from "../comments/Comments";
 import { useState, useContext, useEffect } from "react";
 import axios from "axios";
-import { StateContext } from "../../context/state";
+import  {StateContext}  from "../../context/state";
 import PostModal from "../postModal/PostModal";
 import cookie from "react-cookies";
 

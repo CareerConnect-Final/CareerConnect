@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import "./rightBar.scss";
 import { AuthContext } from "../../context/auth/authContext";
-import { StateContext } from "../../context/state";
+import  {StateContext}  from "../../context/state";
 import { useContext } from "react";
 
 

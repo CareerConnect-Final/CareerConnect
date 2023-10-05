@@ -84,6 +84,7 @@ const JobPosts = (props) => {
       .delete(`https://final-backend-nvf1.onrender.com/api/v1/posts/${id}`)
       .then(() => {
         state.deletePost(id);
+        console.log('delete job post')
       })
       .catch((error) => {
         console.error("Error", error);

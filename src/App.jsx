@@ -16,7 +16,7 @@ import "./style.scss";
 import { useContext } from "react";
 import { DarkModeContext } from "./context/darkModeContext";
 // import { AuthContext } from "./context/authContext";
-import { StateContext } from "./context/state";
+import  StateContext  from "./context/state";
 import 'bootstrap/dist/css/bootstrap.min.css'
 import JobPage from "./pages/jobs/Job";
 // function App() {
