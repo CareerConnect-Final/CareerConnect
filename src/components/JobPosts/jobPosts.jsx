@@ -1,4 +1,4 @@
-import "./jobPosts.scss";
+// import "./jobPosts.scss";
 import {useContext}  from "react";
 import JobPost from "../JobPost/jobPost";
 import {JobContext}  from "../../context/stateJob"; // in the JobContext the first letter must always be a capital letter
