@@ -11,17 +11,36 @@ import {
   useMediaQuery,
   MenuItem,
   useTheme,
+  Input,
+  InputLabel,
+  TextareaAutosize,
+  FormControl,
+  Paper,
+  IconButton,
 } from "@mui/material";
 import ErrorAlert from "../../components/ErrorAlert/index";
 import { Formik, Field } from "formik";
 import { loginSchema, registerSchema } from "../../utils/Schemas";
+import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 
 function LoginPage(props) {
   const initialValuesRegister = {
-    username: "",
+    firstName: "",
+    lastName: "",
     email: "",
+    dateOfBirth: "",
+    country: "",
+    city: "",
+    phoneNumber: "",
+    address: "",
+    gender: "",
+    profilePicture: null,
+    imageForCover: null,
+    career: "",
+    bio: "",
+    username: "",
     password: "",
-    role: "",
+    role: "user", // Default role
   };
 
   const initialValuesLogin = {
@@ -44,9 +63,45 @@ function LoginPage(props) {
   const registerHandler = async (values, onSubmitProps) => {
     setLoading(true);
     try {
-      const { username, password, email, role } = values;
+      const {
+        username,
+        password,
+        email,
+        role,
+        firstName,
+        lastName,
+        dateOfBirth,
+        country,
+        city,
+        phoneNumber,
+        address,
+        gender,
+        profilePicture,
+        imageForCover,
+        career,
+        bio,
+        companyName,
+      } = values;
 
-      const signUpResponse = await signup(username, password, role, email);
+      const signUpResponse = await signup(
+        username,
+        password,
+        role,
+        email,
+        firstName,
+        lastName,
+        dateOfBirth,
+        country,
+        city,
+        phoneNumber,
+        address,
+        gender,
+        profilePicture,
+        imageForCover,
+        career,
+        bio,
+        companyName
+      );
       onSubmitProps.resetForm();
     } catch (err) {
       console.error(err);
@@ -107,6 +162,7 @@ function LoginPage(props) {
             handleChange,
             handleSubmit,
             resetForm,
+            setFieldValue,
           }) => (
             <form onSubmit={handleSubmit}>
               <Box
@@ -177,6 +233,230 @@ function LoginPage(props) {
                         {"company"}
                       </MenuItem>
                     </Field>
+
+                    <>
+                      {values.role === "user" ? (
+                        <>
+                          <TextField
+                            label="First Name"
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                            value={values.firstName}
+                            name="firstName"
+                            error={
+                              touched.firstName && Boolean(errors.firstName)
+                            }
+                            helperText={touched.firstName && errors.firstName}
+                            fullWidth
+                            sx={{ gridColumn: "span 2" }}
+                          />
+                          <TextField
+                            label="Last Name"
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                            value={values.lastName}
+                            name="lastName"
+                            error={touched.lastName && Boolean(errors.lastName)}
+                            helperText={touched.lastName && errors.lastName}
+                            fullWidth
+                            sx={{ gridColumn: "span 2" }}
+                          />
+                        </>
+                      ) : (
+                        <TextField
+                          label="Company Name"
+                          onBlur={handleBlur}
+                          onChange={handleChange}
+                          value={values.companyName}
+                          name="companyName"
+                          error={
+                            touched.companyName && Boolean(errors.companyName)
+                          }
+                          helperText={touched.companyName && errors.companyName}
+                          fullWidth
+                          sx={{ gridColumn: "span 4" }}
+                        />
+                      )}
+                    </>
+
+                    <TextField
+                      label="Country"
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      value={values.country}
+                      name="country"
+                      error={touched.country && Boolean(errors.country)}
+                      helperText={touched.country && errors.country}
+                      fullWidth
+                      sx={{ gridColumn: "span 2" }}
+                    />
+                    <TextField
+                      label="City"
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      value={values.city}
+                      name="city"
+                      error={touched.city && Boolean(errors.city)}
+                      helperText={touched.city && errors.city}
+                      fullWidth
+                      sx={{ gridColumn: "span 2" }}
+                    />
+                    <TextField
+                      label="Address"
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      value={values.address}
+                      name="address"
+                      error={touched.address && Boolean(errors.address)}
+                      helperText={touched.address && errors.address}
+                      fullWidth
+                      sx={{ gridColumn: "span 2" }}
+                    />
+                    <TextField
+                      label="Phone Number"
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      value={values.phoneNumber}
+                      name="phoneNumber"
+                      error={touched.phoneNumber && Boolean(errors.phoneNumber)}
+                      helperText={touched.phoneNumber && errors.phoneNumber}
+                      fullWidth
+                      sx={{ gridColumn: "span 2" }}
+                    />
+                    <>
+                      <TextField
+                        placeholder="Bio" // Adjust the placeholder text as needed
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        value={values.bio}
+                        name="bio"
+                        maxLength={255} // Limit the input to 255 characters
+                        multiline // Enable multiline input
+                        rowsMax={10} // Set a maximum number of rows to control the height
+                        error={touched.bio && Boolean(errors.bio)}
+                        helperText={touched.bio && errors.bio}
+                        sx={{
+                          gridColumn: "span 4", // Adjust the grid column based on the role
+                          width: "100%", // Set the width to 100% to take up the entire grid column
+                          height: "auto", // Allow the height to adjust automatically
+                        }}
+                      />
+                    </>
+                    <FormControl fullWidth sx={{ gridColumn: "span 2" }}>
+                      {/* <InputLabel htmlFor="profilePicture-label">
+                        Profile Picture
+                      </InputLabel> */}
+                      <Box
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="space-between"
+                      >
+                        <input
+                          type="file"
+                          id="profilePicture"
+                          name="profilePicture"
+                          accept="image/*"
+                          style={{ display: "none" }}
+                          onChange={(event) => {
+                            setFieldValue(
+                              "profilePicture",
+                              event.currentTarget.files[0]
+                            );
+                          }}
+                          onBlur={handleBlur}
+                        />
+                        <Paper
+                          component="div"
+                          variant="outlined"
+                          sx={{
+                            p: 2,
+                            display: "flex",
+                            alignItems: "center",
+                            cursor: "pointer",
+                            maxHeight: "74px",
+                          }}
+                          onClick={() => {
+                            document.getElementById("profilePicture").click();
+                          }}
+                        >
+                          <Typography
+                            variant="body1"
+                            component="span"
+                            sx={{ flex: 1, overflow: "hidden" }}
+                          >
+                            {values.profilePicture
+                              ? values.profilePicture.name
+                              : "Upload a profile picture"}
+                          </Typography>
+                          <IconButton
+                            component="span"
+                            color="primary"
+                            aria-label="upload picture"
+                            sx={{ ml: 2 }}
+                          >
+                            <PhotoCameraIcon />
+                          </IconButton>
+                        </Paper>
+                      </Box>
+                    </FormControl>
+                    {/* Cover Image */}
+                    <FormControl fullWidth sx={{ gridColumn: "span 2" }}>
+                      {/* <InputLabel htmlFor="imageForCover-label">
+                        Cover Image
+                      </InputLabel> */}
+                      <Box
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="space-between"
+                      >
+                        <input
+                          type="file"
+                          id="imageForCover"
+                          name="imageForCover"
+                          accept="image/*"
+                          style={{ display: "none" }}
+                          onChange={(event) => {
+                            setFieldValue(
+                              "imageForCover",
+                              event.currentTarget.files[0]
+                            );
+                          }}
+                          onBlur={handleBlur}
+                        />
+                        <Paper
+                          component="div"
+                          variant="outlined"
+                          sx={{
+                            p: 2,
+                            display: "flex",
+                            alignItems: "center",
+                            cursor: "pointer",
+                            maxHeight: "74px",
+                          }}
+                          onClick={() => {
+                            document.getElementById("imageForCover").click();
+                          }}
+                        >
+                          <Typography
+                            variant="body1"
+                            component="span"
+                            sx={{ flex: 1, overflow: "hidden" }}
+                          >
+                            {values.imageForCover
+                              ? values.imageForCover.name
+                              : "Upload a cover image"}
+                          </Typography>
+                          <IconButton
+                            component="span"
+                            color="primary"
+                            aria-label="upload picture"
+                            sx={{ ml: 2 }}
+                          >
+                            <PhotoCameraIcon />
+                          </IconButton>
+                        </Paper>
+                      </Box>
+                    </FormControl>
                   </>
                 )}
               </Box>
