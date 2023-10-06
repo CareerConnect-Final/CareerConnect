@@ -54,7 +54,7 @@ const JobPosts = (props) => {
       };
       axios
         .delete(
-          `https://final-backend-nvf1.onrender.com/careerjob/joblikes/${likeId}`,
+          `https://final-backend-nvf1.onrender.com/careerjob/joblike/${likeId}`,
           {
             headers,
           }
@@ -71,7 +71,7 @@ const JobPosts = (props) => {
       };
 
       axios
-        .post(`https://final-backend-nvf1.onrender.com/careerjob/joblikes`, obj, {
+        .post(`https://final-backend-nvf1.onrender.com/careerjob/likes`, obj, {
           headers,
         })
         .then((data) => {
@@ -92,6 +92,7 @@ const JobPosts = (props) => {
       .delete(`https://final-backend-nvf1.onrender.com/careerjob/jobs/${id}`,{headers})
       .then(() => {
         state.deletePost(id);
+        console.log('delete job post')
       })
       .catch((error) => {
         console.error("Error", error);

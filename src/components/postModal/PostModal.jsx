@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Image from "react-bootstrap/Image";
-import { StateContext } from "../../context/state";
+import  {StateContext}  from "../../context/state";
 import { JobContext } from "../../context/stateJob";
 import cookie from "react-cookies";
 

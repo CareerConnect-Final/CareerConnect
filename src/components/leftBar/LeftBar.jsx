@@ -13,13 +13,17 @@ import Tutorials from "../../assets/11.png";
 import Courses from "../../assets/12.png";
 import Fund from "../../assets/13.png";
 import { AuthContext } from "../../context/auth/authContext";
-import { StateContext } from "../../context/state";
+import  {StateContext}  from "../../context/state";
 import { useContext, useState} from "react";
+import { useLocation } from "react-router-dom";
 
 const LeftBar = () => {
+  const location = useLocation().pathname
+  const [pageType, setPageType] = useState(location);
+
   const { currentUser } = useContext(AuthContext);
   const { myFriends } = useContext(StateContext);
-  
+  // console.log("------>",pageType)
   const [showFriends, setShowFriends] = useState(false);
 
   const toggleFriendsList = () => {
