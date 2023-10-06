@@ -32,7 +32,7 @@ const Share = () => {
     getDownloadURL(snapshot.ref).then( (url) => {
       const obj = {
         user_id: user.id,
-        username: user.firstName,
+        username: user.username,
         content: postContent,
         photo: url, 
         profilePicture: user.profilePicture,

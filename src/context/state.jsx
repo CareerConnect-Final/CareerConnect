@@ -8,7 +8,8 @@ export default function State(props) {
   const [likes, setLikes] = useState([]);
   const [friendRequests, setFriendRequests] = useState([]);
   const [myFriends, setMyFriends] = useState([]);
-  const [userData, setUserData] = useState([]);
+  
+  const [allUsers, setallUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const authToken = cookie.load("auth");
@@ -50,6 +51,22 @@ export default function State(props) {
         Authorization: `Bearer ${authToken}`,
       };
       axios
+        .get("https://final-backend-nvf1.onrender.com/home/users", { headers })
+        .then((response) => {
+          setallUsers(response.data);
+        })
+        .catch((error) => {
+          setError(error);
+        });
+      }
+
+    if (authToken === null) {
+      throw new Error("Authentication token not found.");
+    } else if (authToken != null) {
+      const headers = {
+        Authorization: `Bearer ${authToken}`,
+      };
+      axios
         .get("https://final-backend-nvf1.onrender.com/home/posts", { headers })
         .then((response) => {
           setPosts(response.data);
@@ -58,7 +75,7 @@ export default function State(props) {
           setError(error);
         });
       axios
-        .get("https://final-backend-nvf1.onrender.com/home/friendsreq", {
+        .get("https://final-backend-nvf1.onrender.com/home/received-friend-requests", {
           headers,
         })
         .then((response) => {
@@ -115,6 +132,9 @@ export default function State(props) {
   const addPost = (newPost) => {
     setPosts([newPost, ...posts]);
   };
+  // const addFriend=(friend)=>{
+  //   setFriendRequests([friend,...friendRequests])
+  // }
   const addLike = (newLike) => {
     setLikes([newLike, ...likes]);
   };
@@ -153,12 +173,20 @@ export default function State(props) {
     let newLikes = state.likes.filter((item) => item.id != id);
     setLikes(newLikes);
   };
+  // const sendFriendRequest=()=>{
+
+  // }
+  // console.log(allUsers)
+  // console.log(friendRequests)
+  // console.log(myFriends)
+  console.log(friendRequests)
   const state = {
     posts: posts,
     comments: comments,
     likes: likes,
     addPost: addPost,
     friendRequests:friendRequests,
+    allUsers:allUsers,
     deletePost: deletePost,
     editPost: editPost,
     acceptFriendRequest,
@@ -169,6 +197,7 @@ export default function State(props) {
     editComments: editComments,
     addComment: addComment,
     addLike: addLike,
+    // addFriend:addFriend,
   };
   return (
     <StateContext.Provider value={state}>
