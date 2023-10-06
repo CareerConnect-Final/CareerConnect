@@ -18,13 +18,44 @@ function AuthProvider(props) {
   const [error, setError] = useState(null);
   const [token, setToken] = useState(undefined);
 
-  let signup = async (username, password, role, email) => {
+  let signup = async (
+    username,
+    password,
+    role,
+    email,
+    firstName,
+    lastName,
+    dateOfBirth,
+    country,
+    city,
+    phoneNumber,
+    address,
+    gender,
+    profilePicture,
+    imageForCover,
+    career,
+    bio
+  ) => {
     const obj = {
       username: username,
       password: password,
       role: role,
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      dateOfBirth: dateOfBirth,
+      country: country,
+      city: city,
+      phoneNumber: phoneNumber,
+      address: address,
+      gender: gender,
+      profilePicture: profilePicture,
+      imageForCover: imageForCover,
+      career: career,
+      bio: bio,
+      employed: false,
     };
-    console.log(role);
+    console.log(obj);
     try {
       const url = `https://final-backend-nvf1.onrender.com/signup`;
       const res = await axios.post(url, obj);

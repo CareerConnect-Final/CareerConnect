@@ -20,7 +20,7 @@ import "./style.scss";
 import { useContext, useState, useEffect } from "react";
 import { DarkModeContext } from "./context/darkModeContext";
 import { StateContext } from "./context/state";
-import "bootstrap/dist/css/bootstrap.min.css";
+// import "bootstrap/dist/css/bootstrap.min.css";
 import ChatsPage from "./components/chats/chats";
 import { AuthContext } from "./context/auth/authContext";
 import LoginPage from "./pages/loginPage/loginPage";
@@ -46,6 +46,20 @@ function AuthenticatedLayout() {
     </div>
   );
 }
+function Cv() {
+  const { darkMode } = useContext(DarkModeContext);
+
+  return (
+    <div className={`theme-${darkMode ? "dark" : "light"}`}>
+      <PrivateRoute />
+
+      <Navbar />
+
+      <Outlet />
+    </div>
+  );
+}
+
 function App() {
   const state = useContext(StateContext);
   // const { currentUser, validateToken } = useContext(AuthContext);
@@ -74,6 +88,9 @@ function App() {
           <Route path="/profile/:id" element={<Profile />} />
           <Route path="/generate-cv" element={<CVForm />} />
           <Route path="/chats" element={<ChatsPage />} />
+        </Route>
+        <Route path="/cv" element={<Cv />}>
+          <Route index element={<CVForm />} />
         </Route>
       </Routes>
     </BrowserRouter>
