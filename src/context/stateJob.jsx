@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import cookie from "react-cookies";
 
-export const StateContext = React.createContext();
+export const JobContext = React.createContext();
 
 export default function State(props) {
-  const [posts, setPosts] = useState([]);
+  const [jobPost, setJobPosts] = useState([]);
   const [comments, setComments] = useState([]);
   const [likes, setLikes] = useState([]);
   const [friendRequests, setFriendRequests] = useState([]);
@@ -56,15 +56,8 @@ export default function State(props) {
         Authorization: `Bearer ${authToken}`,
       };
 
-      axios
-        .get("https://final-backend-nvf1.onrender.com/home/posts", { headers })
-        .then((response) => {
-          setPosts(response.data);
-        })
-        .catch((error) => {
-          setError(error);
-        });
-
+     
+        
       axios
         .get("https://final-backend-nvf1.onrender.com/home/friendsreq", {
           headers,
@@ -96,7 +89,7 @@ export default function State(props) {
       };
 
       axios
-        .get("https://final-backend-nvf1.onrender.com/home/likes", { headers })
+        .get("https://final-backend-nvf1.onrender.com/careerjob/likes", { headers })
         .then((response) => {
           setLikes(response.data);
         })
@@ -112,7 +105,7 @@ export default function State(props) {
       };
 
       axios
-        .get("https://final-backend-nvf1.onrender.com/home/comments", {
+        .get("https://final-backend-nvf1.onrender.com/home/jobcomments", {
           headers,
         })
         .then((response) => {
@@ -122,12 +115,31 @@ export default function State(props) {
           setError(error);
         });
     }
+    if (authToken === null) {
+      throw new Error("Authentication token not found.");
+    } else if (authToken != null) {
+      const headers = {
+        Authorization: `Bearer ${authToken}`,
+      };
+
+      axios
+        .get("https://final-backend-nvf1.onrender.com/careerjob/jobs", { headers })
+        .then((response) => {
+          setJobPosts(response.data);
+          console.log(response.data)
+        })
+        .catch((error) => {
+          setError(error);
+        });
+      }
 
     // .get("https://final-backend-nvf1.onrender.com/home/comments", { headers })
   }, []);
 
+
+
   const addPost = (newPost) => {
-    setPosts([newPost, ...posts]);
+    setJobPosts([newPost, ...jobPost]);
   };
   const addLike = (newLike) => {
     setLikes([newLike, ...likes]);
@@ -138,7 +150,7 @@ export default function State(props) {
   };
 
   const editPost = (editedPost) => {
-    setPosts((prevPosts) => {
+    setJobPosts((prevPosts) => {
       return prevPosts.map((post) => {
         if (post.id === editedPost.id) {
           return editedPost;
@@ -158,8 +170,8 @@ export default function State(props) {
     });
   };
   const deletePost = (id) => {
-    let newPosts = state.posts.filter((item) => item.id != id);
-    setPosts(newPosts);
+    let newPosts = state.jobPost.filter((item) => item.id != id);
+    setJobPosts(newPosts);
   };
   const deleteComment = (id) => {
     let newComments = state.comments.filter((item) => item.id != id);
@@ -171,7 +183,7 @@ export default function State(props) {
   };
 
   const state = {
-    posts: posts,
+    jobPost: jobPost,
     comments: comments,
     likes: likes,
     addPost: addPost,
@@ -189,8 +201,8 @@ export default function State(props) {
   };
 
   return (
-    <StateContext.Provider value={state}>
+    <JobContext.Provider value={state}>
       {props.children}
-    </StateContext.Provider>
+    </JobContext.Provider>
   );
 }

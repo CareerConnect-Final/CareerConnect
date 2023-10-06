@@ -13,6 +13,7 @@ import {
   useTheme,
   Input,
   InputLabel,
+  TextareaAutosize,
   FormControl,
   Paper,
   IconButton,
@@ -79,6 +80,7 @@ function LoginPage(props) {
         imageForCover,
         career,
         bio,
+        companyName,
       } = values;
 
       const signUpResponse = await signup(
@@ -97,7 +99,8 @@ function LoginPage(props) {
         profilePicture,
         imageForCover,
         career,
-        bio
+        bio,
+        companyName
       );
       onSubmitProps.resetForm();
     } catch (err) {
@@ -230,28 +233,52 @@ function LoginPage(props) {
                         {"company"}
                       </MenuItem>
                     </Field>
-                    <TextField
-                      label="First Name"
-                      onBlur={handleBlur}
-                      onChange={handleChange}
-                      value={values.firstName}
-                      name="firstName"
-                      error={touched.firstName && Boolean(errors.firstName)}
-                      helperText={touched.firstName && errors.firstName}
-                      fullWidth
-                      sx={{ gridColumn: "span 2" }}
-                    />
-                    <TextField
-                      label="Last Name"
-                      onBlur={handleBlur}
-                      onChange={handleChange}
-                      value={values.lastName}
-                      name="lastName"
-                      error={touched.lastName && Boolean(errors.lastName)}
-                      helperText={touched.lastName && errors.lastName}
-                      fullWidth
-                      sx={{ gridColumn: "span 2" }}
-                    />
+
+                    <>
+                      {values.role === "user" ? (
+                        <>
+                          <TextField
+                            label="First Name"
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                            value={values.firstName}
+                            name="firstName"
+                            error={
+                              touched.firstName && Boolean(errors.firstName)
+                            }
+                            helperText={touched.firstName && errors.firstName}
+                            fullWidth
+                            sx={{ gridColumn: "span 2" }}
+                          />
+                          <TextField
+                            label="Last Name"
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                            value={values.lastName}
+                            name="lastName"
+                            error={touched.lastName && Boolean(errors.lastName)}
+                            helperText={touched.lastName && errors.lastName}
+                            fullWidth
+                            sx={{ gridColumn: "span 2" }}
+                          />
+                        </>
+                      ) : (
+                        <TextField
+                          label="Company Name"
+                          onBlur={handleBlur}
+                          onChange={handleChange}
+                          value={values.companyName}
+                          name="companyName"
+                          error={
+                            touched.companyName && Boolean(errors.companyName)
+                          }
+                          helperText={touched.companyName && errors.companyName}
+                          fullWidth
+                          sx={{ gridColumn: "span 4" }}
+                        />
+                      )}
+                    </>
+
                     <TextField
                       label="Country"
                       onBlur={handleBlur}
@@ -296,6 +323,25 @@ function LoginPage(props) {
                       fullWidth
                       sx={{ gridColumn: "span 2" }}
                     />
+                    <>
+                      <TextField
+                        placeholder="Bio" // Adjust the placeholder text as needed
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        value={values.bio}
+                        name="bio"
+                        maxLength={255} // Limit the input to 255 characters
+                        multiline // Enable multiline input
+                        rowsMax={10} // Set a maximum number of rows to control the height
+                        error={touched.bio && Boolean(errors.bio)}
+                        helperText={touched.bio && errors.bio}
+                        sx={{
+                          gridColumn: "span 4", // Adjust the grid column based on the role
+                          width: "100%", // Set the width to 100% to take up the entire grid column
+                          height: "auto", // Allow the height to adjust automatically
+                        }}
+                      />
+                    </>
                     <FormControl fullWidth sx={{ gridColumn: "span 2" }}>
                       {/* <InputLabel htmlFor="profilePicture-label">
                         Profile Picture

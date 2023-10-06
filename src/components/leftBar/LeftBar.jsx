@@ -13,23 +13,42 @@ import Tutorials from "../../assets/11.png";
 import Courses from "../../assets/12.png";
 import Fund from "../../assets/13.png";
 import { AuthContext } from "../../context/auth/authContext";
-import { useContext } from "react";
+import { StateContext } from "../../context/state";
+import { useContext, useState} from "react";
 
 const LeftBar = () => {
   const { currentUser } = useContext(AuthContext);
+  const { myFriends } = useContext(StateContext);
+  
+  const [showFriends, setShowFriends] = useState(false);
+
+  const toggleFriendsList = () => {
+    setShowFriends(!showFriends);
+  };
 
   return (
     <div className="leftBar">
       <div className="container">
         <div className="menu">
           <div className="user">
-            <img src={currentUser.profilePic} alt="" />
-            <span>{currentUser.name}</span>
+            <img src={currentUser.profilePicture} alt="" />
+            <span>{currentUser.username}</span>
           </div>
-          <div className="item">
+          <div className="item" onClick={toggleFriendsList}>
             <img src={Friends} alt="" />
             <span>Friends</span>
           </div>
+          {showFriends && (
+            <div className="friends-list">
+              {myFriends.map((friend) => (
+                <div className="friend-item" key={friend.id}>
+                  <img src={friend.profilePicture} alt="" />
+                  <span>{friend.username}</span>
+                </div>
+              ))}
+            </div>
+          )}
+
           <div className="item">
             <img src={Groups} alt="" />
             <span>Groups</span>

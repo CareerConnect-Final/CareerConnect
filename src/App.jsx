@@ -22,19 +22,23 @@ import { DarkModeContext } from "./context/darkModeContext";
 import { StateContext } from "./context/state";
 // import "bootstrap/dist/css/bootstrap.min.css";
 import ChatsPage from "./components/chats/chats";
+import "bootstrap/dist/css/bootstrap.min.css";
+import JobPage from "./pages/jobs/Job";
+// function App() {
+// const {currentUser} = useContext(AuthContext);
+
 import { AuthContext } from "./context/auth/authContext";
 import LoginPage from "./pages/loginPage/loginPage";
 import CVForm from "./components/CVForm/CVForm";
-import { Token } from "@mui/icons-material";
 import PrivateRoute from "./pages/loginPage/redirect";
 
 function AuthenticatedLayout() {
   const { darkMode } = useContext(DarkModeContext);
+  // console.log(isLoggedIn);
 
   return (
     <div className={`theme-${darkMode ? "dark" : "light"}`}>
       <PrivateRoute />
-
       <Navbar />
       <div style={{ display: "flex" }}>
         <LeftBar />
@@ -52,9 +56,7 @@ function Cv() {
   return (
     <div className={`theme-${darkMode ? "dark" : "light"}`}>
       <PrivateRoute />
-
       <Navbar />
-
       <Outlet />
     </div>
   );
@@ -68,12 +70,6 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* <Route
-          path="/"
-          element={
-            Token === null ? <Navigate to="login" /> : <AuthenticatedLayout />
-          }
-        /> */}
         <Route
           path="/login"
           element={!isLoggedIn ? <LoginPage /> : <Navigate to="/" />}
@@ -86,8 +82,8 @@ function App() {
         <Route path="/" element={<AuthenticatedLayout />}>
           <Route index element={<Home />} />
           <Route path="/profile/:id" element={<Profile />} />
-          <Route path="/generate-cv" element={<CVForm />} />
           <Route path="/chats" element={<ChatsPage />} />
+          <Route path="/job" element={<JobPage />} />
         </Route>
         <Route path="/cv" element={<Cv />}>
           <Route index element={<CVForm />} />

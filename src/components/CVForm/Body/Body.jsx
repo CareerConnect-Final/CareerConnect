@@ -1,9 +1,10 @@
 import React, { useRef, useState } from "react";
 import ReactToPrint from "react-to-print";
 import { ArrowDown } from "react-feather";
-
+import { useReactToPrint } from "react-to-print";
 import Editor from "../Editor/Editor";
 import Resume from "../Resume/Resume";
+import html2pdf from "html2pdf.js";
 
 import styles from "./Body.module.css";
 
@@ -26,7 +27,13 @@ function Body() {
     other: "Other",
   };
   const resumeRef = useRef();
+  // console.log(resumeRef.current);
 
+  const printResume = useReactToPrint({
+    content: () => resumeRef.current,
+  });
+
+  async function handleSaveClick() {}
   const [activeColor, setActiveColor] = useState(colors[0]);
   const [resumeInformation, setResumeInformation] = useState({
     [sections.basicInfo]: {
@@ -93,6 +100,9 @@ function Body() {
           }}
           content={() => resumeRef.current}
         />
+        <button onClick={handleSaveClick}>
+          save to your profile <ArrowDown />
+        </button>
       </div>
       <div className={styles.main}>
         <Editor

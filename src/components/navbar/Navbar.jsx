@@ -12,6 +12,9 @@ import { useContext } from "react";
 import { DarkModeContext } from "../../context/darkModeContext";
 import { AuthContext } from "../../context/auth/authContext";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import React, { useState } from "react";
+import WorkOutlineIcon from '@mui/icons-material/WorkOutline';
 
 const Navbar = () => {
   const { toggle, darkMode } = useContext(DarkModeContext);
@@ -27,6 +30,24 @@ const Navbar = () => {
     }
   };
 
+  const [searchQuery, setSearchQuery] = useState("");
+  const [users, setUsers] = useState([]);
+
+  const handleSearch = async () => {
+    try {
+      const response = await axios.get(
+        `https://final-backend-nvf1.onrender.com/home/users`
+      );
+
+      setUsers(response.data);
+      users.map((user)=>
+       console.log(user.username)
+      )
+    } catch (error) {
+      console.error("Error searching users:", error);
+    }
+  };
+
   return (
     <div className="navbar">
       <div className="left">
@@ -39,10 +60,17 @@ const Navbar = () => {
         ) : (
           <DarkModeOutlinedIcon onClick={toggle} />
         )}
-        <GridViewOutlinedIcon />
+        <WorkOutlineIcon/>
+        {/* <GridViewOutlinedIcon /> */}
         <div className="search">
-          <SearchOutlinedIcon />
-          <input type="text" placeholder="Search..." />
+          <SearchOutlinedIcon onClick={handleSearch} />
+      
+          <input
+            type="text"
+            placeholder="Search..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
         </div>
       </div>
       <div className="right">
