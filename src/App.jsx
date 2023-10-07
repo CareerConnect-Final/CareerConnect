@@ -40,70 +40,7 @@ import PrivateRoute from "./pages/loginPage/redirect";
 
 function AuthenticatedLayout() {
   const { darkMode } = useContext(DarkModeContext);
-  // console.log(isLoggedIn);
-  const Layout = () => {
-    return (
-      <div className={`theme-${darkMode ? "dark" : "light"}`}>
-        <Navbar />
-        <div style={{ display: "flex" }}>
-          <LeftBar />
-          <div style={{ flex: 6 }}>
-            <Outlet />
-          </div>
-          <RightBar />
-        </div>
-      </div>
-    );
-  };
 
-  const ProtectedRoute = ({ children }) => {
-    if (!currentUser) {
-      return <Navigate to="/login" />;
-    }
-
-    return children;
-  };
-
-  const router = createBrowserRouter([
-    {
-      path: "/",
-      element: (
-        // <ProtectedRoute>
-          <Layout />
-        // </ProtectedRoute>
-      ),
-      children: [
-        {
-          path: "/",
-          element: <Home />,
-        },
-        {
-          path: "/profile/:id",
-          element: <Profile />,
-        },
-        {
-          path: "/generate-cv",
-          element: <CVForm />, 
-        },
-      ],
-    },
-    {
-      path: "/login",
-      element: <LoginPage />,
-    },
-    {
-      path: "/register",
-      element: <LoginPage />,
-    },
-    {
-      path: "/reels",
-      element: <ReelsPage />, 
-    },
-    {
-      path: "/jobsearch",
-      element: <JobSearch />, 
-    },
-  ]);
 
   return (
     <div className={`theme-${darkMode ? "dark" : "light"}`}>
@@ -147,7 +84,8 @@ function App() {
           path="/register"
           element={!isLoggedIn ? <LoginPage /> : <Navigate to="/" />}
         />
-
+          <Route path="/reels" element={<ReelsPage />} />
+          <Route path="/jobsearch" element={<JobSearch />} />
         <Route path="/" element={<AuthenticatedLayout />}>
           <Route index element={<Home />} />
           <Route path="/profile/:id" element={<Profile />} />
@@ -157,6 +95,7 @@ function App() {
         <Route path="/cv" element={<Cv />}>
           <Route index element={<CVForm />} />
         </Route>
+        
       </Routes>
     </BrowserRouter>
   );

@@ -19,10 +19,15 @@
 
 
 import React, { useRef, useState, useEffect } from "react";
+import cookie from "react-cookies";
 
 import "./reel.scss";
+import { AuthContext } from "../../context/auth/authContext";
 
 export default function Reel(props) {
+  const user = cookie.load("user");
+  const authToken = cookie.load("auth");
+  
   const [isVideoPlaying, setisVideoPlaying] = useState(false);
 
   const vidRef = useRef();
@@ -49,6 +54,8 @@ export default function Reel(props) {
       });
     }
   }, []);
+
+  const { currentUser } = useContext(AuthContext);
 
   return (
     <div className='video-cards'>

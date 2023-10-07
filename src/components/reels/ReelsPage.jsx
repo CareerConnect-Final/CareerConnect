@@ -3,10 +3,16 @@
 import React, { useEffect, useState, useContext, useRef } from "react";
 import "./reel.scss";
 import { StateContext } from "../../context/state";
+import { AuthContext } from "../../context/auth/authContext";
+import cookie from "react-cookies";
+
 import Reel from "./Reel";
 import ShareReels from './ShareReels';
 
 const ReelsPage = () => {
+  const user = cookie.load("user");
+  const authToken = cookie.load("auth");
+
   const state = useContext(StateContext);
   // const [currentIndex, setCurrentIndex] = useState(0);
   const containerRef = useRef(null);
@@ -16,6 +22,7 @@ const ReelsPage = () => {
   useEffect(() => {
     state.reel;
   }, []);
+  const { currentUser } = useContext(AuthContext);
 
   return (
     <>
