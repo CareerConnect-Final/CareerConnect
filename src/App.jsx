@@ -12,6 +12,7 @@ import LeftBar from "./components/leftBar/LeftBar";
 import RightBar from "./components/rightBar/RightBar";
 import Home from "./pages/home/Home";
 import Profile from "./pages/profile/Profile";
+import ReelsPage from "./components/reels/ReelsPage";
 import "./style.scss";
 import { useContext } from "react";
 import { DarkModeContext } from "./context/darkModeContext";
@@ -22,6 +23,10 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 // function App() {
   // const {currentUser} = useContext(AuthContext);
 
+  ////////////////////////////////////
+import JobSearch from "./components/JobSearch/JobSearch";
+  ///////////////////////////////
+  /////////////////////////////
 
 import { AuthContext } from "./context/auth/authContext";
 import LoginPage from "./pages/loginPage/loginPage";
@@ -86,6 +91,14 @@ function App() {
     {
       path: "/register",
       element: <LoginPage />,
+    },
+    {
+      path: "/reels",
+      element: <ReelsPage />, 
+    },
+    {
+      path: "/jobsearch",
+      element: <JobSearch />, 
     },
   ]);
 

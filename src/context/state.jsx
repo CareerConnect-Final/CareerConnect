@@ -8,12 +8,14 @@ export default function State(props) {
   const [posts, setPosts] = useState([]);
   const [comments, setComments] = useState([]);
   const [likes, setLikes] = useState([]);
+  const [reels, setReels] = useState([]);
   const [friendRequests, setFriendRequests] = useState([]);
   const [myFriends, setMyFriends] = useState([]);
   const [userData, setUserData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const authToken = cookie.load("auth");
+
 
   const acceptFriendRequest = async (receiver_id) => {
     try {
@@ -123,9 +125,38 @@ export default function State(props) {
         });
     }
 
+    if (authToken === null) {
+      throw new Error("Authentication token not found.");
+    } else if (authToken != null) {
+      const headers = {
+        Authorization: `Bearer ${authToken}`,
+      };
+
+      axios
+        .get("https://final-backend-nvf1.onrender.com/home/reels", {
+          headers,
+        })
+        .then((response) => {
+          setReels(response.data);
+        })
+        .catch((error) => {
+          setError(error);
+        });
+        
+    }
+
     // .get("https://final-backend-nvf1.onrender.com/home/comments", { headers })
   }, []);
 
+  // const addStory = (newPost) => {
+  //   setPosts([newPost, ...posts]);
+  // };
+
+  const addReel = (newReel) => {///
+    setReels([newReel, ...reels]);
+    console.log("reels==>",reels)
+
+  };
   const addPost = (newPost) => {
     setPosts([newPost, ...posts]);
   };
@@ -174,6 +205,8 @@ export default function State(props) {
     posts: posts,
     comments: comments,
     likes: likes,
+    addReel:addReel,
+    reels:reels,
     addPost: addPost,
     friendRequests:friendRequests,
     deletePost: deletePost,

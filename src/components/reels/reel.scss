@@ -1,0 +1,45 @@
+.video-player {
+  height: 100%;
+  width: 100%;
+}
+
+.video-cards {
+  position: relative;
+  /* display: flex; */
+  width: 350px;
+  height: 560px;
+  left: 3px;
+  top: 0px;
+  margin-bottom: 50px;
+}
+.App h3{
+  font-size: 52px;
+  font-family: 'Lugrasimo', serif;
+
+
+}
+
+video {
+  width: 50%;
+  height: 100%;
+  scroll-snap-align: start;
+  border-radius: 20px;
+  max-width: max-content;
+  max-height: max-content;
+  /* position: relative; */
+}
+
+.video-container {
+  position: relative;
+  height: 90vh;
+  width: 70%;
+  max-width: 550px;
+  overflow: scroll;
+  scroll-snap-type: y mandatory;
+  scrollbar-width: none;
+}
+
+.video-container::-webkit-scrollbar {
+  display: none;
+}
+
