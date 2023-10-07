@@ -1,32 +1,33 @@
-import "./post.scss";
+// import "./jobPost.scss";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
 import TextsmsOutlinedIcon from "@mui/icons-material/TextsmsOutlined";
 import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { Link } from "react-router-dom";
-import Comments from "../comments/Comments";
+import CommentsJob from "../comments/CommentsJob";
 import { useState, useContext, useEffect } from "react";
 import axios from "axios";
-import  {StateContext}  from "../../context/state";
+import {JobContext}  from "../../context/stateJob";
 import PostModal from "../postModal/PostModal";
 import cookie from "react-cookies";
 
-const Post = (props) => {
+const JobPosts = (props) => {
   const user = cookie.load("user");
   const authToken = cookie.load("auth");
 
-  const state = useContext(StateContext);
+  const state = useContext(JobContext);
+
   const [commentOpen, setCommentOpen] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const likesCount = state.likes
     ? state.likes
-        .filter((like) => like.post_id === props.post.id)
+        .filter((like) => like.job_id === props.post.id)
         .length.toString()
     : "0";
   const commentCount = state.comments.filter(
-    (comment) => comment.post_id === props.post.id
+    (comment) => comment.job_id === props.post.id
   ).length;
   const toggleMenu = () => {
     setShowMenu(!showMenu);
@@ -39,18 +40,21 @@ const Post = (props) => {
   };
   const handleLikeClick = () => {
     const userLike = state.likes.find(
-      (like) => like.post_id === props.post.id && user.id === like.user_id
+      (like) => like.job_id === props.post.id && user.id === like.user_id
     );
 
     const headers = {
       Authorization: `Bearer ${authToken}`,
     };
-
+    
     if (userLike) {
       const likeId = userLike.id;
+      const headers = {
+        Authorization: `Bearer ${authToken}`,
+      };
       axios
         .delete(
-          `https://final-backend-nvf1.onrender.com/home/likes/${likeId}`,
+          `https://final-backend-nvf1.onrender.com/careerjob/joblike/${likeId}`,
           {
             headers,
           }
@@ -63,11 +67,11 @@ const Post = (props) => {
         });
     } else {
       const obj = {
-        post_id: props.post.id,
+        job_id: props.post.id,
       };
 
       axios
-        .post(`https://final-backend-nvf1.onrender.com/home/likes`, obj, {
+        .post(`https://final-backend-nvf1.onrender.com/careerjob/likes`, obj, {
           headers,
         })
         .then((data) => {
@@ -80,10 +84,15 @@ const Post = (props) => {
   };
   
   const handleDelete = (id) => {
+    
+    const headers = {
+      Authorization: `Bearer ${authToken}`,
+    };
     axios
-      .delete(`https://final-backend-nvf1.onrender.com/api/v1/posts/${id}`)
+      .delete(`https://final-backend-nvf1.onrender.com/careerjob/jobs/${id}`,{headers})
       .then(() => {
         state.deletePost(id);
+        console.log('delete job post')
       })
       .catch((error) => {
         console.error("Error", error);
@@ -143,7 +152,7 @@ const Post = (props) => {
           <div className="item" onClick={handleLikeClick}>
             {state.likes.filter(
               (like) =>
-                like.post_id === props.post.id && user.id === like.user_id
+                like.job_id === props.post.id && user.id === like.user_id
             ).length > 0 ? (
               <FavoriteOutlinedIcon style={{ color: "red" }} />
             ) : (
@@ -162,11 +171,11 @@ const Post = (props) => {
           </div>
         </div>
         {commentOpen && (
-          <Comments comments={state.comments} id={props.post.id} />
+          <CommentsJob comments={state.comments} id={props.post.id} />
         )}
         {showModal && (
           <PostModal
-            check="posts"
+            checkJob="jobposts"
             id={props.post.id}
             showFlag={showModal}
             handleclose={handleClose}
@@ -177,4 +186,4 @@ const Post = (props) => {
   );
 };
 
-export default Post;
+export default JobPosts;

@@ -1,20 +1,19 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import cookie from "react-cookies";
-export const StateContext = React.createContext();
+
+export const JobContext = React.createContext();
+
 export default function State(props) {
-  const [posts, setPosts] = useState([]);
+  const [jobPost, setJobPosts] = useState([]);
   const [comments, setComments] = useState([]);
   const [likes, setLikes] = useState([]);
-  const [reels, setReels] = useState([]);
   const [friendRequests, setFriendRequests] = useState([]);
   const [myFriends, setMyFriends] = useState([]);
-  
-  const [allUsers, setallUsers] = useState([]);
+  const [userData, setUserData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const authToken = cookie.load("auth");
-
 
   const acceptFriendRequest = async (receiver_id) => {
     try {
@@ -30,10 +29,12 @@ export default function State(props) {
       console.error("Error accepting friend request:", error);
     }
   };
+
   const declineFriendRequest = async (receiver_id) => {
     try {
       const url = `https://final-backend-nvf1.onrender.com/home/handle-friend-request/${receiver_id}`;
       console.log("Declining friend request. URL:", url);
+
       const response = await axios.post(
         url,
         { action: "decline" },
@@ -46,6 +47,7 @@ export default function State(props) {
       console.error("Error declining friend request:", error);
     }
   };
+
   useEffect(() => {
     if (authToken === null) {
       throw new Error("Authentication token not found.");
@@ -53,32 +55,11 @@ export default function State(props) {
       const headers = {
         Authorization: `Bearer ${authToken}`,
       };
-      axios
-        .get("https://final-backend-nvf1.onrender.com/home/users", { headers })
-        .then((response) => {
-          setallUsers(response.data);
-        })
-        .catch((error) => {
-          setError(error);
-        });
-      }
 
-    if (authToken === null) {
-      throw new Error("Authentication token not found.");
-    } else if (authToken != null) {
-      const headers = {
-        Authorization: `Bearer ${authToken}`,
-      };
+     
+        
       axios
-        .get("https://final-backend-nvf1.onrender.com/home/posts", { headers })
-        .then((response) => {
-          setPosts(response.data);
-        })
-        .catch((error) => {
-          setError(error);
-        });
-      axios
-        .get("https://final-backend-nvf1.onrender.com/home/received-friend-requests", {
+        .get("https://final-backend-nvf1.onrender.com/home/friendsreq", {
           headers,
         })
         .then((response) => {
@@ -87,6 +68,7 @@ export default function State(props) {
         .catch((error) => {
           setError(error);
         });
+
       axios
         .get("https://final-backend-nvf1.onrender.com/home/myfriends", {
           headers,
@@ -98,14 +80,16 @@ export default function State(props) {
           setError(error);
         });
     }
+
     if (authToken === null) {
       throw new Error("Authentication token not found.");
     } else if (authToken != null) {
       const headers = {
         Authorization: `Bearer ${authToken}`,
       };
+
       axios
-        .get("https://final-backend-nvf1.onrender.com/home/likes", { headers })
+        .get("https://final-backend-nvf1.onrender.com/careerjob/likes", { headers })
         .then((response) => {
           setLikes(response.data);
         })
@@ -119,8 +103,9 @@ export default function State(props) {
       const headers = {
         Authorization: `Bearer ${authToken}`,
       };
+
       axios
-        .get("https://final-backend-nvf1.onrender.com/home/comments", {
+        .get("https://final-backend-nvf1.onrender.com/home/jobcomments", {
           headers,
         })
         .then((response) => {
@@ -130,7 +115,6 @@ export default function State(props) {
           setError(error);
         });
     }
-
     if (authToken === null) {
       throw new Error("Authentication token not found.");
     } else if (authToken != null) {
@@ -139,44 +123,34 @@ export default function State(props) {
       };
 
       axios
-        .get("https://final-backend-nvf1.onrender.com/home/reels", {
-          headers,
-        })
+        .get("https://final-backend-nvf1.onrender.com/careerjob/jobs", { headers })
         .then((response) => {
-          setReels(response.data);
+          setJobPosts(response.data);
+          console.log(response.data)
         })
         .catch((error) => {
           setError(error);
         });
-        
-    }
+      }
 
     // .get("https://final-backend-nvf1.onrender.com/home/comments", { headers })
   }, []);
 
-  // const addStory = (newPost) => {
-  //   setPosts([newPost, ...posts]);
-  // };
 
-  const addReel = (newReel) => {///
-    setReels([newReel, ...reels]);
-    console.log("reels==>",reels)
 
-  };
   const addPost = (newPost) => {
-    setPosts([newPost, ...posts]);
+    setJobPosts([newPost, ...jobPost]);
   };
-  // const addFriend=(friend)=>{
-  //   setFriendRequests([friend,...friendRequests])
-  // }
   const addLike = (newLike) => {
     setLikes([newLike, ...likes]);
   };
+
   const addComment = (newComment) => {
     setComments([newComment, ...comments]);
   };
+
   const editPost = (editedPost) => {
-    setPosts((prevPosts) => {
+    setJobPosts((prevPosts) => {
       return prevPosts.map((post) => {
         if (post.id === editedPost.id) {
           return editedPost;
@@ -196,8 +170,8 @@ export default function State(props) {
     });
   };
   const deletePost = (id) => {
-    let newPosts = state.posts.filter((item) => item.id != id);
-    setPosts(newPosts);
+    let newPosts = state.jobPost.filter((item) => item.id != id);
+    setJobPosts(newPosts);
   };
   const deleteComment = (id) => {
     let newComments = state.comments.filter((item) => item.id != id);
@@ -207,22 +181,13 @@ export default function State(props) {
     let newLikes = state.likes.filter((item) => item.id != id);
     setLikes(newLikes);
   };
-  // const sendFriendRequest=()=>{
 
-  // }
-  // console.log(allUsers)
-  // console.log(friendRequests)
-  // console.log(myFriends)
-  console.log(friendRequests)
   const state = {
-    posts: posts,
+    jobPost: jobPost,
     comments: comments,
     likes: likes,
-    addReel:addReel,
-    reels:reels,
     addPost: addPost,
     friendRequests:friendRequests,
-    allUsers:allUsers,
     deletePost: deletePost,
     editPost: editPost,
     acceptFriendRequest,
@@ -233,11 +198,11 @@ export default function State(props) {
     editComments: editComments,
     addComment: addComment,
     addLike: addLike,
-    // addFriend:addFriend,
   };
+
   return (
-    <StateContext.Provider value={state}>
+    <JobContext.Provider value={state}>
       {props.children}
-    </StateContext.Provider>
+    </JobContext.Provider>
   );
 }

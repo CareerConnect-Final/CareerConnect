@@ -1,29 +1,29 @@
+
+
 import { useContext, useState } from "react";
-import "./comments.scss";
+// import "./comments.scss";
 import { AuthContext } from "../../context/auth/authContext";
-import {StateContext} from "../../context/state";
+import { JobContext } from "../../context/stateJob";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import cookie from "react-cookies";
 import PostModal from "../postModal/PostModal";
 import axios from "axios";
 
-const Comments = (props) => {
+const CommentsJob = (props) => {
   const [showModals, setShowModals] = useState({}); // Use an object to store the showModal state for each comment
   const user = cookie.load("user");
-  const newComments = useContext(StateContext);
+  const newComments = useContext(JobContext);
 
   const [newComment, setNewComment] = useState("");
   console.log(props.id);
 
   // Maintain a separate state for showing the menu for each comment
-  const [showMenus, setShowMenus] = useState(
-    Array(props.comments.length).fill(false)
-  );
+  const [showMenus, setShowMenus] = useState(Array(props.comments.length).fill(false));
 
   // const handleShow = () => {
   //   setShowModals({});
   // };
-
+  const authToken = cookie.load("auth");
   const handleClose = (commentId) => {
     setShowModals((prevModals) => ({
       ...prevModals,
@@ -36,11 +36,15 @@ const Comments = (props) => {
     const obj = {
       profilePicture: user.profilePicture,
       user_id: user.id,
-      post_id: props.id,
+      job_id: props.id,
       content: newComment,
     };
+  
+    const headers = {
+      Authorization: `Bearer ${authToken}`,
+    };
     axios
-      .post("https://final-backend-nvf1.onrender.com/api/v1/comments", obj)
+      .post("https://final-backend-nvf1.onrender.com/careerjob/jobcomments", obj,{headers})
       .then((data) => {
         setNewComment("");
 
@@ -49,7 +53,9 @@ const Comments = (props) => {
       .catch((error) => {
         console.error("Error creating post:", error);
       });
+
   };
+
 
   const toggleMenu = (idx) => {
     // Create a copy of the showMenus array and toggle the menu for the specific comment
@@ -60,7 +66,7 @@ const Comments = (props) => {
 
   const handleDelete = (id) => {
     axios
-      .delete(`https://final-backend-nvf1.onrender.com/api/v1/comments/${id}`)
+      .delete(`https://final-backend-nvf1.onrender.com/api/v1/jobcomments/${id}`)
       .then(() => {
         newComments.deleteComment(id);
       })
@@ -82,7 +88,7 @@ const Comments = (props) => {
         <button onClick={addNewComment}>Send</button>
       </div>
       {props.comments.map((comment, idx) => {
-        if (comment.post_id === props.id) {
+        if (comment.job_id === props.id) {
           return (
             <div className="comment" key={idx}>
               <img src={comment.profilePicture} alt="" />
@@ -96,9 +102,7 @@ const Comments = (props) => {
                           <div
                             className="menu-option"
                             style={{ color: "blue" }}
-                            onClick={() =>
-                              setShowModals({ [comment.id]: true })
-                            } // Open the modal for this specific comment
+                            onClick={() => setShowModals({ [comment.id]: true })} // Open the modal for this specific comment
                           >
                             Edit
                           </div>
@@ -120,10 +124,10 @@ const Comments = (props) => {
               <span className="date">1 hour ago</span>
               {showModals[comment.id] && (
                 <PostModal
-                  check="comments"
-                  id={comment.id}
-                  showFlag={showModals[comment.id]}
-                  handleclose={() => handleClose(comment.id)} // Pass the correct function
+                checkJob="jobcomments"
+                id={comment.id}
+                showFlag={showModals[comment.id]}
+                handleclose={() => handleClose(comment.id)} // Pass the correct function
                 />
               )}
             </div>
@@ -134,4 +138,4 @@ const Comments = (props) => {
   );
 };
 
-export default Comments;
+export default CommentsJob;

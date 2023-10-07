@@ -1,7 +1,7 @@
 import Post from "../post/Post";
 import "./posts.scss";
 import { useContext } from "react";
-import { StateContext } from "../../context/state";
+import  {StateContext}  from "../../context/state";
 // import { useContext, useEffect ,useState} from "react";
 const Posts = () => {
 

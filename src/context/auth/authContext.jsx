@@ -20,13 +20,46 @@ function AuthProvider(props) {
   const [token, setToken] = useState(undefined);
   const [userPost, setUserPost] = useState({});
 
-  let signup = async (username, password, role, email) => {
+  let signup = async (
+    username,
+    password,
+    role,
+    email,
+    firstName,
+    lastName,
+    dateOfBirth,
+    country,
+    city,
+    phoneNumber,
+    address,
+    gender,
+    profilePicture,
+    imageForCover,
+    career,
+    bio,
+    companyName
+  ) => {
     const obj = {
       username: username,
       password: password,
       role: role,
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      dateOfBirth: dateOfBirth,
+      country: country,
+      city: city,
+      phoneNumber: phoneNumber,
+      address: address,
+      gender: gender,
+      profilePicture: profilePicture,
+      imageForCover: imageForCover,
+      career: career,
+      bio: bio,
+      employed: false,
+      companyName: companyName,
     };
-    console.log(role);
+    console.log(obj);
     try {
       const url = `https://final-backend-nvf1.onrender.com/signup`;
       const res = await axios.post(url, obj);
@@ -78,48 +111,49 @@ function AuthProvider(props) {
     cookie.save("auth", Token);
     cookie.save("user", User);
   };
+  const logout = () => {
+    setLoginState(false, null, {});
+  };
 
   // +++++++++++++++++ get user posts+++++++++++++++++++++++
 
-    const getUserPosts = async (userId) => {
-      try {
-        const authToken = cookie.load("auth"); 
-        if (!authToken) {
-          
-          throw new Error("Authentication token not found.");
-        }
-  
-        const url = `https://final-backend-nvf1.onrender.com/home/userposts/${userId}`;
-        const headers = {
-          Authorization: `Bearer ${authToken}`,
-        };
-  
-        const response = await axios.get(url, { headers });
-  
-        if (response.status === 200) {
-          const userPosts = response.data;
-          console.log("=============>",userPosts)
-          return userPosts;
-        } else {
-          throw new Error("Failed to fetch user posts");
-        }
-      } catch (error) {
-        console.error("Error fetching user posts:", error);
-        throw error; 
+  const getUserPosts = async (userId) => {
+    try {
+      const authToken = cookie.load("auth");
+      if (!authToken) {
+        throw new Error("Authentication token not found.");
       }
-    };
+
+      const url = `https://final-backend-nvf1.onrender.com/home/userposts/${userId}`;
+      const headers = {
+        Authorization: `Bearer ${authToken}`,
+      };
+
+      const response = await axios.get(url, { headers });
+
+      if (response.status === 200) {
+        const userPosts = response.data;
+        console.log("=============>", userPosts);
+        return userPosts;
+      } else {
+        throw new Error("Failed to fetch user posts");
+      }
+    } catch (error) {
+      console.error("Error fetching user posts:", error);
+      throw error;
+    }
+  };
   // ++++++++++++++++++++++++++++++++++++++++
 
   useEffect(() => {
     const qs = new URLSearchParams(window.location.search);
     const cookieToken = cookie.load("auth");
     const cookieUser = cookie.load("user"); // this is not a good practice
-    const token = qs.get("token") || cookieToken ;
-    const user = qs.get("user") || cookieUser ;
+    const token = qs.get("token") || cookieToken;
+    const user = qs.get("user") || cookieUser;
     console.log("user from cookie", user);
     console.log("hi");
     validateToken(token, user);
-  
   }, []);
 
   const sharedStates = {
@@ -130,7 +164,8 @@ function AuthProvider(props) {
     signup,
     login,
     currentUser,
-    getUserPosts
+    logout,
+    getUserPosts,
   };
 
   return (

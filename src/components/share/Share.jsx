@@ -4,7 +4,7 @@ import Map from "../../assets/map.png";
 import Friend from "../../assets/friend.png";
 import { useContext } from "react";
 import { AuthContext } from "../../context/auth/authContext";
-import { StateContext } from "../../context/state";
+import  {StateContext}  from "../../context/state";
 import { useState } from "react";
 import axios from "axios";
 import cookie from "react-cookies";
@@ -30,15 +30,14 @@ const Share = () => {
   const imageRef = ref(storage, `${user.email}/posts/${imageUpload.name + v4()}`);
   uploadBytes(imageRef, imageUpload).then((snapshot) => {
     getDownloadURL(snapshot.ref).then( (url) => {
-
       const obj = {
         user_id: user.id,
-        username: user.firstName,
+        username: user.username,
         content: postContent,
         photo: url, 
         profilePicture: user.profilePicture,
       };
-  
+
       axios
         .post("https://final-backend-nvf1.onrender.com/api/v1/posts", obj)
         .then((data) => {
@@ -49,6 +48,7 @@ const Share = () => {
         .catch((error) => {
           console.error("Error creating post:", error);
         });
+
     });
   });
   
