@@ -15,14 +15,23 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import React, { useState } from "react";
 import WorkOutlineIcon from '@mui/icons-material/WorkOutline';
+import {StateContext} from "../../context/state";
+import { JobContext } from "../../context/stateJob";
 
 const Navbar = () => {
+  const state=useContext(StateContext)
+  const stateJob=useContext(JobContext)
   const { toggle, darkMode } = useContext(DarkModeContext);
   const { currentUser, logout } = useContext(AuthContext);
   const navigate = useNavigate();
   // Function to handle sign out
   const handleSignOut = async () => {
     try {
+
+
+  stateJob.resetStateJob()
+  state.resetState()
+
       await logout();
       navigate("/login");
     } catch (error) {
