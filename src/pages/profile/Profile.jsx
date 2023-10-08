@@ -7,51 +7,55 @@ import TwitterIcon from "@mui/icons-material/Twitter";
 import PlaceIcon from "@mui/icons-material/Place";
 import LanguageIcon from "@mui/icons-material/Language";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
+import AlternateEmailOutlinedIcon from '@mui/icons-material/AlternateEmailOutlined';
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import Posts from "../../components/posts/Posts"
-import { useContext, useEffect ,useState} from "react";
+import PermContactCalendarIcon from '@mui/icons-material/PermContactCalendar';
+import Posts from "../../components/posts/Posts";
+import { useContext, useEffect, useState } from "react";
 import Post from "../../components/post/Post";
-const userAPI= "https://final-backend-nvf1.onrender.com/profile"
-const userPostsAPI= "https://final-backend-nvf1.onrender.com/home/userposts/2"
-// const userPostsAPI= "https://final-backend-nvf1.onrender.com/api/v1/users/2/posts"
+const userAPI = "https://final-backend-nvf1.onrender.com/profile";
+import { StateContext } from "../../context/state";
 
 import { useLocation, useNavigate } from "react-router-dom";
 import cookie from "react-cookies";
-import { AuthContext } from "../../context/auth/authContext";
 
 const Profile = () => {
-
+  const state = useContext(StateContext);
+  
 
 
     const cookieToken = cookie.load("auth");
     const cookieUser = cookie.load("user"); // this is not a good practice
     const token =  cookieToken ;
     const user =  cookieUser ;
-    console.log("user from cookie", user);
-
-
     
-  const location = useLocation().pathname
-  const [pageType, setPageType] = useState(location);
-  console.log(pageType);
-    const { currentUser, getUserPosts } = useContext(AuthContext);
-  const [userPosts, setUserPosts] = useState([]);
+    
+    
+    const location = useLocation().pathname
+    const [pageType, setPageType] = useState(location);
+// console.log(pageType)
+    
+    
 
-  useEffect(() => {
+
+  //   const { currentUser, getUserPosts } = useContext(AuthContext);
+  // const [userPosts, setUserPosts] = useState([]);
+
+  // useEffect(() => {
    
-    if (currentUser.id) {
-      getUserPosts(currentUser.id)
-        .then((posts) => {
-          setUserPosts(posts);
-        })
-        .catch((error) => {
-          console.error("Error fetching user posts:", error);
-        });
-    }
-  }, [currentUser.id, getUserPosts]); // this to get the new posts if added 
+  //   if (currentUser.id) {
+  //     getUserPosts(currentUser.id)
+  //       .then((posts) => {
+  //         setUserPosts(posts);
+  //       })
+  //       .catch((error) => {
+  //         console.error("Error fetching user posts:", error);
+  //       });
+  //   }
+  // }, [currentUser.id, getUserPosts]); // this to get the new posts if added 
 
 
-
+console.log("-------+++++>",state.userProfile)
 
 
 
@@ -64,67 +68,86 @@ const Profile = () => {
           className="cover"
         />
         <img
-          src="https://images.pexels.com/photos/14028501/pexels-photo-14028501.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load"
+          src= {user.profilePicture || null}
           alt=""
           className="profilePic"
         />
       </div>
       <div className="profileContainer">
-        <div className="uInfo">
-        <div className="top-right">
-
-< MoreVertIcon />
-</div>
+        {/* <div className="uInfo">
+          <div className="top-right">
+            <MoreVertIcon />
+          </div>
           <div className="left">
             <a href="http://facebook.com">
-              {/* <FacebookTwoToneIcon fontSize="large" />
-            </a>
-            <a href="http://facebook.com">
-              <InstagramIcon fontSize="large" />
-            </a>
-            <a href="http://facebook.com">
-              <TwitterIcon fontSize="large" />
-            </a>
-            <a href="http://facebook.com">
-              <LinkedInIcon fontSize="large" />
-            </a>
-            <a href="http://facebook.com">
-              <PinterestIcon fontSize="large" /> */}
             </a>
           </div>
           <div className="center">
-            <span>{user.firstName} {user.lastName}</span> 
-            {/* <span></span> */}
-                <div>{currentUser.bio}</div>
+            <span>
+              {user.firstName} {user.lastName}
+            </span>
+
+                <div>{user.bio}</div>
             <div className="info">
               <div className="item">
                 <PlaceIcon />
-                <span>{currentUser.city}</span>
+                <span>{user.city}</span>
               </div>
               <div className="item">
                 <LanguageIcon />
-                <span>{currentUser.career}</span>
+                <span>{user.career}</span>
               </div>
             </div>
             <button>follow</button>
           </div>
           <div className="right">
             <EmailOutlinedIcon />
-            
-            
           </div>
-              {/* <div className="top-right">
 
-              < MoreVertIcon />
-              </div> */}
+        </div> */}
+
+
+
+        <div className="uInfo">
+          <div className="top">
+            <button>follow</button>
+            <MoreVertIcon />
+          </div>
+          <div className="user-career">
+           <div>
+            <span>
+              {user.firstName} {user.lastName}
+            </span>
+           </div>
+            <div>{user.career}</div>
+          </div>
+
+          <div className="bio">
+           <div>{user.city}</div> 
+          </div>
+            <div className="contact-info">
+              <div className="con-info">Contact Info:</div>
+              <div className="contact-icons">
+          <div><AlternateEmailOutlinedIcon/> {user.email}</div>
+          <div><PermContactCalendarIcon/>{user.phoneNumber}</div>
+              </div>
+            </div>
+
+        
+          {/* <div className="right">
+            <EmailOutlinedIcon />
+          </div> */}
+
         </div>
-      {/* <Posts  check="userposts"/> */}
-    
-    {userPosts.map(post=>(
+        <div className="uInfo-bio" >
+          <div>About :</div>
+          <div>{user.bio}</div>
+          </div> 
+    {state.userPosts.map(post=>(
       <Post  post={post} key={post.id}/>
+        ))}
 
-    ))}
-  </div>;
+      </div>
       
     </div>
   );

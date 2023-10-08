@@ -1,4 +1,4 @@
-// import "./jobPost.scss";
+import "./jobPost.scss";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
 import TextsmsOutlinedIcon from "@mui/icons-material/TextsmsOutlined";
@@ -54,7 +54,7 @@ const JobPosts = (props) => {
       };
       axios
         .delete(
-          `https://final-backend-nvf1.onrender.com/careerjob/joblikes/${likeId}`,
+          `https://final-backend-nvf1.onrender.com/careerjob/joblike/${likeId}`,
           {
             headers,
           }
@@ -71,7 +71,7 @@ const JobPosts = (props) => {
       };
 
       axios
-        .post(`https://final-backend-nvf1.onrender.com/careerjob/joblikes`, obj, {
+        .post(`https://final-backend-nvf1.onrender.com/careerjob/likes`, obj, {
           headers,
         })
         .then((data) => {
@@ -97,6 +97,8 @@ const JobPosts = (props) => {
         console.error("Error", error);
       });
   };
+
+  console.log(props.post)
   return (
     <div className="post">
       <div className="container">
@@ -108,7 +110,7 @@ const JobPosts = (props) => {
                 to={`/profile/${props.post.user_id}`}
                 style={{ textDecoration: "none", color: "inherit" }}
               >
-                <span className="name">{props.post.username}</span>
+                <span className="name">{props.post.company_name}</span>
               </Link>
               <span className="date">1 min ago</span>
             </div>
@@ -139,7 +141,25 @@ const JobPosts = (props) => {
         </div>
 
         <div className="content">
-          <p>{props.post.content}</p>
+         <div className="cont-cont">
+         <div className="cont-post1"> description : </div> 
+         <p>{props.post.content}</p>
+         </div>
+         <div className="cont-cont">
+         <div className="cont-post"> Title : </div> 
+         <p>{ props.post.job_title}</p>
+         </div>
+         <div className="cont-cont">
+         <div className="cont-post"> Field : </div> 
+         <p>{props.post.job_field}</p>
+         </div>
+         <div className="cont-cont">
+         <div className="cont-post"> City : </div> 
+         <p>{props.post.job_city}</p>
+         </div>
+
+
+
           <img
             src={props.post.photo
               // "https://images.pexels.com/photos/4881619/pexels-photo-4881619.jpeg?auto=compress&cs=tinysrgb&w=1600"
@@ -148,6 +168,9 @@ const JobPosts = (props) => {
           />
         </div>
         <div className="info">
+        <div className="share-pst">
+            
+           
           <div className="item" onClick={handleLikeClick}>
             {state.likes.filter(
               (like) =>
@@ -167,6 +190,10 @@ const JobPosts = (props) => {
           <div className="item">
             <ShareOutlinedIcon />
             Share
+          </div>
+          </div>
+          <div className="aply-btn">
+            <button> Apply</button>
           </div>
         </div>
         {commentOpen && (
