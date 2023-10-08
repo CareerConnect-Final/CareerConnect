@@ -16,16 +16,23 @@ import LeftBar from "./components/leftBar/LeftBar";
 import RightBar from "./components/rightBar/RightBar";
 import Home from "./pages/home/Home";
 import Profile from "./pages/profile/Profile";
+import ReelsPage from "./components/reels/ReelsPage";
+import Gallery from "./components/Gallery/Gallery";
 import "./style.scss";
 import { useContext, useState, useEffect } from "react";
 import { DarkModeContext } from "./context/darkModeContext";
 import { StateContext } from "./context/state";
 // import "bootstrap/dist/css/bootstrap.min.css";
 import ChatsPage from "./components/chats/chats";
-import "bootstrap/dist/css/bootstrap.min.css";
+// import "bootstrap/dist/css/bootstrap.min.css";
 import JobPage from "./pages/jobs/Job";
 // function App() {
-// const {currentUser} = useContext(AuthContext);
+  // const {currentUser} = useContext(AuthContext);
+
+  ////////////////////////////////////
+import JobSearch from "./components/JobSearch/JobSearch";
+  ///////////////////////////////
+  /////////////////////////////
 
 import { AuthContext } from "./context/auth/authContext";
 import LoginPage from "./pages/loginPage/loginPage";
@@ -34,7 +41,7 @@ import PrivateRoute from "./pages/loginPage/redirect";
 
 function AuthenticatedLayout() {
   const { darkMode } = useContext(DarkModeContext);
-  // console.log(isLoggedIn);
+
 
   return (
     <div className={`theme-${darkMode ? "dark" : "light"}`}>
@@ -62,6 +69,18 @@ function Cv() {
   );
 }
 
+function Reels() {
+  const { darkMode } = useContext(DarkModeContext);
+
+  return (
+    <div className={`theme-${darkMode ? "dark" : "light"}`}>
+      <PrivateRoute />
+      <Navbar />
+      <Outlet />
+    </div>
+  );
+}
+
 function App() {
   const state = useContext(StateContext);
   // const { currentUser, validateToken } = useContext(AuthContext);
@@ -78,16 +97,21 @@ function App() {
           path="/register"
           element={!isLoggedIn ? <LoginPage /> : <Navigate to="/" />}
         />
+          {/* <Route path="/reels" element={<ReelsPage />} /> */}
+          <Route path="/jobsearch" element={<JobSearch />} />
 
         <Route path="/" element={<AuthenticatedLayout />}>
           <Route index element={<Home />} />
           <Route path="/profile/:id" element={<Profile />} />
           <Route path="/chats" element={<ChatsPage />} />
           <Route path="/job" element={<JobPage />} />
+          <Route path="/reels" element={<ReelsPage />} />
+          <Route path="/gallery" element={<Gallery />} />
         </Route>
         <Route path="/cv" element={<Cv />}>
           <Route index element={<CVForm />} />
         </Route>
+        
       </Routes>
     </BrowserRouter>
   );

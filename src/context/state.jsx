@@ -6,6 +6,8 @@ export default function State(props) {
   const [posts, setPosts] = useState([]);
   const [comments, setComments] = useState([]);
   const [likes, setLikes] = useState([]);
+  const [reels, setReels] = useState([]);
+
   const [friendRequests, setFriendRequests] = useState([]);
   const [myFriends, setMyFriends] = useState([]);
   const [allUsers, setallUsers] = useState([]);
@@ -13,6 +15,8 @@ export default function State(props) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const authToken = cookie.load("auth");
+
+
   const acceptFriendRequest = async (receiver_id) => {
     try {
       const response = await axios.post(
@@ -44,6 +48,17 @@ export default function State(props) {
     }
   };
 
+    
+
+  // const addStory = (newPost) => {
+  //   setPosts([newPost, ...posts]);
+  // };
+
+  const addReel = (newReel) => {///
+    setReels([newReel, ...reels]);
+    console.log("reels==>",reels)
+
+  };
   // const fetchData=()=>{
 
   // }
@@ -214,6 +229,9 @@ export default function State(props) {
     comments: comments,
     setComments: setComments,
     likes: likes,
+    addReel:addReel,
+    setReels:setReels,
+    reels:reels,
     setLikes: setLikes,
     followers: followers,
     setFollowers: setFollowers,
