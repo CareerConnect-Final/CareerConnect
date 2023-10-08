@@ -78,6 +78,7 @@ const handleKeyDown = (e) => {
 
   const { currentUser } = useContext(AuthContext);
   return (
+  
     <div className="share">
       <div className="container">
         <div className="top">
@@ -126,49 +127,6 @@ const handleKeyDown = (e) => {
         </div>
       </div>
     </div>
-    // <div className="share">
-    //   <div className="container">
-    //     <div className="top">
-    //       <img src={user.profilePicture} alt="" />
-    //       <input
-    //         type="text"
-    //         placeholder={`What's on your mind ${currentUser.name}?`}
-    //         value={postContent}
-    //         onChange={(e) => setPostContent(e.target.value)}
-    //       />
-    //       <input //////////////
-    //         type="text"
-    //         value={imageUpload.name}
-    //       />
-    //     </div>
-    //     <hr />
-    //     <div className="bottom">
-    //       <div className="left">
-    //         <input type="file" id="file" style={{ display: "none" }}
-    //         onChange={(event) => { //////////////////////
-    //           setImageUpload(event.target.files[0]);
-    //       }} />
-    //         <label htmlFor="file">
-    //           <div className="item">
-    //             <img src={Image} alt="" />
-    //             <span>Add Image</span>
-    //           </div>
-    //         </label>
-    //         <div className="item">
-    //           <img src={Map} alt="" />
-    //           <span>Add Place</span>
-    //         </div>
-    //         <div className="item">
-    //           <img src={Friend} alt="" />
-    //           <span>Tag Friends</span>
-    //         </div>
-    //       </div>
-    //       <div className="right">
-    //         <button onClick={handleAdd}>Share</button>
-    //       </div>
-    //     </div>
-    //   </div>
-    // </div>
   );
 };
 

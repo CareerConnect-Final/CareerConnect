@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import Comments from "../comments/Comments";
 import { useState, useContext, useEffect } from "react";
 import axios from "axios";
-import { StateContext } from "../../context/state";
+import  {StateContext}  from "../../context/state";
 import PostModal from "../postModal/PostModal";
 import cookie from "react-cookies";
 import { useParams } from "react-router-dom";
@@ -56,6 +56,8 @@ const Post = (props) => {
 
     if (userLike) {
       const likeId = userLike.id;
+     
+
       axios
         .delete(
           `https://final-backend-nvf1.onrender.com/home/likes/${likeId}`,

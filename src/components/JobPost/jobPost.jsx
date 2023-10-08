@@ -39,6 +39,7 @@ const JobPosts = (props) => {
     setShowModal(false);
   };
   const handleLikeClick = () => {
+    console.log(state.likes)
     const userLike = state.likes.find(
       (like) => like.job_id === props.post.id && user.id === like.user_id
     );
@@ -49,6 +50,8 @@ const JobPosts = (props) => {
     
     if (userLike) {
       const likeId = userLike.id;
+      console.log(likeId)
+      console.log(userLike.id)
       const headers = {
         Authorization: `Bearer ${authToken}`,
       };
@@ -92,6 +95,7 @@ const JobPosts = (props) => {
       .delete(`https://final-backend-nvf1.onrender.com/careerjob/jobs/${id}`,{headers})
       .then(() => {
         state.deletePost(id);
+        console.log('delete job post')
       })
       .catch((error) => {
         console.error("Error", error);
@@ -106,6 +110,7 @@ const JobPosts = (props) => {
           <div className="userInfo">
             <img src={props.post.profilePicture} alt="" />
             <div className="details">
+           
               <Link
                 to={`/profile/${props.post.user_id}`}
                 style={{ textDecoration: "none", color: "inherit" }}
