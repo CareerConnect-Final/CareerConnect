@@ -29,7 +29,8 @@ const ReelsPage = () => {
       <div className="App">
         <center>
           {/* <ShareReels/> */}
-          <h3>Reels Page</h3>
+          <h3></h3> 
+          {/* Reels Page */}
 
           <div className="video-container" id="video-container">
             {state.reels.map((list, i) => (

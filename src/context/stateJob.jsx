@@ -11,6 +11,7 @@ export default function State(props) {
   const [friendRequests, setFriendRequests] = useState([]);
   const [myFriends, setMyFriends] = useState([]);
   const [userData, setUserData] = useState([]);
+  const [jobSearch, setJobSearch] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const authToken = cookie.load("auth");
@@ -198,6 +199,8 @@ export default function State(props) {
     editComments: editComments,
     addComment: addComment,
     addLike: addLike,
+    jobSearch:jobSearch,
+    setJobSearch:setJobSearch,
   };
 
   return (

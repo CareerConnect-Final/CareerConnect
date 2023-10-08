@@ -1,6 +1,8 @@
 .video-player {
   height: 100%;
   width: 100%;
+  border-style: ridge;
+
 }
 
 .video-cards {
@@ -11,6 +13,10 @@
   left: 3px;
   top: 0px;
   margin-bottom: 50px;
+  // border-style: ridge;
+  border-radius: 20px;
+
+
 }
 .App h3{
   font-size: 52px;
@@ -43,3 +49,45 @@ video {
   display: none;
 }
 
+
+.video-cards {
+  position: relative; // This is necessary for positioning the button relative to the video
+  margin: 20px;
+  margin-left: 20px;
+
+  .blue-button {
+    z-index: 2;
+    position: absolute;
+    top: 10px; // Adjust the top distance as needed
+    left: 30px; // Adjust the left distance as needed
+    background-color: rgba(68, 114, 214, 0.938);
+    color: white;
+    border: none;
+    border-radius: 50%; // Create a circular background
+    width: 40px; // Set the width and height for the circular button
+    height: 40px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: rgb(0, 0, 110); // Change the background color on hover if desired
+    }
+  }
+
+}
+
+
+.file-input-label {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  cursor: pointer;
+  border-radius: 5px;
+  font-weight: bold;
+  text-align: center;
+  transition: background-color 0.3s;
+}
+
+.file-input-label:hover {
+  background-color: #0056b3;
+}

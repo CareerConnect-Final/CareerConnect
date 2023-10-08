@@ -7,6 +7,7 @@ export default function State(props) {
   const [comments, setComments] = useState([]);
   const [likes, setLikes] = useState([]);
   const [reels, setReels] = useState([]);
+
   const [friendRequests, setFriendRequests] = useState([]);
   const [myFriends, setMyFriends] = useState([]);
   
@@ -77,26 +78,26 @@ export default function State(props) {
         .catch((error) => {
           setError(error);
         });
-      // axios
-      //   .get("https://final-backend-nvf1.onrender.com/home/received-friend-requests", {
-      //     headers,
-      //   })
-      //   .then((response) => {
-      //     setFriendRequests(response.data);
-      //   })
-      //   .catch((error) => {
-      //     setError(error);
-      //   });
-      // axios
-      //   .get("https://final-backend-nvf1.onrender.com/home/myfriends", {
-      //     headers,
-      //   })
-      //   .then((response) => {
-      //     setMyFriends(response.data);
-      //   })
-      //   .catch((error) => {
-      //     setError(error);
-      //   });
+      axios
+        .get("https://final-backend-nvf1.onrender.com/home/received-friend-requests", {
+          headers,
+        })
+        .then((response) => {
+          setFriendRequests(response.data);
+        })
+        .catch((error) => {
+          setError(error);
+        });
+      axios
+        .get("https://final-backend-nvf1.onrender.com/home/myfriends", {
+          headers,
+        })
+        .then((response) => {
+          setMyFriends(response.data);
+        })
+        .catch((error) => {
+          setError(error);
+        });
     }
     if (authToken === null) {
       throw new Error("Authentication token not found.");

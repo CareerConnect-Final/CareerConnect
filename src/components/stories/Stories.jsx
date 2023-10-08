@@ -130,6 +130,7 @@ const ShareReels = () => {
   const newReel = useContext(StateContext);
  const user=cookie.load("user")
  const handleAdd = () => {
+  console.log(videoUpload.name)
   const videoRef = ref(storage, `${user.email}/reels/${videoUpload.name + v4()}`);
   uploadBytes(videoRef, videoUpload).then((snapshot) => {
     getDownloadURL(snapshot.ref).then( (url) => {

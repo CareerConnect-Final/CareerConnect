@@ -17,6 +17,8 @@ import  {StateContext}  from "../../context/state";
 import { useContext, useState} from "react";
 import { useLocation } from "react-router-dom";
 
+import { Link } from "react-router-dom";
+
 const LeftBar = () => {
   const location = useLocation().pathname
   const [pageType, setPageType] = useState(location);
@@ -28,6 +30,10 @@ const LeftBar = () => {
 
   const toggleFriendsList = () => {
     setShowFriends(!showFriends);
+  };
+
+  const imgStyle = {
+    marginRight: '10px',
   };
 
   return (
@@ -62,8 +68,13 @@ const LeftBar = () => {
             <span>Marketplace</span>
           </div>
           <div className="item">
-            <img src={Watch} alt="" />
+          <Link
+                to={`/reels`}
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
+            <img src={Watch} alt="" style={imgStyle}/>
             <span>Watch</span>
+            </Link>
           </div>
           <div className="item">
             <img src={Memories} alt="" />
@@ -82,8 +93,14 @@ const LeftBar = () => {
             <span>Gaming</span>
           </div>
           <div className="item">
-            <img src={Gallery} alt="" />
-            <span>Gallery</span>
+          <Link
+                to={`/gallery`}
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
+              <img src={Gallery} style={imgStyle} alt="" />
+              <span>Gallery</span>
+          </Link>
+
           </div>
           <div className="item">
             <img src={Videos} alt="" />
