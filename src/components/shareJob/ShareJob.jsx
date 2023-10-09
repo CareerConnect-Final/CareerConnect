@@ -8,6 +8,7 @@ import { JobContext } from "../../context/stateJob";
 import { useState } from "react";
 import axios from "axios";
 import cookie from "react-cookies";
+import { DarkModeContext } from "../../context/darkModeContext";
 /////////////////////////////////////firebase//
 import {
   ref,
@@ -24,6 +25,12 @@ const Share = () => {
   const [photoContent, setPhotoContent] = useState("");///
   const newPost = useContext(JobContext);
   const [postContent, setPostContent] = useState("");
+  const [cityContent, setCityContent] = useState("");
+  const [fieldContent, setFieldContent] = useState("");
+  const [titleContent, setTitleContent] = useState("");
+
+  const {darkMode } = useContext(DarkModeContext);
+
 
  const user=cookie.load("user")
  const authToken = cookie.load("auth");
@@ -37,9 +44,9 @@ const Share = () => {
       const obj = {
         user_id: user.id,
         company_name: user.firstName,
-        job_title: "title" ,
-        job_city: "city",
-        job_field: "field",
+        job_title: titleContent,
+        job_city: cityContent,
+        job_field: fieldContent,
         content: postContent,
         // photo: "url", 
         profilePicture: user.profilePicture,
@@ -62,59 +69,74 @@ const Share = () => {
   // });
   
 };
+const [text, setText] = useState('');
+
+const handleKeyDown = (e) => {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    setPostContent((prevContent) => prevContent + '\n');
+  }
+};
+
 
   const { currentUser } = useContext(AuthContext);
   return (
+  
     <div className="share">
+      <div className="container">
+        <div className="top">
+          <div className="top-img">
+          <img src={user.profilePicture} alt="" />
+          </div>
+          <div className="top-inpt">
 
+         {darkMode ?  <textarea
+         style={{backgroundColor:"#222222", color:"white"}}
+        placeholder={`Add a job post`}
+        value={postContent}
+        onChange={(e) => setPostContent(e.target.value)}
+        onKeyDown={handleKeyDown}
+        rows={4}
+        cols={50}
+      />:   <textarea  
+      placeholder={`Add a job post`}
+      value={postContent}
+      onChange={(e) => setPostContent(e.target.value)}
+      onKeyDown={handleKeyDown}
+      rows={4}
+      cols={50}
+    />  }
+          <input
+            type="text"
+            placeholder={`Add city`}
+            value={cityContent}
+            onChange={(e) => setCityContent(e.target.value)}
+            />
+          <input
+            type="text"
+            placeholder={`Add title`}
+            value={titleContent}
+            onChange={(e) => setTitleContent(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder={`Add field`}
+            value={fieldContent}
+            onChange={(e) => setFieldContent(e.target.value)}
+            />
+            </div>
 
+        </div>
+        <hr />
+        <div className="bottom">
+          <div className="left">
 
-      {user.role==="company"&&(
-
-<div className="container">
-<div className="top">
-  <img src={user.profilePicture} alt="" />
-  <input
-    type="text"
-    placeholder={`What's on your mind ${currentUser.name}?`}
-    value={postContent}
-    onChange={(e) => setPostContent(e.target.value)}
-  />
-  <input //////////////
-    type="text"
-    value={imageUpload.name}
-  />
-</div>
-<hr />
-<div className="bottom">
-  <div className="left">
-    <input type="file" id="file" style={{ display: "none" }}
-    onChange={(event) => { //////////////////////
-      setImageUpload(event.target.files[0]);
-  }} />
-    <label htmlFor="file">
-      <div className="item">
-        <img src={Image} alt="" />
-        <span>Add Image</span>
+          </div>
+          <div className="right">
+            <button onClick={handleAdd}>Share</button>
+          </div>
+        </div>
       </div>
-    </label>
-    <div className="item">
-      <img src={Map} alt="" />
-      <span>Add Place</span>
-    </div>
-    <div className="item">
-      <img src={Friend} alt="" />
-      <span>Tag Friends</span>
-    </div>
-  </div>
-  <div className="right">
-    <button onClick={handleAdd}>Share</button>
-  </div>
-</div>
-</div>
-
-      )}
-     
     </div>
   );
 };

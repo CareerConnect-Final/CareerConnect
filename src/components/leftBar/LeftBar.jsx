@@ -16,10 +16,12 @@ import { AuthContext } from "../../context/auth/authContext";
 import  {StateContext}  from "../../context/state";
 import { useContext, useState} from "react";
 import { useLocation } from "react-router-dom";
+import { DarkModeContext } from "../../context/darkModeContext";
 
 import { Link } from "react-router-dom";
 
 const LeftBar = () => {
+  const {darkMode } = useContext(DarkModeContext);
   const location = useLocation().pathname
   const [pageType, setPageType] = useState(location);
 
@@ -51,7 +53,10 @@ const LeftBar = () => {
           {showFriends && (
             <div className="friends-list">
               {myFriends.map((friend) => (
-                <div className="friend-item" key={friend.id}>
+                 darkMode ? <div style={{backgroundColor:"#333333", color:"white"}}  className="friend-item" key={friend.id}>
+                  <img src={friend.profilePicture} alt="" />
+                  <span>{friend.username}</span>
+                </div> : <div style={{backgroundColor:"#eee"}}  className="friend-item" key={friend.id}>
                   <img src={friend.profilePicture} alt="" />
                   <span>{friend.username}</span>
                 </div>
