@@ -11,12 +11,16 @@ import axios from "axios";
 import  {StateContext}  from "../../context/state";
 import PostModal from "../postModal/PostModal";
 import cookie from "react-cookies";
+import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 
-
-
-
 const Post = (props) => {
+  const navigate = useNavigate();
+
+
+
+
+
  
   // const userID = useParams();
   // console.log(userID.id)
@@ -116,6 +120,7 @@ const Post = (props) => {
           <div className="userInfo">
             <img src={props.post.profilePicture} alt="" />
             <div className="details">
+              
               <Link
                 to={`/profile/${props.post.user_id}`}
                 style={{ textDecoration: "none", color: "inherit" }}

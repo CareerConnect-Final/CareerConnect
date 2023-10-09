@@ -63,7 +63,7 @@ const Share = () => {
           <img src={user.profilePicture} alt="" />
           <input
             type="text"
-            placeholder={`What's on your mind ${currentUser.name}?`}
+            placeholder={`What's on your mind ${user.username}?`}
             value={postContent}
             onChange={(e) => setPostContent(e.target.value)}
           />

@@ -197,7 +197,7 @@ export default function State(props) {
     let newLikes = state.likes.filter((item) => item.id != id);
     setLikes(newLikes);
   };
-  console.log(youFollow)
+  console.log(followers)
 
   const state = {
     jobPost: jobPost,
