@@ -63,13 +63,13 @@ const Navbar = () => {
         <Link to="/" style={{ textDecoration: "none" }}>
           <span>CareerConnect</span>
         </Link>
-        <HomeOutlinedIcon />
+        <Link to="/" style={{ textDecoration: "none", color:"inherit" }}><HomeOutlinedIcon /></Link>
         {darkMode ? (
           <WbSunnyOutlinedIcon onClick={toggle} />
         ) : (
           <DarkModeOutlinedIcon onClick={toggle} />
         )}
-        <WorkOutlineIcon/>
+       <Link to="/job" style={{ textDecoration: "none", color:"inherit" }}><WorkOutlineIcon/> </Link>
         {/* <GridViewOutlinedIcon /> */}
         <div className="search">
           <SearchOutlinedIcon onClick={handleSearch} />
@@ -84,13 +84,13 @@ const Navbar = () => {
       </div>
       <div className="right">
         <PersonOutlinedIcon />
-        <EmailOutlinedIcon />
+        <Link to="/chats" style={{ textDecoration: "none", color:"inherit" }}><EmailOutlinedIcon /></Link>
         <NotificationsOutlinedIcon />
         <div className="user">
           <img src={currentUser.profilePic} alt="" />
           <span>{currentUser.name}</span>
         </div>
-        <button onClick={handleSignOut}>Sign Out</button>{" "}
+        <button className="sign-out" onClick={handleSignOut}>Sign Out</button>{" "}
       </div>
     </div>
   );

@@ -44,6 +44,7 @@ const Share = () => {
           setPostContent("");
           setPhotoContent("");
           newPost.addPost(data.data);
+          console.log(obj)
         })
         .catch((error) => {
           console.error("Error creating post:", error);

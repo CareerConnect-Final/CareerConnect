@@ -10,6 +10,7 @@ export default function State(props) {
   const [likes, setLikes] = useState([]);
   const [friendRequests, setFriendRequests] = useState([]);
   const [myFriends, setMyFriends] = useState([]);
+  const [jobSearch, setJobSearch] = useState([]);
   const [followers, setFollowers] = useState([]);
   const [youFollow,setYouFollow]=useState([])
   const [loading, setLoading] = useState(true);
@@ -226,6 +227,8 @@ export default function State(props) {
     editComments: editComments,
     addComment: addComment,
     addLike: addLike,
+    jobSearch:jobSearch,
+    setJobSearch:setJobSearch,
     setError:setError,
     resetStateJob:resetStateJob,
   };

@@ -1,7 +1,7 @@
 
 
 import { useContext, useState } from "react";
-// import "./comments.scss";
+import "./commentsjob.scss";
 import { AuthContext } from "../../context/auth/authContext";
 import { JobContext } from "../../context/stateJob";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
@@ -91,12 +91,13 @@ const CommentsJob = (props) => {
         if (comment.job_id === props.id) {
           return (
             <div className="comment" key={idx}>
+              <div className="info1">
+                <div className="com-sec1">
+              <div className="com-user-img">
               <img src={comment.profilePicture} alt="" />
-              <div className="info">
-                <div>
                   {user.id === comment.user_id && (
                     <div className="menu-container">
-                      <MoreHorizIcon onClick={() => toggleMenu(idx)} />
+                      <div className="com-dots"><MoreHorizIcon onClick={() => toggleMenu(idx)} /></div>
                       {showMenus[idx] && (
                         <div className="menu">
                           <div
@@ -117,11 +118,14 @@ const CommentsJob = (props) => {
                       )}
                     </div>
                   )}
+                <div style={{paddingLeft:"12px"}}>{comment.username}</div>
+                  </div>
                 </div>
-                <span>{comment.username}</span>
+                <div className="com-sec">
                 <p>{comment.content}</p>
+                </div>
               </div>
-              <span className="date">1 hour ago</span>
+              {/* <span className="date">1 hour ago</span> */}
               {showModals[comment.id] && (
                 <PostModal
                 checkJob="jobcomments"
@@ -130,6 +134,7 @@ const CommentsJob = (props) => {
                 handleclose={() => handleClose(comment.id)} // Pass the correct function
                 />
               )}
+          
             </div>
           );
         }

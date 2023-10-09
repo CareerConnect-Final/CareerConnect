@@ -12,16 +12,20 @@ import Messages from "../../assets/10.png";
 import Tutorials from "../../assets/11.png";
 import Courses from "../../assets/12.png";
 import Fund from "../../assets/13.png";
+import { DarkModeContext } from "../../context/darkModeContext";
+
+import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/auth/authContext";
 import { StateContext } from "../../context/state";
 import { useContext, useState } from "react";
 import { useLocation } from "react-router-dom";
 import cookie from "react-cookies";
-import { Link } from "react-router-dom";
 
 const LeftBar = () => {
   const user = cookie.load("user");
   const location = useLocation().pathname;
+
+  const {darkMode } = useContext(DarkModeContext);
   const [pageType, setPageType] = useState(location);
 
   const { currentUser } = useContext(AuthContext);
@@ -31,6 +35,10 @@ const LeftBar = () => {
 
   const toggleFriendsList = () => {
     setShowFriends(!showFriends);
+  };
+
+  const imgStyle = {
+    marginRight: '10px',
   };
 
   return (
@@ -53,7 +61,10 @@ const LeftBar = () => {
           {showFriends && (
             <div className="friends-list">
               {myFriends.map((friend) => (
-                <div className="friend-item" key={friend.id}>
+                 darkMode ? <div style={{backgroundColor:"#333333", color:"white"}}  className="friend-item" key={friend.id}>
+                  <img src={friend.profilePicture} alt="" />
+                  <span>{friend.username}</span>
+                </div> : <div style={{backgroundColor:"#eee"}}  className="friend-item" key={friend.id}>
                   <img src={friend.profilePicture} alt="" />
                   <Link
                           to={`/profile/${friend.id}`}
@@ -75,8 +86,13 @@ const LeftBar = () => {
             <span>Marketplace</span>
           </div>
           <div className="item">
-            <img src={Watch} alt="" />
+          <Link
+                to={`/reels`}
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
+            <img src={Watch} alt="" style={imgStyle}/>
             <span>Watch</span>
+            </Link>
           </div>
           <div className="item">
             <img src={Memories} alt="" />
@@ -95,8 +111,14 @@ const LeftBar = () => {
             <span>Gaming</span>
           </div>
           <div className="item">
-            <img src={Gallery} alt="" />
-            <span>Gallery</span>
+          <Link
+                to={`/gallery`}
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
+              <img src={Gallery} style={imgStyle} alt="" />
+              <span>Gallery</span>
+          </Link>
+
           </div>
           <div className="item">
             <img src={Videos} alt="" />
