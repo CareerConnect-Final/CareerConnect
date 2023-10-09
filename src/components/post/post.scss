@@ -8,6 +8,7 @@
     border-radius: 20px;
     background-color: themed("bg");
     color: themed("textColor");
+    margin: 20px 0;
 
     .container {
       padding: 20px;
@@ -45,6 +46,7 @@
 
       .content {
         margin: 20px 0px;
+        padding-left: 0px;
 
         img {
           width: 100%;

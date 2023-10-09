@@ -10,11 +10,19 @@ export default function State(props) {
 
   const [friendRequests, setFriendRequests] = useState([]);
   const [myFriends, setMyFriends] = useState([]);
+  const [userData, setUserData] = useState([]);
+  const [userPosts, setUserPosts] = useState([]);
+  const [userProfile, setUserProfile] = useState([]);
   const [allUsers, setallUsers] = useState([]);
   const [followers, setFollowers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [userid, setUserid] = useState(0);
+
+  // console.log("------->",userid)
+
   const authToken = cookie.load("auth");
+  const user = cookie.load("user");
 
 
   const acceptFriendRequest = async (receiver_id) => {
@@ -132,6 +140,68 @@ export default function State(props) {
   //         setError(error);
   //       });
 
+    //   axios
+    //     .get("https://final-backend-nvf1.onrender.com/home/comments", {
+    //       headers,
+    //     })
+    //     .then((response) => {
+    //       setComments(response.data);
+    //     })
+    //     .catch((error) => {
+    //       setError(error);
+    //     });
+    // }
+    // if (authToken === null) {
+    //   throw new Error("Authentication token not found.");
+    // } else if (authToken != null) {
+    //   const headers = {
+    //     Authorization: `Bearer ${authToken}`,
+    //   };
+
+    //   axios
+    //     .get(`https://final-backend-nvf1.onrender.com/home/users/${userid}`, {
+    //       headers,
+    //     })
+    //     .then((response) => {
+    //       setUserProfile(response.data);
+    //     })
+    //     .catch((error) => {
+    //       setError(error);
+    //     });
+    // }
+
+   
+  // }, []);
+  
+  const setUserId = (id) => {
+    // setUserid(id); 
+  };
+  
+
+
+
+
+  useEffect(() => {
+    if (authToken === null) {
+      throw new Error("Authentication token not found.");
+    } else if (authToken != null) {
+      const headers = {
+        Authorization: `Bearer ${authToken}`,
+      };
+      axios
+      .get(`https://final-backend-nvf1.onrender.com/home/userposts/${user.id}`, {
+        headers,
+      })
+      .then((response) => {
+        setUserPosts(response.data);
+      })
+      .catch((error) => {
+        setError(error);
+      });
+    }
+},[])
+
+
   //   }
   //   if (authToken === null) {
   //     throw new Error("Authentication token not found.");
@@ -176,8 +246,10 @@ export default function State(props) {
     setallUsers([]);
     setFollowers([]);
     setLoading(true);
-
+    setUserProfile([])
     setError(null);
+    setUserPosts([])
+    // setUserid(0)
   };
 
   const addPost = (newPost) => {
@@ -251,8 +323,14 @@ export default function State(props) {
     editComments: editComments,
     addComment: addComment,
     addLike: addLike,
+    userPosts:userPosts,
+    userProfile:userProfile,
+    setUserPosts:setUserPosts,
+    setUserProfile:setUserProfile,
+    setUserId:setUserId,
     setError: setError,
     resetState: resetState,
+    // userid:userid
   };
   return (
     <StateContext.Provider value={state}>

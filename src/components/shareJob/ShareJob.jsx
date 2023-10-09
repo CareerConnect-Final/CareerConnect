@@ -8,6 +8,7 @@ import { JobContext } from "../../context/stateJob";
 import { useState } from "react";
 import axios from "axios";
 import cookie from "react-cookies";
+import { DarkModeContext } from "../../context/darkModeContext";
 /////////////////////////////////////firebase//
 import {
   ref,
@@ -24,6 +25,11 @@ const Share = () => {
   const [photoContent, setPhotoContent] = useState(""); ///
   const newPost = useContext(JobContext);
   const [postContent, setPostContent] = useState("");
+  const [cityContent, setCityContent] = useState("");
+  const [fieldContent, setFieldContent] = useState("");
+  const [titleContent, setTitleContent] = useState("");
+
+  const { darkMode } = useContext(DarkModeContext);
 
   const user = cookie.load("user");
   const authToken = cookie.load("auth");
@@ -37,9 +43,9 @@ const Share = () => {
     const obj = {
       user_id: user.id,
       company_name: user.firstName,
-      job_title: "title",
-      job_city: "city",
-      job_field: "field",
+      job_title: titleContent,
+      job_city: cityContent,
+      job_field: fieldContent,
       content: postContent,
       // photo: "url",
       profilePicture: user.profilePicture,
@@ -63,6 +69,14 @@ const Share = () => {
     // });
     // });
   };
+  const [text, setText] = useState("");
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      setPostContent((prevContent) => prevContent + "\n");
+    }
+  };
 
   const { currentUser } = useContext(AuthContext);
   return (
@@ -71,12 +85,26 @@ const Share = () => {
         <div className="container">
           <div className="top">
             <img src={user.profilePicture} alt="" />
-            <input
-              type="text"
-              placeholder={`What's on your mind ${currentUser.name}?`}
-              value={postContent}
-              onChange={(e) => setPostContent(e.target.value)}
-            />
+            {darkMode ? (
+              <textarea
+                style={{ backgroundColor: "#222222", color: "white" }}
+                placeholder={`Add a job post`}
+                value={postContent}
+                onChange={(e) => setPostContent(e.target.value)}
+                onKeyDown={handleKeyDown}
+                rows={4}
+                cols={50}
+              />
+            ) : (
+              <textarea
+                placeholder={`Add a job post`}
+                value={postContent}
+                onChange={(e) => setPostContent(e.target.value)}
+                onKeyDown={handleKeyDown}
+                rows={4}
+                cols={50}
+              />
+            )}
             <input //////////////
               type="text"
               value={imageUpload.name}

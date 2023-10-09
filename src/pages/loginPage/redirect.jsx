@@ -10,7 +10,7 @@ const PrivateRoute = () => {
   const cookieToken = cookie.load("auth");
 
   const [Token, setToken] = useState(cookieToken);
-  console.log(Token);
+  // console.log(Token);
   const navigate = useNavigate();
   if (cookieToken === "null") {
     navigate("/login");

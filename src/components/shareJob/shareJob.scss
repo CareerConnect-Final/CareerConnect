@@ -16,6 +16,7 @@
         display: flex;
         align-items: center;
         gap: 20px;
+        position: relative;
         img {
           width: 40px;
           height: 40px;
@@ -30,6 +31,7 @@
           background-color: transparent;
           width: 60%;
           color: themed("textColor");
+          border-radius: 0px;
         }
       }
 
@@ -75,6 +77,29 @@
             border-radius: 3px;
           }
         }
+      }
+      .top-img{
+        position: absolute;
+        top:15px;
+        left:10px
+      }
+      .top-inpt{
+      margin-left: 50px;
+      // margin: 100px;
+      }
+      .top input{
+        border-bottom: #100f0f 1px solid
+      }
+      .top textarea{
+        margin-top: 20px;
+        margin-left: 14px;
+        border: none;
+    
+      }
+      .top textarea:focus{
+        outline: none; 
+        
+        border-width: 0px;
       }
     }
   }
