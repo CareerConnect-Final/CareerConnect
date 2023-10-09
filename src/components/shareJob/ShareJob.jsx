@@ -8,6 +8,7 @@ import { JobContext } from "../../context/stateJob";
 import { useState } from "react";
 import axios from "axios";
 import cookie from "react-cookies";
+import { DarkModeContext } from "../../context/darkModeContext";
 /////////////////////////////////////firebase//
 import {
   ref,
@@ -27,6 +28,8 @@ const Share = () => {
   const [cityContent, setCityContent] = useState("");
   const [fieldContent, setFieldContent] = useState("");
   const [titleContent, setTitleContent] = useState("");
+
+  const {darkMode } = useContext(DarkModeContext);
 
 
  const user=cookie.load("user")
@@ -87,14 +90,22 @@ const handleKeyDown = (e) => {
           </div>
           <div className="top-inpt">
 
-          <textarea
+         {darkMode ?  <textarea
+         style={{backgroundColor:"#222222", color:"white"}}
         placeholder={`Add a job post`}
         value={postContent}
         onChange={(e) => setPostContent(e.target.value)}
         onKeyDown={handleKeyDown}
         rows={4}
         cols={50}
-      />
+      />:   <textarea  
+      placeholder={`Add a job post`}
+      value={postContent}
+      onChange={(e) => setPostContent(e.target.value)}
+      onKeyDown={handleKeyDown}
+      rows={4}
+      cols={50}
+    />  }
           <input
             type="text"
             placeholder={`Add city`}

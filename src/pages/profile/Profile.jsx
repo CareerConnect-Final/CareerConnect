@@ -38,23 +38,6 @@ const Profile = () => {
     
 
 
-  //   const { currentUser, getUserPosts } = useContext(AuthContext);
-  // const [userPosts, setUserPosts] = useState([]);
-
-  // useEffect(() => {
-   
-  //   if (currentUser.id) {
-  //     getUserPosts(currentUser.id)
-  //       .then((posts) => {
-  //         setUserPosts(posts);
-  //       })
-  //       .catch((error) => {
-  //         console.error("Error fetching user posts:", error);
-  //       });
-  //   }
-  // }, [currentUser.id, getUserPosts]); // this to get the new posts if added 
-
-
 console.log("-------+++++>",state.userProfile)
 
 
@@ -140,7 +123,10 @@ console.log("-------+++++>",state.userProfile)
 
         </div>
         <div className="uInfo-bio" >
+        <div>
           <div>About :</div>
+          <button className="resume">Resume</button>
+          </div>
           <div>{user.bio}</div>
           </div> 
     {state.userPosts.map(post=>(

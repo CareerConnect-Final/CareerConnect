@@ -69,9 +69,13 @@
           }
         }
         .friend-item{
-          background-color: #eee;
+          // background-color: #eee;
           border-radius: 3px;
           padding: 5px;
+          // font-size: 35px;
+        }
+        .friend-item span{
+          font-size: 13px;
         }
         .friend-item img{
           width: 35px;

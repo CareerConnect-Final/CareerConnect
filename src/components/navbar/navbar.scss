@@ -6,7 +6,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 10px 20px;
-    height: 50px;
+    height: 80px;
     border-bottom: 1px solid themed("border");
     position: sticky;
     top: 0;
@@ -76,8 +76,16 @@
           object-fit: cover;
         }
 
-        span {
-        }
+        // span {
+        // }
+      }
+      .sign-out{
+        border: none;
+        padding: 5px;
+        color: white;
+        cursor: pointer;
+        background-color: #f72222;
+        border-radius: 3px;
       }
     }
   }

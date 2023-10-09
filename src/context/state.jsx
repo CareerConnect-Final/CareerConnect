@@ -19,7 +19,7 @@ export default function State(props) {
   const [error, setError] = useState(null);
   const [userid, setUserid] = useState(0);
 
-  console.log("------->",userid)
+  // console.log("------->",userid)
 
   const authToken = cookie.load("auth");
   const user = cookie.load("user");
@@ -174,32 +174,32 @@ export default function State(props) {
   // }, []);
   
   const setUserId = (id) => {
-    setUserid(id); 
+    // setUserid(id); 
   };
   
 
 
 
 
-  // useEffect(() => {
-    // if (authToken === null) {
-    //   throw new Error("Authentication token not found.");
-    // } else if (authToken != null) {
-    //   const headers = {
-    //     Authorization: `Bearer ${authToken}`,
-    //   };
-    //   axios
-    //   .get(`https://final-backend-nvf1.onrender.com/home/userposts/${user.id}`, {
-    //     headers,
-    //   })
-    //   .then((response) => {
-    //     setUserPosts(response.data);
-    //   })
-    //   .catch((error) => {
-    //     setError(error);
-    //   });
-    // }
-// },[])
+  useEffect(() => {
+    if (authToken === null) {
+      throw new Error("Authentication token not found.");
+    } else if (authToken != null) {
+      const headers = {
+        Authorization: `Bearer ${authToken}`,
+      };
+      axios
+      .get(`https://final-backend-nvf1.onrender.com/home/userposts/${user.id}`, {
+        headers,
+      })
+      .then((response) => {
+        setUserPosts(response.data);
+      })
+      .catch((error) => {
+        setError(error);
+      });
+    }
+},[])
 
 
   //   }
@@ -249,6 +249,7 @@ export default function State(props) {
     setUserProfile([])
     setError(null);
     setUserPosts([])
+    // setUserid(0)
   };
 
   const addPost = (newPost) => {
@@ -329,6 +330,7 @@ export default function State(props) {
     setUserId:setUserId,
     setError: setError,
     resetState: resetState,
+    // userid:userid
   };
   return (
     <StateContext.Provider value={state}>

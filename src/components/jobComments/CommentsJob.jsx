@@ -1,7 +1,7 @@
 
 
 import { useContext, useState } from "react";
-// import "./comments.scss";
+import "./commentsjob.scss";
 import { AuthContext } from "../../context/auth/authContext";
 import { JobContext } from "../../context/stateJob";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";

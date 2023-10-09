@@ -38,9 +38,11 @@ const Post = (props) => {
   ).length;
   const toggleMenu = () => {
     setShowMenu(!showMenu);
+
   };
   const handleShow = () => {
     setShowModal(true);
+
   };
   const handleClose = () => {
     setShowModal(false);
@@ -104,6 +106,9 @@ const Post = (props) => {
     state.setUserId(id)
     // console.log(id)
   }
+
+    // console.log(props.post)
+  
   return (
     <div className="post">
       <div className="container">
@@ -121,6 +126,7 @@ const Post = (props) => {
             </div>
           </div>
           {props.post.user_id === user.id && (
+            // {console.log(props.post.user_id ,"+++++++",user.id)}
             <div className="menu-container">
               <MoreHorizIcon onClick={toggleMenu} />
               {showMenu && (
@@ -142,7 +148,7 @@ const Post = (props) => {
                 </div>
               )}
             </div>
-          )}
+           )} 
         </div>
 
         <div className="content">

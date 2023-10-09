@@ -5,7 +5,7 @@ import TextsmsOutlinedIcon from "@mui/icons-material/TextsmsOutlined";
 import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { Link } from "react-router-dom";
-import CommentsJob from "../comments/CommentsJob";
+import CommentsJob from "../jobComments/CommentsJob";
 import { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import {JobContext}  from "../../context/stateJob";
@@ -57,7 +57,7 @@ const JobPosts = (props) => {
       };
       axios
         .delete(
-          `https://final-backend-nvf1.onrender.com/careerjob/joblike/${likeId}`,
+          `https://final-backend-nvf1.onrender.com/careerjob/likes/${likeId}`,
           {
             headers,
           }
@@ -95,14 +95,14 @@ const JobPosts = (props) => {
       .delete(`https://final-backend-nvf1.onrender.com/careerjob/jobs/${id}`,{headers})
       .then(() => {
         state.deletePost(id);
-        console.log('delete job post')
+        // console.log('delete job post')
       })
       .catch((error) => {
         console.error("Error", error);
       });
   };
 
-  console.log(props.post)
+  // console.log(props.post)
   return (
     <div className="post">
       <div className="container">
@@ -145,11 +145,8 @@ const JobPosts = (props) => {
           )}
         </div>
 
-        <div className="content">
-         <div className="cont-cont">
-         <div className="cont-post1"> description : </div> 
-         <p>{props.post.content}</p>
-         </div>
+        <div className="content-job">
+
          <div className="cont-cont">
          <div className="cont-post"> Title : </div> 
          <p>{ props.post.job_title}</p>
@@ -162,7 +159,10 @@ const JobPosts = (props) => {
          <div className="cont-post"> City : </div> 
          <p>{props.post.job_city}</p>
          </div>
-
+         <div className="cont-cont">
+         <div className="cont-post1"> description : </div> 
+         <p>{props.post.content}</p>
+         </div>
 
 
           <img
