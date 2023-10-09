@@ -5,6 +5,7 @@ import { JobContext } from "../../context/stateJob";
 import { useState } from "react";
 import axios from "axios";
 import cookie from "react-cookies";
+import JobPost from "../JobPost/jobPost";
 /////////////////////////////////////firebase//
 import {
   ref,
@@ -18,6 +19,9 @@ import { v4 } from "uuid";
 ///////////////////////////////////
 const JobSearch = () => {
   const filter = useContext(JobContext);
+
+  filter.setRenderJobs(filter.jobPost);
+
 
   const [searchBasedOn, setSearchBasedOn] = useState("Title"); 
   const [selectedTitle, setSelectedTitle] = useState(""); 
@@ -38,6 +42,7 @@ const JobSearch = () => {
           .get(`https://final-backend-nvf1.onrender.com/careerjob/jobtitle/${selectedTitle}`, { headers })
           .then((response) => {
             filter.setJobSearch(response.data);
+            filter.setRenderJobs(response.data)
           })
           .catch((error) => {
             setError(error);
@@ -57,6 +62,8 @@ const JobSearch = () => {
           .get(`https://final-backend-nvf1.onrender.com/careerjob/jobcity/${selectedCity}`, { headers })
           .then((response) => {
             filter.setJobSearch(response.data);
+            filter.setRenderJobs(response.data)
+            console.log("=============>>>>", response.data)
           })
           .catch((error) => {
             setError(error);
@@ -83,6 +90,7 @@ const JobSearch = () => {
   };
 
   return (
+    <>
     <div className="share">
       {user.role !== "company" && (
         <div className="container">
@@ -101,32 +109,36 @@ const JobSearch = () => {
                 </select>
                 {searchBasedOn == "Title" && (
                   <div>
-                    <label htmlFor="dropdown">Select Job Title:</label>
+                    {/* <label htmlFor="dropdown">Select Job Title:</label>
                     <select
                       id="dropdown"
                       value={selectedTitle}
                       onChange={handleSelectedTitle}
                     >
                       <option value="option1"></option>
-                      <option value="option2">Option 1</option>
-                      <option value="option3">Option 2</option>
-                      <option value="option4">Option 3</option>
-                    </select>
+                      <option value="qa">qa</option>
+                      <option value="software">software</option>
+                      <option value="full stack">full stack</option>
+                    </select> */}
+
+                      <input type="text" alt="" placeholder="title" onChange={handleSelectedTitle}/>
                   </div>
                 )}
                 {searchBasedOn == "City" && (
                   <div>
-                    <label htmlFor="dropdown">Select City:</label>
+                    {/* <label htmlFor="dropdown">Select City:</label>
                     <select
                       id="dropdown"
                       value={selectedCity}
                       onChange={handleSelectedCity}
                     >
                       <option value="option1"></option>
-                      <option value="option2">Option 1</option>
-                      <option value="option3">Option 2</option>
-                      <option value="option4">Option 3</option>
-                    </select>
+                      <option value="amman">amman</option>
+                      <option value="irbid">irbid</option>
+                      {/* <option value="option4">Option 3</option>
+                    </select> */}
+
+                    <input type="text" alt="" placeholder="title" onChange={handleSelectedCity}/>
                   </div>
                 )}
               </div>
@@ -141,6 +153,14 @@ const JobSearch = () => {
         </div>
       )}
     </div>
+    <div className="posts">
+
+    {filter.renderJobs.map(post=>(
+     
+     <JobPost post={post} key={post.id}/>
+   ))}
+ </div>;
+</>
   );
 };
 

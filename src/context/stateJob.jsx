@@ -16,6 +16,10 @@ export default function State(props) {
   const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
+  // const [jobCity, setJobCity] = useState([]);
+  // const [jobTitle, setJobTitle] = useState([]);
+  const [renderJobs, setRenderJobs] = useState(jobPost);
+
   const [error, setError] = useState(null);
   const authToken = cookie.load("auth");
 
@@ -231,6 +235,12 @@ export default function State(props) {
     setJobSearch:setJobSearch,
     setError:setError,
     resetStateJob:resetStateJob,
+    renderJobs:renderJobs,
+    setRenderJobs:setRenderJobs,
+    // jobCity:jobCity,
+    // setJobCity: setJobCity,
+    // jobTitle: jobTitle,
+    // setJobTitle: setJobTitle,
   };
 
   return (

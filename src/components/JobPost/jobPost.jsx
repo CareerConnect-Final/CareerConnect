@@ -101,6 +101,9 @@ const JobPosts = (props) => {
         console.error("Error", error);
       });
   };
+
+
+
   return (
     <div className="post">
       <div className="container">
