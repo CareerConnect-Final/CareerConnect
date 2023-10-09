@@ -61,7 +61,7 @@ const Navbar = () => {
     <div className="navbar">
       <div className="left">
         <Link to="/" style={{ textDecoration: "none" }}>
-          <span>lamasocial</span>
+          <span>CareerConnect</span>
         </Link>
         <HomeOutlinedIcon />
         {darkMode ? (

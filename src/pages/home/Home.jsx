@@ -55,7 +55,7 @@ const Home = () => {
         Authorization: `Bearer ${authToken}`,
       };
       axios
-        .get("https://final-backend-nvf1.onrender.com/home/posts", { headers })
+        .get("https://final-backend-nvf1.onrender.com/home/homeposts", { headers })
         .then((response) => {
           state.setPosts(response.data);
         })

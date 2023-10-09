@@ -13,12 +13,15 @@ import Tutorials from "../../assets/11.png";
 import Courses from "../../assets/12.png";
 import Fund from "../../assets/13.png";
 import { AuthContext } from "../../context/auth/authContext";
-import  {StateContext}  from "../../context/state";
-import { useContext, useState} from "react";
+import { StateContext } from "../../context/state";
+import { useContext, useState } from "react";
 import { useLocation } from "react-router-dom";
+import cookie from "react-cookies";
+import { Link } from "react-router-dom";
 
 const LeftBar = () => {
-  const location = useLocation().pathname
+  const user = cookie.load("user");
+  const location = useLocation().pathname;
   const [pageType, setPageType] = useState(location);
 
   const { currentUser } = useContext(AuthContext);
@@ -35,8 +38,13 @@ const LeftBar = () => {
       <div className="container">
         <div className="menu">
           <div className="user">
-            <img src={currentUser.profilePicture} alt="" />
-            <span>{currentUser.username}</span>
+            <img src={user.profilePicture} alt="" />
+            <Link
+              to={`/profile/${user.id}`}
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              <span>{user.username}</span>
+            </Link>
           </div>
           <div className="item" onClick={toggleFriendsList}>
             <img src={Friends} alt="" />
@@ -47,7 +55,12 @@ const LeftBar = () => {
               {myFriends.map((friend) => (
                 <div className="friend-item" key={friend.id}>
                   <img src={friend.profilePicture} alt="" />
-                  <span>{friend.username}</span>
+                  <Link
+                          to={`/profile/${friend.id}`}
+                          style={{ textDecoration: "none", color: "inherit" }}
+                        >
+                          <span>{friend.username}</span>
+                        </Link>
                 </div>
               ))}
             </div>
