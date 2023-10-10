@@ -105,6 +105,8 @@ const JobPosts = (props) => {
       });
   };
 
+
+
   // console.log(props.post)
   return (
     <div className="post">

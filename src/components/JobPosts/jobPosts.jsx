@@ -2,6 +2,8 @@
 import {useContext}  from "react";
 import JobPost from "../JobPost/jobPost";
 import {JobContext}  from "../../context/stateJob"; // in the JobContext the first letter must always be a capital letter
+
+
 const JobPosts = () => {
 
 
@@ -10,6 +12,7 @@ const JobPosts = () => {
   return <div className="posts">
 
      {state.jobPost.map(post=>(
+      
       <JobPost post={post} key={post.id}/>
     ))}
   </div>;

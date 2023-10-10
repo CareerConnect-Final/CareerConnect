@@ -21,19 +21,18 @@ import { storage } from "../../firebase";
 import { v4 } from "uuid";
 ///////////////////////////////////
 const Share = () => {
-
-  const [photoContent, setPhotoContent] = useState("");///
+  const [imageUpload, setImageUpload] = useState(""); ///
+  const [photoContent, setPhotoContent] = useState(""); ///
   const newPost = useContext(JobContext);
   const [postContent, setPostContent] = useState("");
   const [cityContent, setCityContent] = useState("");
   const [fieldContent, setFieldContent] = useState("");
   const [titleContent, setTitleContent] = useState("");
 
-  const {darkMode } = useContext(DarkModeContext);
+  const { darkMode } = useContext(DarkModeContext);
 
-
- const user=cookie.load("user")
- const authToken = cookie.load("auth");
+  const user = cookie.load("user");
+  const authToken = cookie.load("auth");
 
  const handleAdd = () => {
   // console.log("imageUpload--->", imageUpload)
@@ -69,22 +68,19 @@ const Share = () => {
           console.error("Error creating post:", error);
         });
     // });
-  // });
-  
-};
-const [text, setText] = useState('');
+    // });
+  };
+  const [text, setText] = useState("");
 
-const handleKeyDown = (e) => {
-  if (e.key === 'Enter') {
-    e.preventDefault();
-    setPostContent((prevContent) => prevContent + '\n');
-  }
-};
-
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      setPostContent((prevContent) => prevContent + "\n");
+    }
+  };
 
   const { currentUser } = useContext(AuthContext);
   return (
-  
     <div className="share">
       <div className="container">
         <div className="top">
@@ -143,5 +139,6 @@ const handleKeyDown = (e) => {
     </div>
   );
 };
+
 
 export default Share;
