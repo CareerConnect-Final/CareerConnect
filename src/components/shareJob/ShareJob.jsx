@@ -82,68 +82,60 @@ const Share = () => {
   const { currentUser } = useContext(AuthContext);
   return (
     <div className="share">
-      {user.role === "company" && (
-        <div className="container">
-          <div className="top">
-            <img src={user.profilePicture} alt="" />
-            {darkMode ? (
-              <textarea
-                style={{ backgroundColor: "#222222", color: "white" }}
-                placeholder={`Add a job post`}
-                value={postContent}
-                onChange={(e) => setPostContent(e.target.value)}
-                onKeyDown={handleKeyDown}
-                rows={4}
-                cols={50}
-              />
-            ) : (
-              <textarea
-                placeholder={`Add a job post`}
-                value={postContent}
-                onChange={(e) => setPostContent(e.target.value)}
-                onKeyDown={handleKeyDown}
-                rows={4}
-                cols={50}
-              />
-            )}
-            <input //////////////
-              type="text"
-              value={imageUpload.name}
-            />
+      <div className="container">
+        <div className="top">
+          <div className="top-img">
+          <img src={user.profilePicture} alt="" />
           </div>
-          <hr />
-          <div className="bottom">
-            <div className="left">
-              <input
-                type="file"
-                id="file"
-                style={{ display: "none" }}
-                onChange={(event) => {
-                  //////////////////////
-                  setImageUpload(event.target.files[0]);
-                }}
-              />
-              <label htmlFor="file">
-                <div className="item">
-                  <img src={Image} alt="" />
-                  <span>Add Image</span>
-                </div>
-              </label>
-              <div className="item">
-                <img src={Map} alt="" />
-                <span>Add Place</span>
-              </div>
-              <div className="item">
-                <img src={Friend} alt="" />
-                <span>Tag Friends</span>
-              </div>
+          <div className="top-inpt">
+
+         {darkMode ?  <textarea
+         style={{backgroundColor:"#222222", color:"white"}}
+        placeholder={`Add a job post`}
+        value={postContent}
+        onChange={(e) => setPostContent(e.target.value)}
+        onKeyDown={handleKeyDown}
+        rows={4}
+        cols={50}
+      />:   <textarea  
+      placeholder={`Add a job post`}
+      value={postContent}
+      onChange={(e) => setPostContent(e.target.value)}
+      onKeyDown={handleKeyDown}
+      rows={4}
+      cols={50}
+    />  }
+          <input
+            type="text"
+            placeholder={`Add city`}
+            value={cityContent}
+            onChange={(e) => setCityContent(e.target.value)}
+            />
+          <input
+            type="text"
+            placeholder={`Add title`}
+            value={titleContent}
+            onChange={(e) => setTitleContent(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder={`Add field`}
+            value={fieldContent}
+            onChange={(e) => setFieldContent(e.target.value)}
+            />
             </div>
-            <div className="right">
-              <button onClick={handleAdd}>Share</button>
-            </div>
+
+        </div>
+        <hr />
+        <div className="bottom">
+          <div className="left">
+
+          </div>
+          <div className="right">
+            <button onClick={handleAdd}>Share</button>
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 };

@@ -32,7 +32,6 @@ import { v4 } from "uuid";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import { useParams } from "react-router-dom";
 
 const Profile = () => {
   const [resumeUpload, setResumeUpload] = useState(""); ///
@@ -207,21 +206,22 @@ const Profile = () => {
           <div>
             <div>About :</div>
             <div>
-              {user.id !== userId && user.role === "company" ? (
+              {user.id != userId && user.role === "company" ? (
                 <button className="resume" onClick={handleShowCv}>
                   Resume
                 </button>
               ) : null}
 
-              {user.id === userId && user.role !== "company" ? (
+              {user.id == userId && user.role !== "company" ? (
                 <button className="resume" onClick={handleShowCv}>
                   Resume
                 </button>
               ): null}
             </div>
-            <Button variant="primary" className="resume1" onClick={handleShow}>
-              Add Resume
-            </Button>
+            {/* {console.log(user.id , userId)} */}
+            {user.id == userId && user.role !== "company" ? (<Button variant="primary" className="resume1" onClick={handleShow}>
+              Add Cv
+            </Button>) : null}
             <Modal show={show} onHide={handleClose}>
               <Modal.Header closeButton>
                 <Modal.Title>Modal heading</Modal.Title>
