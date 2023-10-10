@@ -146,23 +146,24 @@ const Home = () => {
         });
     }
 
-    // if (authToken === null) {
-    //   throw new Error("Authentication token not found.");
-    // } else if (authToken != null) {
-    //   const headers = {
-    //     Authorization: `Bearer ${authToken}`,
-    //   };
-    //   axios
-    //   .get(`https://final-backend-nvf1.onrender.com/home/userposts/1`, {
-    //     headers,
-    //   })
-    //   .then((response) => {
-    //     state.setUserPosts(response.data);
-    //   })
-    //   .catch((error) => {
-    //     setError(error);
-    //   });
-    // }
+    if (authToken === null) {
+      throw new Error("Authentication token not found.");
+    } else if (authToken != null) {
+      const headers = {
+        Authorization: `Bearer ${authToken}`,
+      };
+
+      axios
+        .get("https://final-backend-nvf1.onrender.com/home/reels", {
+          headers,
+        })
+        .then((response) => {
+          state.setReels(response.data);
+        })
+        .catch((error) => {
+          setError(error);
+        });
+    }
   }, [authToken]);
 
   return (

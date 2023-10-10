@@ -7,7 +7,7 @@ export default function State(props) {
   const [comments, setComments] = useState([]);
   const [likes, setLikes] = useState([]);
   const [reels, setReels] = useState([]);
-
+  const [resume, setResume] = useState([]);
   const [friendRequests, setFriendRequests] = useState([]);
   const [myFriends, setMyFriends] = useState([]);
   const [userData, setUserData] = useState([]);
@@ -62,7 +62,12 @@ export default function State(props) {
   const addReel = (newReel) => {
     ///
     setReels([newReel, ...reels]);
-    console.log("reels==>", reels);
+  };
+
+  const addResume = (newReel) => {
+    ///
+    setResume([newReel]);
+    console.log("setResume==>", reels);
   };
   // const fetchData=()=>{
 
@@ -297,6 +302,9 @@ export default function State(props) {
     setComments: setComments,
     likes: likes,
     addReel: addReel,
+    addResume: addResume,
+    resume: resume,
+    setResume: setResume,
     setReels: setReels,
     reels: reels,
     setLikes: setLikes,
@@ -308,7 +316,6 @@ export default function State(props) {
     allUsers: allUsers,
     setallUsers: setallUsers,
     deletePost: deletePost,
-    userPosts: userPosts,
     setUserPosts: setUserPosts,
     editPost: editPost,
     acceptFriendRequest,

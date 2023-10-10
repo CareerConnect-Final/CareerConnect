@@ -11,7 +11,7 @@ const Comments = (props) => {
   const [showModals, setShowModals] = useState({}); // Use an object to store the showModal state for each comment
   const user = cookie.load("user");
   const newComments = useContext(StateContext);
-
+  const authToken = cookie.load("auth");
   const [newComment, setNewComment] = useState("");
   // console.log(props.id);
 
@@ -39,8 +39,11 @@ const Comments = (props) => {
       post_id: props.id,
       content: newComment,
     };
+    const headers = {
+      Authorization: `Bearer ${authToken}`,
+    };
     axios
-      .post("https://final-backend-nvf1.onrender.com/api/v1/comments", obj)
+      .post("https://final-backend-nvf1.onrender.com/home/comments", obj,{headers})
       .then((data) => {
         setNewComment("");
         console.log("->", props);
@@ -79,7 +82,6 @@ const Comments = (props) => {
         console.error("Error", error);
       });
   };
-
   return (
     <div className="comments">
       <div className="write">
@@ -123,7 +125,7 @@ const Comments = (props) => {
                     )}
                   </div>
                 )}
-              <div style={{paddingLeft:"12px"}}>{comment.username}</div>
+                <div style={{paddingLeft:"12px"}}>{comment.username} </div>
                 </div>
               </div>
               <div className="com-sec">
