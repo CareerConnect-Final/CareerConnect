@@ -32,12 +32,12 @@
 //       const obj = {
 //         user_id: user.id,
 //         username: user.firstName,
-//         video: url, 
+//         video: url,
 //         profilePicture: user.profilePicture,
 //       };
 
 //       console.log(url)
-  
+
 //       axios
 //         .post("https://final-backend-nvf1.onrender.com/api/v1/reels", obj)
 //         .then((data) => {
@@ -50,7 +50,7 @@
 //         });
 //     });
 //   });
-  
+
 // };
 
 // const handlePlayClick = () => {
@@ -104,7 +104,6 @@
 
 // export default ShareReels;
 
-
 import axios from "axios";
 import { useContext } from "react";
 import "./stories.scss";
@@ -125,42 +124,60 @@ import { v4 } from "uuid";
 
 const ShareReels = () => {
   const { currentUser } = useContext(AuthContext);
-  const [videoUpload, setVideoUpload] = useState("");///
+  const [videoUpload, setVideoUpload] = useState(""); ///
 
-  const newReel = useContext(StateContext);
- const user=cookie.load("user")
- const handleAdd = () => {
-  console.log(videoUpload.name)
-  const videoRef = ref(storage, `${user.email}/reels/${videoUpload.name + v4()}`);
-  uploadBytes(videoRef, videoUpload).then((snapshot) => {
-    getDownloadURL(snapshot.ref).then( (url) => {
+  const state = useContext(StateContext);
+  const user = cookie.load("user");
+  const handleAdd = () => {
+    console.log(videoUpload.name);
+    const videoRef = ref(
+      storage,
+      `${user.email}/reels/${videoUpload.name + v4()}`
+    );
+    uploadBytes(videoRef, videoUpload).then((snapshot) => {
+      getDownloadURL(snapshot.ref).then((url) => {
+        const obj = {
+          user_id: user.id,
+          username: user.firstName,
+          video: url,
+          profilePicture: user.profilePicture,
+        };
 
-      const obj = {
-        user_id: user.id,
-        username: user.firstName,
-        video: url, 
-        profilePicture: user.profilePicture,
-      };
+        console.log("url==>", url);
 
-      console.log("url==>",url)
+        axios
+          .post("https://final-backend-nvf1.onrender.com/api/v1/reels", obj)
+          .then((data) => {
+            setVideoUpload("");
+            state.addReel(data.data);
+          })
+          .catch((error) => {
+            console.error("Error creating reel:", error);
+          });
 
-      axios
-        .post("https://final-backend-nvf1.onrender.com/api/v1/reels", obj)
-        .then((data) => {
-          setVideoUpload("")
-          newReel.addReel(data.data);
-          console.log("data.daat==>",data.data)
-
-        })
-        .catch((error) => {
-          console.error("Error creating reel:", error);
-        });
-
-
+          if (authToken === null) {
+            throw new Error("Authentication token not found.");
+          } else if (authToken != null) {
+            const headers = {
+              Authorization: `Bearer ${authToken}`,
+            };
+      
+            // axios
+            //   .get("https://final-backend-nvf1.onrender.com/home/reels", {
+            //     headers,
+            //   })
+            //   .then((response) => {
+            //     state.setStory([response.data, ...state.story]);
+            //   })
+            //   .catch((error) => {
+            //     setError(error);
+            //   });
+          }
+      });
     });
-  });
-  
-};
+  };
+
+
 
 
   //TEMPORARY
@@ -187,25 +204,41 @@ const ShareReels = () => {
     },
   ];
 
+
+
+    // const itemsPerPage = 4;
+    // const [startIndex, setStartIndex] = useState(0);
+  
+    // const visibleStories = state.reels.slice(startIndex, startIndex + itemsPerPage);
+    // const showRightArrow = stories.length > itemsPerPage;
+  
+    // const handleRightArrowClick = () => {
+    //   if (startIndex + itemsPerPage < stories.length && stories.length - (startIndex + itemsPerPage)>=itemsPerPage) {
+    //     setStartIndex(startIndex + itemsPerPage);
+    //   } else {
+    //     setStartIndex(stories.length - itemsPerPage);
+    //   }
+    // };
+
   return (
     <div className="stories">
       <div className="story">
-        {/* <img src={user.profilePicture} alt="" /> */}
-        {/* <span>{}</span> */}
-        <input type="file" id="file" style={{ display: "none" }}
-            onChange={(event) => { //////////////////////
-              setVideoUpload(event.target.files[0]);
-          }} />
+        <input
+          type="file"
+          id="file"
+          style={{ display: "none" }}
+          onChange={(event) => {
+            //////////////////////
+            setVideoUpload(event.target.files[0]);
+          }}
+        />
         <label htmlFor="file">
-              <div className="item">
-                <img src={user.profilePicture} alt="" />
-                <span>Add Story</span>
-              </div>
-            </label>
-            {
-              videoUpload !== "" ? <button onClick={handleAdd}>+</button> : ""
-
-            }
+          <div className="item">
+            <img src={user.profilePicture} alt="" />
+            <span>Add Story</span>
+          </div>
+        </label>
+        {videoUpload !== "" ? <button onClick={handleAdd}>+</button> : ""}
       </div>
 
       {stories.map(story=>(
@@ -214,6 +247,19 @@ const ShareReels = () => {
           <span>{story.name}</span>
         </div>
       ))}
+
+        {/* {visibleStories.map((story) => (
+          <div className="story" key={story.id}>
+            <img src={story.img} alt="" />
+            <span>{story.name}</span>
+          </div>
+        ))}
+        {showRightArrow && (
+        <div className="right-arrow-container">
+          <button className="right-arrow-button" onClick={handleRightArrowClick}>
+          &#8594;</button>
+          </div>
+        )} */}
     </div>
   );
 };
