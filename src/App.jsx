@@ -22,23 +22,15 @@ import "./style.scss";
 import { useContext, useState, useEffect } from "react";
 import { DarkModeContext } from "./context/darkModeContext";
 import { StateContext } from "./context/state";
-// import "bootstrap/dist/css/bootstrap.min.css";
 import ChatsPage from "./components/chats/chats";
-// import "bootstrap/dist/css/bootstrap.min.css";
 import JobPage from "./pages/jobs/Job";
-// function App() {
-  // const {currentUser} = useContext(AuthContext);
-
-  ////////////////////////////////////
 import JobSearch from "./components/JobSearch/JobSearch";
-  ///////////////////////////////
-  /////////////////////////////
-
 import { AuthContext } from "./context/auth/authContext";
 import LoginPage from "./pages/loginPage/loginPage";
 import CVForm from "./components/CVForm/CVForm";
 import PrivateRoute from "./pages/loginPage/redirect";
-
+import AuthComponent from "./components/AuthComponent /AuthComponent "
+import Main from "./components/Landing/src/Main"
 function AuthenticatedLayout() {
   const { darkMode } = useContext(DarkModeContext);
 
@@ -98,8 +90,12 @@ function App() {
           element={!isLoggedIn ? <LoginPage /> : <Navigate to="/" />}
         />
           {/* <Route path="/reels" element={<ReelsPage />} /> */}
+          
           <Route path="/jobsearch" element={<JobSearch />} />
+          <Route path="/landing" element={<Main />} />
+          <Route path="/AuthComponent" element={<AuthComponent />} />
 
+          
         <Route path="/" element={<AuthenticatedLayout />}>
           <Route index element={<Home />} />
           <Route path="/profile/:userId" element={<Profile />} />

@@ -160,7 +160,7 @@ const JobPosts = (props) => {
          <p>{props.post.job_city}</p>
          </div>
          <div className="cont-cont">
-         <div className="cont-post1"> description : </div> 
+         <div className="cont-post1"> Description : </div> 
          <p>{props.post.content}</p>
          </div>
 

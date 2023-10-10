@@ -15,7 +15,6 @@ export default function State(props) {
   const [userProfile, setUserProfile] = useState([]);
   const [allUsers, setallUsers] = useState([]);
   const [followers, setFollowers] = useState([]);
-  const [userPosts,setUserPosts]=useState([])
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [userid, setUserid] = useState(0);
