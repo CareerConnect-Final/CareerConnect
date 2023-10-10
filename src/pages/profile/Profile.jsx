@@ -22,7 +22,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import cookie from "react-cookies";
 import { useParams } from "react-router-dom";
 
-import { StateContext } from "../../context/state";
 
 const Profile = () => {
   const state = useContext(StateContext);
@@ -98,10 +97,10 @@ const Profile = () => {
             </div>
           </div>
         </div>
-        <div className="uInfo-bio">
-          <div>
-            <div>About :</div>
-            <button className="resume">Resume</button>
+        <div className="uInfo-bio" >
+        <div>
+          <div>About :</div>
+        {user.role ==="user"&&  <button className="resume">Resume</button>}
           </div>
           <div>{user.bio}</div>
         </div>

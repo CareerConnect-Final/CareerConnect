@@ -18,6 +18,7 @@ import {
 } from "react-chat-engine";
 import { MultiChatWindow } from "react-chat-engine-advanced";
 
+import "./chat.scss"
 const ChatsPage = (props) => {
   return (
     <div style={{ height: "100vh", width: "100vw" }}>
