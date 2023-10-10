@@ -390,7 +390,7 @@ const RightBar = () => {
           </div>
         </div>
       )}
-    {console.log(userId)}
+    {/* {console.log(userId)} */}
       {/* {pageType === `profile/${userId}` &&(
         <div className="rightBar">
           <div className="container">

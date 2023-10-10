@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import cookie from "react-cookies";
+
 export const StateContext = React.createContext();
 export default function State(props) {
   const [posts, setPosts] = useState([]);
+  const [companyPosts, setCompanyPosts] = useState([]);
   const [comments, setComments] = useState([]);
+  // const [userData, setComments] = useState([]);
   const [likes, setLikes] = useState([]);
   const [reels, setReels] = useState([]);
   const [resume, setResume] = useState([]);
   const [friendRequests, setFriendRequests] = useState([]);
   const [myFriends, setMyFriends] = useState([]);
-  const [userData, setUserData] = useState([]);
+  const [users, setUsers] = useState([]);
   const [userPosts, setUserPosts] = useState([]);
   const [userProfile, setUserProfile] = useState([]);
   const [allUsers, setallUsers] = useState([]);
@@ -69,115 +72,6 @@ export default function State(props) {
     setResume([newReel]);
     console.log("setResume==>", reels);
   };
-  // const fetchData=()=>{
-
-  // }
-  // useEffect(() => {
-  //   if (authToken === null) {
-  //     throw new Error("Authentication token not found.");
-  //   } else if (authToken != null) {
-  //     const headers = {
-  //       Authorization: `Bearer ${authToken}`,
-  //     };
-  //     axios
-  //       .get("https://final-backend-nvf1.onrender.com/home/followers", {
-  //         headers,
-  //       })
-  //       .then((response) => {
-  //         console.log("data come come ")
-  //         setFollowers(response.data);
-  //       })
-  //       .catch((error) => {
-  //         setError(error);
-  //       });
-  //     }
-  //   if (authToken === null) {
-  //     throw new Error("Authentication token not found.");
-  //   } else if (authToken != null) {
-  //     const headers = {
-  //       Authorization: `Bearer ${authToken}`,
-  //     };
-  //     axios
-  //       .get("https://final-backend-nvf1.onrender.com/home/users", { headers })
-  //       .then((response) => {
-  //         setallUsers(response.data);
-  //       })
-  //       .catch((error) => {
-  //         setError(error);
-  //       });
-  //     }
-
-  //   if (authToken === null) {
-  //     throw new Error("Authentication token not found.");
-  //   } else if (authToken != null) {
-  //     const headers = {
-  //       Authorization: `Bearer ${authToken}`,
-  //     };
-  //     axios
-  //       .get("https://final-backend-nvf1.onrender.com/home/posts", { headers })
-  //       .then((response) => {
-  //         setPosts(response.data);
-  //       })
-  //       .catch((error) => {
-  //         setError(error);
-  //       });
-  //     axios
-  //       .get("https://final-backend-nvf1.onrender.com/home/received-friend-requests", {
-  //         headers,
-  //       })
-  //       .then((response) => {
-  //         setFriendRequests(response.data);
-  //       })
-  //       .catch((error) => {
-  //         setError(error);
-  //       });
-  //     axios
-  //       .get("https://final-backend-nvf1.onrender.com/home/myfriends", {
-  //         headers,
-  //       })
-  //       .then((response) => {
-  //         setMyFriends(response.data);
-  //       })
-  //       .catch((error) => {
-  //         setError(error);
-  //       });
-
-  //   axios
-  //     .get("https://final-backend-nvf1.onrender.com/home/comments", {
-  //       headers,
-  //     })
-  //     .then((response) => {
-  //       setComments(response.data);
-  //     })
-  //     .catch((error) => {
-  //       setError(error);
-  //     });
-  // }
-  // if (authToken === null) {
-  //   throw new Error("Authentication token not found.");
-  // } else if (authToken != null) {
-  //   const headers = {
-  //     Authorization: `Bearer ${authToken}`,
-  //   };
-
-  //   axios
-  //     .get(`https://final-backend-nvf1.onrender.com/home/users/${userid}`, {
-  //       headers,
-  //     })
-  //     .then((response) => {
-  //       setUserProfile(response.data);
-  //     })
-  //     .catch((error) => {
-  //       setError(error);
-  //     });
-  // }
-
-  // }, []);
-
-  const setUserId = (id) => {
-    // setUserid(id);
-  };
-
   useEffect(() => {
     if (authToken === null) {
       throw new Error("Authentication token not found.");
@@ -186,14 +80,177 @@ export default function State(props) {
         Authorization: `Bearer ${authToken}`,
       };
       axios
+        .get("https://final-backend-nvf1.onrender.com/home/followers", {
+          headers,
+        })
+        .then((response) => {
+          // console.log("data come comeeeeeeee ")
+          setFollowers(response.data);
+        })
+        .catch((error) => {
+          setError(error);
+        });
+    }
+
+    if (authToken === null) {
+      throw new Error("Authentication token not found.");
+    } else if (authToken != null) {
+      const headers = {
+        Authorization: `Bearer ${authToken}`,
+      };
+      axios
+        .get("https://final-backend-nvf1.onrender.com/home/users", { headers })
+        .then((response) => {
+          // console.log("hellooo data is here")
+          setallUsers(response.data);
+        })
+        .catch((error) => {
+          setError(error);
+        });
+    }
+
+    if (authToken === null) {
+      throw new Error("Authentication token not found.");
+    } else if (authToken != null) {
+      const headers = {
+        Authorization: `Bearer ${authToken}`,
+      };
+      // axios
+      //   .get("https://final-backend-nvf1.onrender.com/home/homeposts", {
+      //     headers,
+      //   })
+      //   .then((response) => {
+      //     setPosts(response.data);
+      //   })
+      //   .catch((error) => {
+      //     setError(error);
+      //   });
+      // axios
+      //   .get("https://final-backend-nvf1.onrender.com/home/posts", {
+      //     headers,
+      //   })
+      //   .then((response) => {
+      //     setPosts(response.data);
+      //   })
+      //   .catch((error) => {
+      //     setError(error);
+      //   });
+      if (user.role === "user") {
+        // If the user's role is "user," hit the "/home/homeposts" route
+        axios
+          .get("https://final-backend-nvf1.onrender.com/home/homeposts", {
+            headers,
+          })
+          .then((response) => {
+            setPosts(response.data);
+          })
+          .catch((error) => {
+            setError(error);
+          });
+      } else if (user.role === "company") {
+        // If the user's role is "company," hit the "/home/posts" route
+        axios
+          .get("https://final-backend-nvf1.onrender.com/home/posts", {
+            headers,
+          })
+          .then((response) => {
+            setPosts(response.data);
+          })
+          .catch((error) => {
+            setError(error);
+          });
+      }
+
+      axios
         .get(
-          `https://final-backend-nvf1.onrender.com/home/userposts/${user.id}`,
+          "https://final-backend-nvf1.onrender.com/home/received-friend-requests",
           {
             headers,
           }
         )
         .then((response) => {
-          setUserPosts(response.data);
+          setFriendRequests(response.data);
+        })
+        .catch((error) => {
+          setError(error);
+        });
+      axios
+        .get("https://final-backend-nvf1.onrender.com/home/myfriends", {
+          headers,
+        })
+        .then((response) => {
+          setMyFriends(response.data);
+        })
+        .catch((error) => {
+          setError(error);
+        });
+    }
+
+    // if (authToken === null) {
+    //   throw new Error("Authentication token not found.");
+    // } else if (authToken != null) {
+    //   const headers = {
+    //     Authorization: `Bearer ${authToken}`,
+    //   };
+
+    //   axios
+    //     .get(`https://final-backend-nvf1.onrender.com/home/users/1`, {
+    //       headers,
+    //     })
+    //     .then((response) => {
+    //       setUserProfile(response.data);
+    //     })
+    //     .catch((error) => {
+    //       setError(error);
+    //     });
+    // }
+
+    if (authToken === null) {
+      throw new Error("Authentication token not found.");
+    } else if (authToken != null) {
+      const headers = {
+        Authorization: `Bearer ${authToken}`,
+      };
+      axios
+        .get("https://final-backend-nvf1.onrender.com/home/likes", { headers })
+        .then((response) => {
+          setLikes(response.data);
+        })
+        .catch((error) => {
+          setError(error);
+        });
+    }
+    if (authToken === null) {
+      throw new Error("Authentication token not found.");
+    } else if (authToken != null) {
+      const headers = {
+        Authorization: `Bearer ${authToken}`,
+      };
+      axios
+        .get("https://final-backend-nvf1.onrender.com/home/comments", {
+          headers,
+        })
+        .then((response) => {
+          setComments(response.data);
+        })
+        .catch((error) => {
+          setError(error);
+        });
+    }
+
+    if (authToken === null) {
+      throw new Error("Authentication token not found.");
+    } else if (authToken != null) {
+      const headers = {
+        Authorization: `Bearer ${authToken}`,
+      };
+
+      axios
+        .get("https://final-backend-nvf1.onrender.com/home/reels", {
+          headers,
+        })
+        .then((response) => {
+          setReels(response.data);
         })
         .catch((error) => {
           setError(error);
@@ -201,7 +258,11 @@ export default function State(props) {
     }
   }, []);
 
-  //   }
+  const setUserId = (id) => {
+    // setUserid(id);
+  };
+
+  // useEffect(() => {
   //   if (authToken === null) {
   //     throw new Error("Authentication token not found.");
   //   } else if (authToken != null) {
@@ -209,26 +270,14 @@ export default function State(props) {
   //       Authorization: `Bearer ${authToken}`,
   //     };
   //     axios
-  //       .get("https://final-backend-nvf1.onrender.com/home/likes", { headers })
+  //       .get(
+  //         `https://final-backend-nvf1.onrender.com/home/userposts/${user.id}`,
+  //         {
+  //           headers,
+  //         }
+  //       )
   //       .then((response) => {
-  //         setLikes(response.data);
-  //       })
-  //       .catch((error) => {
-  //         setError(error);
-  //       });
-  //   }
-  //   if (authToken === null) {
-  //     throw new Error("Authentication token not found.");
-  //   } else if (authToken != null) {
-  //     const headers = {
-  //       Authorization: `Bearer ${authToken}`,
-  //     };
-  //     axios
-  //       .get("https://final-backend-nvf1.onrender.com/home/comments", {
-  //         headers,
-  //       })
-  //       .then((response) => {
-  //         setComments(response.data);
+  //         setUserPosts(response.data);
   //       })
   //       .catch((error) => {
   //         setError(error);
@@ -236,7 +285,11 @@ export default function State(props) {
   //   }
   // }, []);
 
+ 
+
   const resetState = () => {
+    // Clear user-related data
+
     setPosts([]);
     setComments([]);
     setLikes([]);
@@ -248,13 +301,16 @@ export default function State(props) {
     setLoading(true);
     setUserProfile([]);
     setError(null);
+    setCompanyPosts([]);
     setUserPosts([]);
     // setUserid(0)
   };
-
   const addPost = (newPost) => {
     setPosts([newPost, ...posts]);
   };
+  // const addCompanyPost = (newPost) => {
+  //   setCompanyPosts([newPost, ...posts]);
+  // };
 
   const addLike = (newLike) => {
     setLikes([newLike, ...likes]);
@@ -272,6 +328,16 @@ export default function State(props) {
       });
     });
   };
+  const editUsers = (editedUser) => {
+    setallUsers((prevData) => {
+      return prevData.map((user) => {
+        if (user.id === editedUser.id) {
+          return editedUser;
+        }
+        return user;
+      });
+    });
+  };
   const editComments = (editedcomment) => {
     setComments((prevComment) => {
       return prevComment.map((comment) => {
@@ -283,21 +349,26 @@ export default function State(props) {
     });
   };
   const deletePost = (id) => {
-    let newPosts = state.posts.filter((item) => item.id != id);
+    let newPosts = posts.filter((item) => item.id != id);
     setPosts(newPosts);
   };
   const deleteComment = (id) => {
-    let newComments = state.comments.filter((item) => item.id != id);
+    let newComments = comments.filter((item) => item.id != id);
     setComments(newComments);
   };
   const deleteLike = (id) => {
-    let newLikes = state.likes.filter((item) => item.id != id);
+    let newLikes = likes.filter((item) => item.id != id);
     setLikes(newLikes);
   };
-  console.log(userPosts);
+
+
+
+  console.log(allUsers);
   const state = {
     posts: posts,
     setPosts: setPosts,
+    companyPosts:companyPosts,
+    setCompanyPosts:setCompanyPosts,
     comments: comments,
     setComments: setComments,
     likes: likes,
@@ -316,7 +387,7 @@ export default function State(props) {
     allUsers: allUsers,
     setallUsers: setallUsers,
     deletePost: deletePost,
-    setUserPosts: setUserPosts,
+    editUsers:editUsers,
     editPost: editPost,
     acceptFriendRequest,
     declineFriendRequest,
@@ -327,6 +398,7 @@ export default function State(props) {
     editComments: editComments,
     addComment: addComment,
     addLike: addLike,
+    
     userPosts: userPosts,
     userProfile: userProfile,
     setUserPosts: setUserPosts,
@@ -334,6 +406,7 @@ export default function State(props) {
     setUserId: setUserId,
     setError: setError,
     resetState: resetState,
+    setLoading:setLoading,
     // userid:userid
   };
   return (
