@@ -10,7 +10,7 @@ import {
   BrowserRouter,
   Routes,
 } from "react-router-dom";
-
+import io from "socket.io-client";
 import Navbar from "./components/navbar/Navbar";
 import LeftBar from "./components/leftBar/LeftBar";
 import RightBar from "./components/rightBar/RightBar";
@@ -22,10 +22,8 @@ import { DarkModeContext } from "./context/darkModeContext";
 import { StateContext } from "./context/state";
 // import "bootstrap/dist/css/bootstrap.min.css";
 import ChatsPage from "./components/chats/chats";
-import "bootstrap/dist/css/bootstrap.min.css";
 import JobPage from "./pages/jobs/Job";
-// function App() {
-// const {currentUser} = useContext(AuthContext);
+import NPost from "./components/notiPost/post";
 
 import { AuthContext } from "./context/auth/authContext";
 import LoginPage from "./pages/loginPage/loginPage";
@@ -84,6 +82,7 @@ function App() {
           <Route path="/profile/:id" element={<Profile />} />
           <Route path="/chats" element={<ChatsPage />} />
           <Route path="/job" element={<JobPage />} />
+          <Route path="/post/:postId" element={<NPost />} />
         </Route>
         <Route path="/cv" element={<Cv />}>
           <Route index element={<CVForm />} />

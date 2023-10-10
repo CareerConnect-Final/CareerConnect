@@ -1,4 +1,5 @@
 import { PrettyChatWindow } from "react-chat-engine-pretty";
+import "./chats.css";
 import {
   ChatEngine,
   ChatList,

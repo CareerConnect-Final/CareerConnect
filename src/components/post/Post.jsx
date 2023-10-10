@@ -8,9 +8,10 @@ import { Link } from "react-router-dom";
 import Comments from "../comments/Comments";
 import { useState, useContext, useEffect } from "react";
 import axios from "axios";
-import  {StateContext}  from "../../context/state";
+import { StateContext } from "../../context/state";
 import PostModal from "../postModal/PostModal";
 import cookie from "react-cookies";
+import socketService from "../../socket/socket"; // Import the socket service
 
 const Post = (props) => {
   const user = cookie.load("user");
@@ -71,14 +72,24 @@ const Post = (props) => {
           headers,
         })
         .then((data) => {
-          state.addLike(data.data); 
+          state.addLike(data.data);
+          const sentData = {
+            senderId: user.id,
+            senderName: user.username,
+            profilePicture: user.profilePicture,
+            receiverId: props.post.user_id,
+            message: `${user.username} liked your post`,
+            postId: props.post.id,
+          };
+
+          socketService.socket.emit("likePost", sentData);
         })
         .catch((error) => {
           console.error("Error", error);
         });
     }
   };
-  
+
   const handleDelete = (id) => {
     axios
       .delete(`https://final-backend-nvf1.onrender.com/api/v1/posts/${id}`)
@@ -133,7 +144,8 @@ const Post = (props) => {
         <div className="content">
           <p>{props.post.content}</p>
           <img
-            src={props.post.photo
+            src={
+              props.post.photo
               // "https://images.pexels.com/photos/4881619/pexels-photo-4881619.jpeg?auto=compress&cs=tinysrgb&w=1600"
             }
             alt=""
@@ -162,7 +174,11 @@ const Post = (props) => {
           </div>
         </div>
         {commentOpen && (
-          <Comments comments={state.comments} id={props.post.id} />
+          <Comments
+            comments={state.comments}
+            id={props.post.id}
+            postuserId={props.post.user_id}
+          />
         )}
         {showModal && (
           <PostModal

@@ -26,6 +26,7 @@ function Editor(props) {
     github: activeInformation?.detail?.github || "",
     phone: activeInformation?.detail?.phone || "",
     email: activeInformation?.detail?.email || "",
+    adress: activeInformation?.detail?.adress || "",
   });
 
   const handlePointUpdate = (value, index) => {
@@ -277,6 +278,14 @@ function Editor(props) {
             setValues((prev) => ({ ...prev, phone: event.target.value }))
           }
         />
+        <InputControl
+          label="adress"
+          value={values.adress}
+          placeholder="Enter your adress"
+          onChange={(event) =>
+            setValues((prev) => ({ ...prev, adress: event.target.value }))
+          }
+        />
       </div>
     </div>
   );
@@ -363,6 +372,7 @@ function Editor(props) {
           github: values.github,
           email: values.email,
           phone: values.phone,
+          adress: values.adress,
         };
 
         props.setInformation((prev) => ({
@@ -532,9 +542,7 @@ function Editor(props) {
       companyName: activeInfo?.details
         ? activeInfo.details[0]?.companyName || ""
         : "",
-      college: activeInfo?.details
-        ? activeInfo.details[0]?.college || ""
-        : "",
+      college: activeInfo?.details ? activeInfo.details[0]?.college || "" : "",
       location: activeInfo?.details
         ? activeInfo.details[0]?.location || ""
         : "",
@@ -557,6 +565,7 @@ function Editor(props) {
         ? activeInfo.details[0]?.github || ""
         : activeInfo?.detail?.github || "",
       phone: activeInfo?.detail?.phone || "",
+      adress: activeInfo?.detail?.adress || "",
       email: activeInfo?.detail?.email || "",
       summary: typeof activeInfo?.detail !== "object" ? activeInfo.detail : "",
       other: typeof activeInfo?.detail !== "object" ? activeInfo.detail : "",

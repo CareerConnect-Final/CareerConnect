@@ -4,6 +4,7 @@ import cookie from "react-cookies";
 import jwt_decode from "jwt-decode";
 import base64 from "base-64";
 import { createContext, useEffect, useState } from "react";
+import socketService from "../../socket/socket"; // Import the socket service
 /* ---------------- */
 export const AuthContext = React.createContext();
 /* ---------------- */
@@ -110,8 +111,13 @@ function AuthProvider(props) {
     setError(error || null);
     cookie.save("auth", Token);
     cookie.save("user", User);
+    if (loggedIn) {
+      // Connect to Socket.io when the user logs in
+      socketService.connect(Token);
+    }
   };
   const logout = () => {
+    socketService.disconnect();
     setLoginState(false, null, {});
   };
 
@@ -154,7 +160,23 @@ function AuthProvider(props) {
     console.log("user from cookie", user);
     console.log("hi");
     validateToken(token, user);
+
+    const savedSocketId = localStorage.getItem("socketId");
+
+    if (isLoggedIn && savedSocketId) {
+      socketService.connect(token, savedSocketId);
+    } else if (isLoggedIn) {
+      // If no saved socket ID, just connect with the token
+      socketService.connect(token);
+    }
+
+    // socketService.onConnect(() => {
+    //   // Handle the socket connection here, if needed
+    // });
   }, []);
+  //************************************************************************************************ */
+
+  //************************************************************************************************ */
 
   const sharedStates = {
     isLoggedIn,

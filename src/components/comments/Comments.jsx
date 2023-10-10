@@ -1,12 +1,12 @@
 import { useContext, useState } from "react";
 import "./comments.scss";
 import { AuthContext } from "../../context/auth/authContext";
-import {StateContext} from "../../context/state";
+import { StateContext } from "../../context/state";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import cookie from "react-cookies";
 import PostModal from "../postModal/PostModal";
 import axios from "axios";
-
+import socketService from "../../socket/socket";
 const Comments = (props) => {
   const [showModals, setShowModals] = useState({}); // Use an object to store the showModal state for each comment
   const user = cookie.load("user");
@@ -43,8 +43,18 @@ const Comments = (props) => {
       .post("https://final-backend-nvf1.onrender.com/api/v1/comments", obj)
       .then((data) => {
         setNewComment("");
-
+        console.log("->", props);
         newComments.addComment(data.data);
+        const sentData = {
+          senderId: user.id,
+          senderName: user.username,
+          profilePicture: user.profilePicture,
+          receiverId: props.postuserId,
+          message: `${user.username} commented on your post`,
+          postId: props.id,
+        };
+
+        socketService.socket.emit("commentPost", sentData);
       })
       .catch((error) => {
         console.error("Error creating post:", error);
