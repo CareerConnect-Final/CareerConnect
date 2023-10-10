@@ -1,10 +1,11 @@
 import "./jobsearch.scss";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { AuthContext } from "../../context/auth/authContext";
 import { JobContext } from "../../context/stateJob";
 import { useState } from "react";
 import axios from "axios";
 import cookie from "react-cookies";
+import JobPost from "../JobPost/jobPost";
 /////////////////////////////////////firebase//
 import {
   ref,
@@ -18,10 +19,15 @@ import { v4 } from "uuid";
 ///////////////////////////////////
 const JobSearch = () => {
   const filter = useContext(JobContext);
+  const [renderJobs, setRenderJobs] = useState(filter.jobPost);
+  const [flag, setFlag] = useState(false)
+  // setRenderJobs(filter.jobPost);
+
 
   const [searchBasedOn, setSearchBasedOn] = useState("Title"); 
   const [selectedTitle, setSelectedTitle] = useState(""); 
   const [selectedCity, setSelectedCity] = useState(""); 
+  
 
   const user = cookie.load("user");
   const authToken = cookie.load("auth");
@@ -34,16 +40,20 @@ const JobSearch = () => {
         const headers = {
           Authorization: `Bearer ${authToken}`,
         };
+
         axios
           .get(`https://final-backend-nvf1.onrender.com/careerjob/jobtitle/${selectedTitle}`, { headers })
           .then((response) => {
-            filter.setJobSearch(response.data);
+            console.log("tttttttitle",response.data)
+
+            // filter.setJobSearch(response.data);
+            setRenderJobs(response.data);
+            setFlag(true)
           })
           .catch((error) => {
             setError(error);
           });
-        setSelectedCity("");
-        setSelectedTitle("");
+        
       }
 
     } else if (selectedTitle == "" && selectedCity !== ""){
@@ -56,19 +66,25 @@ const JobSearch = () => {
         axios
           .get(`https://final-backend-nvf1.onrender.com/careerjob/jobcity/${selectedCity}`, { headers })
           .then((response) => {
-            filter.setJobSearch(response.data);
+            // filter.setJobSearch(response.data);
+            setRenderJobs(response.data);
+            setFlag(true)
+            console.log("=============>>>>", response.data)
           })
           .catch((error) => {
             setError(error);
           });
-        setSelectedCity("");
-        setSelectedTitle("");
       }
     }
 
       
   };
 
+  const handelFlag = (e) => {
+    setFlag(false);
+    setSelectedCity("");
+    setSelectedTitle("");
+  }
 
   const handleSearchBasedOn = (event) => {
     setSearchBasedOn(event.target.value);
@@ -82,7 +98,16 @@ const JobSearch = () => {
     setSelectedTitle("");
   };
 
+  useEffect(()=>{
+    setRenderJobs(filter.jobPost)
+  },[])
+
+  // useEffect(()=>{
+
+  // },[])
+
   return (
+    <>
     <div className="share">
       {user.role !== "company" && (
         <div className="container">
@@ -101,32 +126,36 @@ const JobSearch = () => {
                 </select>
                 {searchBasedOn == "Title" && (
                   <div>
-                    <label htmlFor="dropdown">Select Job Title:</label>
+                    {/* <label htmlFor="dropdown">Select Job Title:</label>
                     <select
                       id="dropdown"
                       value={selectedTitle}
                       onChange={handleSelectedTitle}
                     >
                       <option value="option1"></option>
-                      <option value="option2">Option 1</option>
-                      <option value="option3">Option 2</option>
-                      <option value="option4">Option 3</option>
-                    </select>
+                      <option value="qa">qa</option>
+                      <option value="software">software</option>
+                      <option value="full stack">full stack</option>
+                    </select> */}
+
+                      <input type="text" alt="" placeholder="title" onChange={handleSelectedTitle} value={selectedTitle}/>
                   </div>
                 )}
                 {searchBasedOn == "City" && (
                   <div>
-                    <label htmlFor="dropdown">Select City:</label>
+                    {/* <label htmlFor="dropdown">Select City:</label>
                     <select
                       id="dropdown"
                       value={selectedCity}
                       onChange={handleSelectedCity}
                     >
                       <option value="option1"></option>
-                      <option value="option2">Option 1</option>
-                      <option value="option3">Option 2</option>
-                      <option value="option4">Option 3</option>
-                    </select>
+                      <option value="amman">amman</option>
+                      <option value="irbid">irbid</option>
+                      {/* <option value="option4">Option 3</option>
+                    </select> */}
+
+                    <input type="text" alt="" placeholder="City" onChange={handleSelectedCity} value={selectedCity}/>
                   </div>
                 )}
               </div>
@@ -136,11 +165,29 @@ const JobSearch = () => {
           <div className="bottom">
             <div className="right">
               <button onClick={handleSearch}>Search</button>
+              {flag && 
+                <button onClick={handelFlag}>Clear Search</button>
+              }
+
             </div>
           </div>
         </div>
       )}
     </div>
+    <div className="posts">
+      {console.log("renderJobs====>",renderJobs)}
+      {flag ? 
+      renderJobs.map(post=>(
+    
+        <JobPost post={post} key={post.id}/>
+      )):
+      filter.jobPost.map(post=>(
+    
+        <JobPost post={post} key={post.id}/>
+      ))}
+    
+ </div>
+</>
   );
 };
 

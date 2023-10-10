@@ -1,6 +1,7 @@
 // import Stories from "../../components/stories/Stories"
 import JobPosts from "../../components/JobPosts/jobPosts";
 import Share from "../../components/shareJob/ShareJob";
+import JobSearch from "../../components/JobSearch/JobSearch";
 import "./job.scss";
 import { useEffect, useContext } from "react";
 import axios from "axios";
@@ -8,6 +9,7 @@ import { JobContext } from "../../context/stateJob";
 import cookie from "react-cookies";
 
 const JobPage = () => {
+  const user = cookie.load("user");
   const authToken = cookie.load("auth");
   const state = useContext(JobContext);
   useEffect(() => {
@@ -156,8 +158,16 @@ const JobPage = () => {
   return (
     <div className="home">
       {/* <Stories/> */}
-      <Share />
-      <JobPosts />
+      {user.role === "company" &&
+      (<>
+            <Share />
+            <JobPosts />
+        </>
+      )
+      }
+      {user.role !== "company" &&
+            <JobSearch />
+      }
     </div>
   );
 };
