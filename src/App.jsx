@@ -102,7 +102,7 @@ function App() {
 
         <Route path="/" element={<AuthenticatedLayout />}>
           <Route index element={<Home />} />
-          <Route path="/profile/:id" element={<Profile />} />
+          <Route path="/profile/:userId" element={<Profile />} />
           <Route path="/chats" element={<ChatsPage />} />
           <Route path="/job" element={<JobPage />} />
           <Route path="/reels" element={<ReelsPage />} />

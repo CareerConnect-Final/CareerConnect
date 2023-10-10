@@ -1,22 +1,3 @@
-// // src/components/ReelsPage.js
-
-// import React, { useEffect, useState, useContext, useRef } from "react";
-// import "./ReelsPage.scss";
-// import { StateContext } from "../../context/state";
-
-// const Reel = (props) => {
-//   return (
-//     <>
-//       <video controls autoPlay muted>
-//         <source src={props.reel.video} type="video/mp4" />
-//         Your browser does not support the video tag.
-//       </video>
-//     </>
-//   );
-// };
-
-// export default Reel;
-
 import React, { useRef, useState, useEffect, useContext } from "react";
 import cookie from "react-cookies";
 import { StateContext } from "../../context/state";

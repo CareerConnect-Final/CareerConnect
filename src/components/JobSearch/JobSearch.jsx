@@ -1,5 +1,5 @@
 import "./jobsearch.scss";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { AuthContext } from "../../context/auth/authContext";
 import { JobContext } from "../../context/stateJob";
 import { useState } from "react";
@@ -19,13 +19,15 @@ import { v4 } from "uuid";
 ///////////////////////////////////
 const JobSearch = () => {
   const filter = useContext(JobContext);
-
-  filter.setRenderJobs(filter.jobPost);
+  const [renderJobs, setRenderJobs] = useState(filter.jobPost);
+  const [flag, setFlag] = useState(false)
+  // setRenderJobs(filter.jobPost);
 
 
   const [searchBasedOn, setSearchBasedOn] = useState("Title"); 
   const [selectedTitle, setSelectedTitle] = useState(""); 
   const [selectedCity, setSelectedCity] = useState(""); 
+  
 
   const user = cookie.load("user");
   const authToken = cookie.load("auth");
@@ -38,17 +40,20 @@ const JobSearch = () => {
         const headers = {
           Authorization: `Bearer ${authToken}`,
         };
+
         axios
           .get(`https://final-backend-nvf1.onrender.com/careerjob/jobtitle/${selectedTitle}`, { headers })
           .then((response) => {
-            filter.setJobSearch(response.data);
-            filter.setRenderJobs(response.data)
+            console.log("tttttttitle",response.data)
+
+            // filter.setJobSearch(response.data);
+            setRenderJobs(response.data);
+            setFlag(true)
           })
           .catch((error) => {
             setError(error);
           });
-        setSelectedCity("");
-        setSelectedTitle("");
+        
       }
 
     } else if (selectedTitle == "" && selectedCity !== ""){
@@ -61,21 +66,25 @@ const JobSearch = () => {
         axios
           .get(`https://final-backend-nvf1.onrender.com/careerjob/jobcity/${selectedCity}`, { headers })
           .then((response) => {
-            filter.setJobSearch(response.data);
-            filter.setRenderJobs(response.data)
+            // filter.setJobSearch(response.data);
+            setRenderJobs(response.data);
+            setFlag(true)
             console.log("=============>>>>", response.data)
           })
           .catch((error) => {
             setError(error);
           });
-        setSelectedCity("");
-        setSelectedTitle("");
       }
     }
 
       
   };
 
+  const handelFlag = (e) => {
+    setFlag(false);
+    setSelectedCity("");
+    setSelectedTitle("");
+  }
 
   const handleSearchBasedOn = (event) => {
     setSearchBasedOn(event.target.value);
@@ -88,6 +97,14 @@ const JobSearch = () => {
     setSelectedCity(event.target.value);
     setSelectedTitle("");
   };
+
+  useEffect(()=>{
+    setRenderJobs(filter.jobPost)
+  },[])
+
+  // useEffect(()=>{
+
+  // },[])
 
   return (
     <>
@@ -121,7 +138,7 @@ const JobSearch = () => {
                       <option value="full stack">full stack</option>
                     </select> */}
 
-                      <input type="text" alt="" placeholder="title" onChange={handleSelectedTitle}/>
+                      <input type="text" alt="" placeholder="title" onChange={handleSelectedTitle} value={selectedTitle}/>
                   </div>
                 )}
                 {searchBasedOn == "City" && (
@@ -138,7 +155,7 @@ const JobSearch = () => {
                       {/* <option value="option4">Option 3</option>
                     </select> */}
 
-                    <input type="text" alt="" placeholder="title" onChange={handleSelectedCity}/>
+                    <input type="text" alt="" placeholder="City" onChange={handleSelectedCity} value={selectedCity}/>
                   </div>
                 )}
               </div>
@@ -148,18 +165,28 @@ const JobSearch = () => {
           <div className="bottom">
             <div className="right">
               <button onClick={handleSearch}>Search</button>
+              {flag && 
+                <button onClick={handelFlag}>Clear Search</button>
+              }
+
             </div>
           </div>
         </div>
       )}
     </div>
     <div className="posts">
-
-    {filter.renderJobs.map(post=>(
-     
-     <JobPost post={post} key={post.id}/>
-   ))}
- </div>;
+      {console.log("renderJobs====>",renderJobs)}
+      {flag ? 
+      renderJobs.map(post=>(
+    
+        <JobPost post={post} key={post.id}/>
+      )):
+      filter.jobPost.map(post=>(
+    
+        <JobPost post={post} key={post.id}/>
+      ))}
+    
+ </div>
 </>
   );
 };
