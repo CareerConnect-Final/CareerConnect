@@ -125,7 +125,7 @@ console.log("-------+++++>",state.userProfile)
         <div className="uInfo-bio" >
         <div>
           <div>About :</div>
-          <button className="resume">Resume</button>
+        {user.role ==="user"&&  <button className="resume">Resume</button>}
           </div>
           <div>{user.bio}</div>
           </div> 

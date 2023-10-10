@@ -18,6 +18,7 @@ import { useParams } from "react-router-dom";
 
 const Post = (props) => {
  
+
   // const userID = useParams();
   // console.log(userID.id)
  
@@ -152,6 +153,7 @@ const Post = (props) => {
         </div>
 
         <div className="content">
+          
           <p>{props.post.content}</p>
           <img
             src={props.post.photo

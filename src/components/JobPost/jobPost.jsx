@@ -9,8 +9,9 @@ import CommentsJob from "../jobComments/CommentsJob";
 import { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import {JobContext}  from "../../context/stateJob";
-import PostModal from "../postModal/PostModal";
+// import PostModal from "../postModal/PostModal";
 import cookie from "react-cookies";
+import JobModal from "../jobModal/jobModal";
 
 const JobPosts = (props) => {
   const user = cookie.load("user");
@@ -79,6 +80,8 @@ const JobPosts = (props) => {
         })
         .then((data) => {
           state.addLike(data.data); 
+
+
         })
         .catch((error) => {
           console.error("Error", error);
@@ -205,7 +208,7 @@ const JobPosts = (props) => {
           <CommentsJob comments={state.comments} id={props.post.id} />
         )}
         {showModal && (
-          <PostModal
+          <JobModal
             checkJob="jobposts"
             id={props.post.id}
             showFlag={showModal}

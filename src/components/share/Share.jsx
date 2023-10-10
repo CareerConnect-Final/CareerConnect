@@ -5,7 +5,7 @@ import Friend from "../../assets/friend.png";
 import { useContext } from "react";
 import { AuthContext } from "../../context/auth/authContext";
 import  {StateContext}  from "../../context/state";
-import { useState } from "react";
+import { useState ,useRef } from "react";
 import axios from "axios";
 import cookie from "react-cookies";
 /////////////////////////////////////firebase//
@@ -20,6 +20,8 @@ import { storage } from "../../firebase";
 import { v4 } from "uuid";
 ///////////////////////////////////
 const Share = () => {
+
+  const fileInputRef = useRef(null);
   const [imageUpload, setImageUpload] = useState("");///
   const [photoContent, setPhotoContent] = useState("");///
   const newPost = useContext(StateContext);
@@ -34,28 +36,41 @@ const Share = () => {
         user_id: user.id,
         username: user.username,
         content: postContent,
-        photo: url, 
+        photo: url,
         profilePicture: user.profilePicture,
       };
-
       axios
         .post("https://final-backend-nvf1.onrender.com/api/v1/posts", obj)
         .then((data) => {
           setPostContent("");
           setPhotoContent("");
+          setImageUpload("");
           newPost.addPost(data.data);
-          console.log(obj)
         })
         .catch((error) => {
           console.error("Error creating post:", error);
         });
-
     });
   });
-  
 };
 
-  const { currentUser } = useContext(AuthContext);
+
+const handleImageClick = () => {
+  // Trigger the file input when "Add Image" is clicked
+  if (fileInputRef.current) {
+    fileInputRef.current.click();
+
+
+
+  }
+};
+
+const handleImageInputChange = (event) => {
+  const selectedFile = event.target.files[0];
+  setImageUpload(selectedFile);
+ 
+};
+
   return (
     <div className="share">
       <div className="container">
@@ -63,7 +78,7 @@ const Share = () => {
           <img src={user.profilePicture} alt="" />
           <input
             type="text"
-            placeholder={`What's on your mind ${currentUser.name}?`}
+            placeholder={`What's on your mind ${user.username}?`}
             value={postContent}
             onChange={(e) => setPostContent(e.target.value)}
           />
@@ -75,16 +90,20 @@ const Share = () => {
         <hr />
         <div className="bottom">
           <div className="left">
-            <input type="file" id="file" style={{ display: "none" }}
-            onChange={(event) => { //////////////////////
-              setImageUpload(event.target.files[0]);
-          }} />
-            <label htmlFor="file">
-              <div className="item">
-                <img src={Image} alt="" />
-                <span>Add Image</span>
-              </div>
-            </label>
+          <input
+              type="file"
+              id="file"
+              ref={fileInputRef} // Assign the ref to the file input
+              style={{
+                display: "none",
+              }}
+              onChange={handleImageInputChange}
+            />
+            <div className="item" onClick={handleImageClick}>
+              <img src={Image} alt="" />
+              <span>Add Image</span>
+            </div>
+
             <div className="item">
               <img src={Map} alt="" />
               <span>Add Place</span>
@@ -102,5 +121,4 @@ const Share = () => {
     </div>
   );
 };
-
 export default Share;

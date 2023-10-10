@@ -44,23 +44,27 @@ const Share = () => {
       const obj = {
         user_id: user.id,
         company_name: user.firstName,
-        job_title: titleContent,
         job_city: cityContent,
+        job_title: titleContent,
         job_field: fieldContent,
         content: postContent,
         // photo: "url", 
         profilePicture: user.profilePicture,
       };
+      console.log(obj)
       const headers = {
         Authorization: `Bearer ${authToken}`,
       };
       axios
         .post("https://final-backend-nvf1.onrender.com/careerjob/jobs", obj,{headers})
         .then((data) => {
-          setPostContent("");
-          setPhotoContent("");
+          
           newPost.addPost(data.data);
           console.log(data.data)
+          setPostContent("");
+          setCityContent("");
+          setFieldContent("");
+          setTitleContent("");
         })
         .catch((error) => {
           console.error("Error creating post:", error);
