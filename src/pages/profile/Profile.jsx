@@ -14,15 +14,11 @@ import PermContactCalendarIcon from "@mui/icons-material/PermContactCalendar";
 import Posts from "../../components/posts/Posts";
 import { useContext, useEffect, useState } from "react";
 import Post from "../../components/post/Post";
-const userAPI = "https://final-backend-nvf1.onrender.com/profile";
-const userPostsAPI = "https://final-backend-nvf1.onrender.com/home/userposts/2";
-// const userPostsAPI= "https://final-backend-nvf1.onrender.com/api/v1/users/2/posts"
+
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import cookie from "react-cookies";
 import { useParams } from "react-router-dom";
-
-import { StateContext } from "../../context/state";
 
 const Profile = () => {
   const state = useContext(StateContext);

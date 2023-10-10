@@ -40,8 +40,6 @@ import {
 
 import cookie from "react-cookies";
 import "./navbar.scss";
-import React, { useState } from "react";
-import WorkOutlineIcon from "@mui/icons-material/WorkOutline";
 import { StateContext } from "../../context/state";
 import { JobContext } from "../../context/stateJob";
 
