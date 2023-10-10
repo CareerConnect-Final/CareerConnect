@@ -68,6 +68,40 @@ function Cv() {
     </div>
   );
 }
+function Prof() {
+  const { darkMode } = useContext(DarkModeContext);
+
+  return (
+    <div className={`theme-${darkMode ? "dark" : "light"}`}>
+    {/* <PrivateRoute /> */}
+    <Navbar />
+    <div style={{ display: "flex" }}>
+      <LeftBar />
+      <div style={{ flex: 6 }}>
+        <Outlet />
+      </div>
+     
+    </div>
+  </div>
+  );
+}
+function Jobs() {
+  const { darkMode } = useContext(DarkModeContext);
+
+  return (
+    <div className={`theme-${darkMode ? "dark" : "light"}`}>
+    <PrivateRoute />
+    <Navbar />
+    <div style={{ display: "flex" }}>
+      <LeftBar />
+      <div style={{ flex: 6 }}>
+        <Outlet />
+      </div>
+      <RightBar />
+    </div>
+  </div>
+  );
+}
 
 function Reels() {
   const { darkMode } = useContext(DarkModeContext);
@@ -98,14 +132,14 @@ function App() {
           element={!isLoggedIn ? <LoginPage /> : <Navigate to="/" />}
         />
         {/* <Route path="/reels" element={<ReelsPage />} /> */}
-
+       
         <Route path="/jobsearch" element={<JobSearch />} />
         <Route path="/landing" element={<Main />} />
         {/* <Route path="/AuthComponent" element={<AuthComponent />} /> */}
 
         <Route path="/" element={<AuthenticatedLayout />}>
           <Route index element={<Home />} />
-          <Route path="/profile/:userId" element={<Profile />} />
+          {/* <Route path="/profile/:userId" element={<Profile />} /> */}
           <Route path="/chats" element={<ChatsPage />} />
           <Route path="/job" element={<JobPage />} />
           <Route path="/post/:postId" element={<NPost />} />
@@ -114,6 +148,14 @@ function App() {
         </Route>
         <Route path="/cv" element={<Cv />}>
           <Route index element={<CVForm />} />
+        </Route>
+        <Route path="/profile/:userId" element={<Prof />}>
+          <Route index element={<Profile />} />
+          
+        </Route>
+        <Route path="/job" element={<Jobs />}>
+          <Route index element={<JobPage />} />
+          
         </Route>
       </Routes>
     </BrowserRouter>

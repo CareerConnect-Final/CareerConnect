@@ -186,6 +186,7 @@ function AuthProvider(props) {
     const savedSocketId = localStorage.getItem("socketId");
 
     if (isLoggedIn && savedSocketId) {
+
       socketService.connect(token, savedSocketId);
     } else if (isLoggedIn) {
       // If no saved socket ID, just connect with the token
