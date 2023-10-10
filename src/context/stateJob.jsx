@@ -57,149 +57,149 @@ export default function State(props) {
     }
   };
 
-  useEffect(() => {
-    if (authToken === null) {
-      throw new Error("Authentication token not found.");
-    } else if (authToken != null) {
-      const headers = {
-        Authorization: `Bearer ${authToken}`,
-      };
+  // useEffect(() => {
+  //   if (authToken === null) {
+  //     throw new Error("Authentication token not found.");
+  //   } else if (authToken != null) {
+  //     const headers = {
+  //       Authorization: `Bearer ${authToken}`,
+  //     };
 
-      axios
-        .get("https://final-backend-nvf1.onrender.com/home/friendsreq", {
-          headers,
-        })
-        .then((response) => {
-          setFriendRequests(response.data);
-        })
-        .catch((error) => {
-          setError(error);
-        });
+  //     axios
+  //       .get("https://final-backend-nvf1.onrender.com/home/friendsreq", {
+  //         headers,
+  //       })
+  //       .then((response) => {
+  //         setFriendRequests(response.data);
+  //       })
+  //       .catch((error) => {
+  //         setError(error);
+  //       });
 
-      axios
-        .get("https://final-backend-nvf1.onrender.com/home/myfriends", {
-          headers,
-        })
-        .then((response) => {
-          setMyFriends(response.data);
-        })
-        .catch((error) => {
-          setError(error);
-        });
-    }
-    if (authToken === null) {
-      throw new Error("Authentication token not found.");
-    } else if (authToken != null) {
-      const headers = {
-        Authorization: `Bearer ${authToken}`,
-      };
-      axios
-        .get(
-          "https://final-backend-nvf1.onrender.com/careerjob/followdcompanies",
-          {
-            headers,
-          }
-        )
-        .then((response) => {
-          console.log("data come comeeeeeeee ");
-          setYouFollow(response.data);
-        })
-        .catch((error) => {
-          setError(error);
-        });
-    }
+  //     axios
+  //       .get("https://final-backend-nvf1.onrender.com/home/myfriends", {
+  //         headers,
+  //       })
+  //       .then((response) => {
+  //         setMyFriends(response.data);
+  //       })
+  //       .catch((error) => {
+  //         setError(error);
+  //       });
+  //   }
+  //   if (authToken === null) {
+  //     throw new Error("Authentication token not found.");
+  //   } else if (authToken != null) {
+  //     const headers = {
+  //       Authorization: `Bearer ${authToken}`,
+  //     };
+  //     axios
+  //       .get(
+  //         "https://final-backend-nvf1.onrender.com/careerjob/followdcompanies",
+  //         {
+  //           headers,
+  //         }
+  //       )
+  //       .then((response) => {
+  //         // console.log("data come comeeeeeeee ");
+  //         setYouFollow(response.data);
+  //       })
+  //       .catch((error) => {
+  //         setError(error);
+  //       });
+  //   }
 
-    if (authToken === null) {
-      throw new Error("Authentication token not found.");
-    } else if (authToken != null) {
-      const headers = {
-        Authorization: `Bearer ${authToken}`,
-      };
+  //   if (authToken === null) {
+  //     throw new Error("Authentication token not found.");
+  //   } else if (authToken != null) {
+  //     const headers = {
+  //       Authorization: `Bearer ${authToken}`,
+  //     };
 
-      axios
-        .get("https://final-backend-nvf1.onrender.com/careerjob/likes", {
-          headers,
-        })
-        .then((response) => {
-          setLikes(response.data);
-        })
-        .catch((error) => {
-          setError(error);
-        });
-    }
-    if (authToken === null) {
-      throw new Error("Authentication token not found.");
-    } else if (authToken != null) {
-      const headers = {
-        Authorization: `Bearer ${authToken}`,
-      };
+  //     axios
+  //       .get("https://final-backend-nvf1.onrender.com/careerjob/likes", {
+  //         headers,
+  //       })
+  //       .then((response) => {
+  //         setLikes(response.data);
+  //       })
+  //       .catch((error) => {
+  //         setError(error);
+  //       });
+  //   }
+  //   if (authToken === null) {
+  //     throw new Error("Authentication token not found.");
+  //   } else if (authToken != null) {
+  //     const headers = {
+  //       Authorization: `Bearer ${authToken}`,
+  //     };
 
-      axios
-        .get("https://final-backend-nvf1.onrender.com/home/jobcomments", {
-          headers,
-        })
-        .then((response) => {
-          setComments(response.data);
-        })
-        .catch((error) => {
-          setError(error);
-        });
-    }
-    if (authToken === null) {
-      throw new Error("Authentication token not found.");
-    } else if (authToken != null) {
-      const headers = {
-        Authorization: `Bearer ${authToken}`,
-      };
+  //     axios
+  //       .get("https://final-backend-nvf1.onrender.com/home/jobcomments", {
+  //         headers,
+  //       })
+  //       .then((response) => {
+  //         setComments(response.data);
+  //       })
+  //       .catch((error) => {
+  //         setError(error);
+  //       });
+  //   }
+  //   if (authToken === null) {
+  //     throw new Error("Authentication token not found.");
+  //   } else if (authToken != null) {
+  //     const headers = {
+  //       Authorization: `Bearer ${authToken}`,
+  //     };
 
-      axios
-        .get("https://final-backend-nvf1.onrender.com/careerjob/jobs", {
-          headers,
-        })
-        .then((response) => {
-          setJobPosts(response.data);
-          // console.log(response.data);
-        })
-        .catch((error) => {
-          setError(error);
-        });
-    }
-    if (authToken === null) {
-      throw new Error("Authentication token not found.");
-    } else if (authToken != null) {
-      const headers = {
-        Authorization: `Bearer ${authToken}`,
-      };
-      axios
-        .get("https://final-backend-nvf1.onrender.com/home/users", { headers })
-        .then((response) => {
-          // console.log("job users from job job ")
-          setAllUsers(response.data);
-        })
-        .catch((error) => {
-          setError(error);
-        });
-    }
-    if (authToken === null) {
-      throw new Error("Authentication token not found.");
-    } else if (authToken != null) {
-      const headers = {
-        Authorization: `Bearer ${authToken}`,
-      };
-      axios
-        .get("https://final-backend-nvf1.onrender.com/home/followers", {
-          headers,
-        })
-        .then((response) => {
-          // console.log("data come comeeeeeeee ")
-          setFollowers(response.data);
-          // console.log(followers)
-        })
-        .catch((error) => {
-         setError(error);
-        });
-    }
-  },[] );
+  //     axios
+  //       .get("https://final-backend-nvf1.onrender.com/careerjob/jobs", {
+  //         headers,
+  //       })
+  //       .then((response) => {
+  //         setJobPosts(response.data);
+  //         // console.log(response.data);
+  //       })
+  //       .catch((error) => {
+  //         setError(error);
+  //       });
+  //   }
+  //   if (authToken === null) {
+  //     throw new Error("Authentication token not found.");
+  //   } else if (authToken != null) {
+  //     const headers = {
+  //       Authorization: `Bearer ${authToken}`,
+  //     };
+  //     axios
+  //       .get("https://final-backend-nvf1.onrender.com/home/users", { headers })
+  //       .then((response) => {
+  //         // console.log("job users from job job ")
+  //         setAllUsers(response.data);
+  //       })
+  //       .catch((error) => {
+  //         setError(error);
+  //       });
+  //   }
+  //   if (authToken === null) {
+  //     throw new Error("Authentication token not found.");
+  //   } else if (authToken != null) {
+  //     const headers = {
+  //       Authorization: `Bearer ${authToken}`,
+  //     };
+  //     axios
+  //       .get("https://final-backend-nvf1.onrender.com/home/followers", {
+  //         headers,
+  //       })
+  //       .then((response) => {
+  //         // console.log("data come comeeeeeeee ")
+  //         setFollowers(response.data);
+  //         // console.log(followers)
+  //       })
+  //       .catch((error) => {
+  //        setError(error);
+  //       });
+  //   }
+  // },[] );
 
 
 
@@ -259,7 +259,7 @@ export default function State(props) {
     let newLikes = likes.filter((item) => item.id != id);
     setLikes(newLikes);
   };
-  console.log(followers)
+  // console.log(followers)
 
   const state = {
     jobPost: jobPost,

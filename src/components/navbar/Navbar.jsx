@@ -271,7 +271,7 @@ const Navbar = () => {
               value={search}
               onChange={handleChange}
             />
-            {console.log(search)}
+            {/* {console.log(search)} */}
             {search && (
               <div className="search-results">
                 {userNames
