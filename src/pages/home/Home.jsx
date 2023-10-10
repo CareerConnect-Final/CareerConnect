@@ -1,22 +1,21 @@
-import Stories from "../../components/stories/Stories"
-import Posts from "../../components/posts/Posts"
-import Share from "../../components/share/Share"
-import { StateContext } from "../../context/state"
-import "./home.scss"
-import { useContext ,useEffect} from "react"
-import axios from "axios"
+import Stories from "../../components/stories/Stories";
+import Posts from "../../components/posts/Posts";
+import Share from "../../components/share/Share";
+import "./home.scss";
+import { useContext, useState, useEffect } from "react";
+import socketService from "../../socket/socket";
+import { StateContext } from "../../context/state";
+import "./home.scss";
+import axios from "axios";
 import cookie from "react-cookies";
 // import { useParams } from "react-router-dom"
-
-
-
 
 const Home = () => {
   // const {userId}= useParams()
   // console.log(userId)
 
   const authToken = cookie.load("auth");
-  const state=useContext(StateContext)
+  const state = useContext(StateContext);
   useEffect(() => {
     if (authToken === null) {
       throw new Error("Authentication token not found.");
@@ -35,8 +34,8 @@ const Home = () => {
         .catch((error) => {
           state.setError(error);
         });
-      }
-   
+    }
+
     if (authToken === null) {
       throw new Error("Authentication token not found.");
     } else if (authToken != null) {
@@ -52,7 +51,7 @@ const Home = () => {
         .catch((error) => {
           state.setError(error);
         });
-      }
+    }
 
     if (authToken === null) {
       throw new Error("Authentication token not found.");
@@ -61,7 +60,9 @@ const Home = () => {
         Authorization: `Bearer ${authToken}`,
       };
       axios
-        .get("https://final-backend-nvf1.onrender.com/home/homeposts", { headers })
+        .get("https://final-backend-nvf1.onrender.com/home/homeposts", {
+          headers,
+        })
         .then((response) => {
           state.setPosts(response.data);
         })
@@ -69,9 +70,12 @@ const Home = () => {
           state.setError(error);
         });
       axios
-        .get("https://final-backend-nvf1.onrender.com/home/received-friend-requests", {
-          headers,
-        })
+        .get(
+          "https://final-backend-nvf1.onrender.com/home/received-friend-requests",
+          {
+            headers,
+          }
+        )
         .then((response) => {
           state.setFriendRequests(response.data);
         })
@@ -88,7 +92,6 @@ const Home = () => {
         .catch((error) => {
           state.setError(error);
         });
-     
     }
 
     if (authToken === null) {
@@ -109,7 +112,7 @@ const Home = () => {
           setError(error);
         });
     }
-    
+
     if (authToken === null) {
       throw new Error("Authentication token not found.");
     } else if (authToken != null) {
@@ -142,37 +145,34 @@ const Home = () => {
           state.setError(error);
         });
     }
-    
-    // if (authToken === null) {
-    //   throw new Error("Authentication token not found.");
-    // } else if (authToken != null) {
-    //   const headers = {
-    //     Authorization: `Bearer ${authToken}`,
-    //   };
-    //   axios
-    //   .get(`https://final-backend-nvf1.onrender.com/home/userposts/1`, {
-    //     headers,
-    //   })
-    //   .then((response) => {
-    //     state.setUserPosts(response.data);
-    //   })
-    //   .catch((error) => {
-    //     setError(error);
-    //   });
-    // }
+
+    if (authToken === null) {
+      throw new Error("Authentication token not found.");
+    } else if (authToken != null) {
+      const headers = {
+        Authorization: `Bearer ${authToken}`,
+      };
+
+      axios
+        .get("https://final-backend-nvf1.onrender.com/home/reels", {
+          headers,
+        })
+        .then((response) => {
+          state.setReels(response.data);
+        })
+        .catch((error) => {
+          setError(error);
+        });
+    }
   }, [authToken]);
 
-
   return (
-  
-
     <div className="home">
-      
-      <Stories/>
-      <Share/>
-      <Posts/>
+      <Stories />
+      <Share />
+      <Posts />
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

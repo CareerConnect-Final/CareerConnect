@@ -23,7 +23,25 @@ import { Formik, Field } from "formik";
 import { loginSchema, registerSchema } from "../../utils/Schemas";
 import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 
+import cookie from "react-cookies";
+/////////////////////////////////////firebase//
+import {
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  listAll,
+  list,
+} from "firebase/storage";
+import { storage } from "../../firebase";
+import { v4 } from "uuid";
+
 function LoginPage(props) {
+  const user=cookie.load("user")
+
+
+
+
+
   const initialValuesRegister = {
     firstName: "",
     lastName: "",
@@ -351,19 +369,26 @@ function LoginPage(props) {
                         alignItems="center"
                         justifyContent="space-between"
                       >
+                        {/* ///////////////// */}
                         <input
                           type="file"
                           id="profilePicture"
                           name="profilePicture"
                           accept="image/*"
                           style={{ display: "none" }}
+                          // onChange={(event) => {
+                          //   setFieldValue(
+                          //     "profilePicture",
+                          //     event.currentTarget.files[0]
+                          //   );
+                          // }}
+                          // onBlur={handleBlur}
                           onChange={(event) => {
                             setFieldValue(
                               "profilePicture",
                               event.currentTarget.files[0]
                             );
                           }}
-                          onBlur={handleBlur}
                         />
                         <Paper
                           component="div"
@@ -376,7 +401,7 @@ function LoginPage(props) {
                             maxHeight: "74px",
                           }}
                           onClick={() => {
-                            document.getElementById("profilePicture").click();
+                            document.getElementById("profilePicture").click(); /////////////////
                           }}
                         >
                           <Typography
@@ -409,6 +434,7 @@ function LoginPage(props) {
                         alignItems="center"
                         justifyContent="space-between"
                       >
+                        {/* //////////////// */}
                         <input
                           type="file"
                           id="imageForCover"

@@ -1,6 +1,7 @@
 // import Stories from "../../components/stories/Stories"
 import JobPosts from "../../components/JobPosts/jobPosts";
 import Share from "../../components/shareJob/ShareJob";
+import JobSearch from "../../components/JobSearch/JobSearch";
 import "./job.scss";
 import { useEffect, useContext } from "react";
 import axios from "axios";
@@ -8,6 +9,7 @@ import { JobContext } from "../../context/stateJob";
 import cookie from "react-cookies";
 
 const JobPage = () => {
+  const user = cookie.load("user");
   const authToken = cookie.load("auth");
   const state = useContext(JobContext);
   useEffect(() => {
@@ -47,17 +49,20 @@ const JobPage = () => {
         Authorization: `Bearer ${authToken}`,
       };
       axios
-        .get("https://final-backend-nvf1.onrender.com/careerjob/followdcompanies", {
-          headers,
-        })
+        .get(
+          "https://final-backend-nvf1.onrender.com/careerjob/followdcompanies",
+          {
+            headers,
+          }
+        )
         .then((response) => {
-          console.log("data come comeeeeeeee ")
+          console.log("data come comeeeeeeee ");
           state.setYouFollow(response.data);
         })
         .catch((error) => {
           state.setError(error);
         });
-      }
+    }
 
     if (authToken === null) {
       throw new Error("Authentication token not found.");
@@ -129,35 +134,41 @@ const JobPage = () => {
         .catch((error) => {
           state.setError(error);
         });
-      }
-      if (authToken === null) {
-        throw new Error("Authentication token not found.");
-      } else if (authToken != null) {
-        const headers = {
-          Authorization: `Bearer ${authToken}`,
-        };
-        axios
-          .get("https://final-backend-nvf1.onrender.com/home/followers", {
-            headers,
-          })
-          .then((response) => {
-            // console.log("data come comeeeeeeee ")
-            state.setFollowers(response.data);
-            // console.log(state.followers)
-          })
-          .catch((error) => {
-            state.setError(error);
-          });
-        }
-
-   
+    }
+    if (authToken === null) {
+      throw new Error("Authentication token not found.");
+    } else if (authToken != null) {
+      const headers = {
+        Authorization: `Bearer ${authToken}`,
+      };
+      axios
+        .get("https://final-backend-nvf1.onrender.com/home/followers", {
+          headers,
+        })
+        .then((response) => {
+          // console.log("data come comeeeeeeee ")
+          state.setFollowers(response.data);
+          // console.log(state.followers)
+        })
+        .catch((error) => {
+          state.setError(error);
+        });
+    }
   }, []);
 
   return (
     <div className="home">
       {/* <Stories/> */}
-      <Share />
-      <JobPosts />
+      {user.role === "company" &&
+      (<>
+            <Share />
+            <JobPosts />
+        </>
+      )
+      }
+      {user.role !== "company" &&
+            <JobSearch />
+      }
     </div>
   );
 };
