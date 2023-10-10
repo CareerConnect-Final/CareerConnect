@@ -10,6 +10,7 @@ export default function State(props) {
   // const [userData, setComments] = useState([]);
   const [likes, setLikes] = useState([]);
   const [reels, setReels] = useState([]);
+  const [story, setStory] = useState([]);
   const [resume, setResume] = useState([]);
   const [friendRequests, setFriendRequests] = useState([]);
   const [myFriends, setMyFriends] = useState([]);
@@ -67,10 +68,9 @@ export default function State(props) {
     setReels([newReel, ...reels]);
   };
 
-  const addResume = (newReel) => {
+  const addResume = (newCv) => {
     ///
-    setResume([newReel]);
-    console.log("setResume==>", reels);
+    setResume([newCv]);
   };
   useEffect(() => {
     if (authToken === null) {
@@ -378,6 +378,8 @@ export default function State(props) {
     setResume: setResume,
     setReels: setReels,
     reels: reels,
+    story:story,
+    setStory:setStory,
     setLikes: setLikes,
     followers: followers,
     setFollowers: setFollowers,
@@ -401,7 +403,6 @@ export default function State(props) {
     
     userPosts: userPosts,
     userProfile: userProfile,
-    setUserPosts: setUserPosts,
     setUserProfile: setUserProfile,
     setUserId: setUserId,
     setError: setError,

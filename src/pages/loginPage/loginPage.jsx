@@ -37,10 +37,25 @@ import { v4 } from "uuid";
 
 function LoginPage(props) {
   const user=cookie.load("user")
+  const [profilePhotoUrl, setProfilePhotoUrl] = useState("");
+  const [coverPhotoUrl, setCoverPhotoUrl] = useState("");
 
-
-
-
+  const handleAddProfilePhoto = (e) => {
+    const imageRef = ref(storage, `profile/${e.name + v4()}`);
+    uploadBytes(imageRef, e).then((snapshot) => {
+    getDownloadURL(snapshot.ref).then( (url) => {
+      setProfilePhotoUrl(url)
+    })
+  })
+  }
+  const handleAddCoverPhoto = (e) => {
+    const imageRef = ref(storage, `cover/${e.name + v4()}`);
+    uploadBytes(imageRef, e).then((snapshot) => {
+    getDownloadURL(snapshot.ref).then( (url) => {
+      setCoverPhotoUrl(url)
+    })
+  })
+  }
 
   const initialValuesRegister = {
     firstName: "",
@@ -94,8 +109,8 @@ function LoginPage(props) {
         phoneNumber,
         address,
         gender,
-        profilePicture,
-        imageForCover,
+        profilePicture= profilePhotoUrl,
+        imageForCover= coverPhotoUrl,
         career,
         bio,
         companyName,
@@ -396,18 +411,9 @@ function LoginPage(props) {
                           name="profilePicture"
                           accept="image/*"
                           style={{ display: "none" }}
-                          // onChange={(event) => {
-                          //   setFieldValue(
-                          //     "profilePicture",
-                          //     event.currentTarget.files[0]
-                          //   );
-                          // }}
-                          // onBlur={handleBlur}
                           onChange={(event) => {
-                            setFieldValue(
-                              "profilePicture",
-                              event.currentTarget.files[0]
-                            );
+                            // setProfileImageUpload(event.currentTarget.files[0]);
+                            handleAddProfilePhoto(event.currentTarget.files[0]);
                           }}
                         />
                         <Paper
@@ -462,10 +468,7 @@ function LoginPage(props) {
                           accept="image/*"
                           style={{ display: "none" }}
                           onChange={(event) => {
-                            setFieldValue(
-                              "imageForCover",
-                              event.currentTarget.files[0]
-                            );
+                            handleAddCoverPhoto(event.currentTarget.files[0]);
                           }}
                           onBlur={handleBlur}
                         />
