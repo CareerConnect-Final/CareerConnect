@@ -22,7 +22,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import cookie from "react-cookies";
 import { useParams } from "react-router-dom";
 
-import { StateContext } from "../../context/state";
 
 const Profile = () => {
   const state = useContext(StateContext);
