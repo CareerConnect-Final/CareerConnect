@@ -142,17 +142,37 @@ function LoginPage(props) {
     setLoading(false);
   };
 
-  const loginHandler = async (values, onSubmitProps) => {
-    setLoading(true);
-    try {
-      const { username, password } = values;
-      const loggedInResponse = await login(username, password);
-      onSubmitProps.resetForm();
-    } catch (err) {
-      console.error(err);
-    }
-    setLoading(false);
-  };
+  // const loginHandler = async (values, onSubmitProps) => {
+  //   setLoading(true);
+  //   try {
+  //     const { username, password } = values;
+  //     const loggedInResponse = await login(username, password);
+  //     onSubmitProps.resetForm();
+  //     window.location.reload();
+
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  //   setLoading(false);
+  // };
+
+
+  
+    const loginHandler = async (values, onSubmitProps) => {
+      setLoading(true);
+      try {
+        const { username, password } = values;
+        await login(username, password);
+        onSubmitProps.resetForm();
+        
+        // Navigate to the home page and reload
+        navigate("/");
+        window.location.reload();
+      } catch (err) {
+        console.error(err);
+      }
+      setLoading(false);
+    };
 
   const handleFormSubmit = async (values, onSubmitProps) => {
     if (isRegister) await registerHandler(values, onSubmitProps);

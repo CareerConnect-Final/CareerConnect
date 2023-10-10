@@ -18,6 +18,7 @@ import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import cookie from "react-cookies";
 import { useParams } from "react-router-dom";
+import ProfileModal from "./ProfileModal";
 
 import {
   ref,
@@ -36,6 +37,8 @@ import Modal from "react-bootstrap/Modal";
 const Profile = () => {
   const [resumeUpload, setResumeUpload] = useState(""); ///
   const [show, setShow] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const [myCv, setMyCv] = useState("");
   const { userId } = useParams();
   console.log("====>>>>", userId);
@@ -47,10 +50,10 @@ const Profile = () => {
 
   const state = useContext(StateContext);
 
-  const cookieToken = cookie.load("auth");
-  const cookieUser = cookie.load("user"); // this is not a good practice
-  const token = cookieToken;
-  const user = cookieUser;
+
+  const user = cookie.load("user"); // this is not a good practice
+  
+  
 
   const location = useLocation().pathname;
   const [pageType, setPageType] = useState(location);
@@ -94,7 +97,12 @@ const Profile = () => {
       }
     }
   };
-
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
   const handleFileInputChange = (event) => {
     setResumeUpload(event.target.files[0]);
   };
@@ -135,19 +143,17 @@ const Profile = () => {
         });
     }
   };
-
   useEffect(() => {
-    if (authToken === null) {
-      throw new Error("Authentication token not found.");
-    } else if (authToken != null) {
+    // Fetch user-specific posts based on the userId
+    if (authToken != null) {
       const headers = {
         Authorization: `Bearer ${authToken}`,
       };
+
       axios
-        .get(
-          `https://final-backend-nvf1.onrender.com/home/userposts/${userId}`,
-          { headers }
-        )
+        .get(`https://final-backend-nvf1.onrender.com/home/userposts/${userId}`, {
+          headers,
+        })
         .then((response) => {
           state.setUserPosts(response.data);
         })
@@ -155,8 +161,52 @@ const Profile = () => {
           state.setError(error);
         });
     }
-  }, [userId, authToken]);
 
+
+
+  }, [userId]); // Trigger the fetch when userId changes
+
+  useEffect(()=>{
+    if (authToken != null) {
+      const headers = {
+        Authorization: `Bearer ${authToken}`,
+      };
+
+      axios
+        .get(`https://final-backend-nvf1.onrender.com/home/users/${userId}`, {
+          headers,
+        })
+        .then((response) => {
+          state.setUserProfile(response.data);
+        })
+        .catch((error) => {
+          state.setError(error);
+        });
+    }
+  
+  },[authToken])
+
+
+      // if (authToken != null) {
+    //   const headers = {
+    //     Authorization: `Bearer ${authToken}`,
+    //   };
+
+    //   axios
+    //     .get(`https://final-backend-nvf1.onrender.com/home/users/${userId}`, {
+    //       headers,
+    //     })
+    //     .then((response) => {
+    //       state.setUsers(response.data);
+    //     })
+    //     .catch((error) => {
+    //       state.setError(error);
+    //     });
+    // }
+    console.log(state.userProfile)
+//  const oneUser=state.allUsers.find((user)=>{user.id==userId})
+//  const oneUser = state.allUsers.find((user) => user.id === userId)
+//  console.log(oneUser)
   return (
     <div className="profile">
       <div className="images">
@@ -165,35 +215,35 @@ const Profile = () => {
           alt=""
           className="cover"
         />
-        <img src={user.profilePicture || null} alt="" className="profilePic" />
+        <img src={state.userProfile.profilePicture || null} alt="" className="profilePic" />
       </div>
       <div className="profileContainer">
         <div className="uInfo">
           <div className="top">
             <button>follow</button>
-            <MoreVertIcon />
+            <MoreVertIcon onClick={openModal} />
           </div>
           <div className="user-career">
             <div>
               <span>
-                {user.firstName} {user.lastName}
+                {state.userProfile.firstName} {state.userProfile.lastName}
               </span>
             </div>
-            <div>{user.career}</div>
+            <div>{state.userProfile.career}</div>
           </div>
 
           <div className="bio">
-            <div>{user.city}</div>
+            <div>{state.userProfile.city}</div>
           </div>
           <div className="contact-info">
             <div className="con-info">Contact Info:</div>
             <div className="contact-icons">
               <div>
-                <AlternateEmailOutlinedIcon /> {user.email}
+                <AlternateEmailOutlinedIcon /> {state.userProfile.email}
               </div>
               <div>
                 <PermContactCalendarIcon />
-                {user.phoneNumber}
+                {state.userProfile.phoneNumber}
               </div>
             </div>
           </div>
@@ -204,7 +254,7 @@ const Profile = () => {
         </div>
         <div className="uInfo-bio">
           <div>
-            <div>About :</div>
+            <div>About : </div>
             <div>
               {user.id != userId && user.role === "company" ? (
                 <button className="resume" onClick={handleShowCv}>
@@ -258,8 +308,11 @@ const Profile = () => {
               </Modal.Footer>
             </Modal>{" "}
           </div>
-          <div>{user.bio}</div>
+          <div>{state.userProfile.bio}</div>
         </div>
+        {isModalOpen && (
+          <ProfileModal isOpen={isModalOpen} closeModal={closeModal} />
+        )}
         {state.userPosts.map((post) => (
           <Post post={post} key={post.id} />
         ))}
@@ -269,3 +322,28 @@ const Profile = () => {
 };
 
 export default Profile;
+
+
+
+  // useEffect(() => {
+  //   if (authToken === null) {
+  //     throw new Error("Authentication token not found.");
+  //   } else if (authToken != null) {
+  //     const headers = {
+  //       Authorization: `Bearer ${authToken}`,
+  //     };
+  //     axios
+  //       .get(
+  //         `https://final-backend-nvf1.onrender.com/home/userposts/${userId}`,
+  //         { headers }
+  //       )
+  //       .then((response) => {
+  //         state.setUserPosts(response.data);
+  //       })
+  //       .catch((error) => {
+  //         state.setError(error);
+  //       });
+  //   }
+  // }, [userId, authToken]);
+
+  // state.userProfile.profilePicture
