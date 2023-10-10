@@ -95,19 +95,19 @@ function JobModal(props) {
           </div>
           <div className="inp1">
           <label style={{ marginRight: "5px" }}>Edit field</label>
-          {darkMode ?<input style={{backgroundColor:"#222222", color:"white"}} type="text" onChange={handleTitleChange} />
+          {darkMode ?<input style={{backgroundColor:"#222222", color:"white"}} type="text" onChange={handleFieldChange} />
           :<input type="text" onChange={handleFieldChange} />}
          
           </div>
           <div className="inp1">
           <label style={{ marginRight: "5px" }}>Edit city</label>
-          {darkMode ?<input style={{backgroundColor:"#222222", color:"white"}} type="text" onChange={handleTitleChange} />
+          {darkMode ?<input style={{backgroundColor:"#222222", color:"white"}} type="text" onChange={handleCityChange} />
           :<input type="text" onChange={handleCityChange} />}
           </div>
 
           <div className="inp1">
           <label style={{ marginRight: "5px" }}>Edit post</label>
-          {darkMode ?<input style={{backgroundColor:"#222222", color:"white"}} type="text" onChange={handleTitleChange} />
+          {darkMode ?<input style={{backgroundColor:"#222222", color:"white"}} type="text" onChange={handlePostChange} />
           :<input type="text" onChange={handlePostChange} />}
      
           </div>
