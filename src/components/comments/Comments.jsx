@@ -13,7 +13,7 @@ const Comments = (props) => {
   const newComments = useContext(StateContext);
 
   const [newComment, setNewComment] = useState("");
-  console.log(props.id);
+  // console.log(props.id);
 
   // Maintain a separate state for showing the menu for each comment
   const [showMenus, setShowMenus] = useState(
@@ -66,6 +66,7 @@ const Comments = (props) => {
     const updatedShowMenus = [...showMenus];
     updatedShowMenus[idx] = !updatedShowMenus[idx];
     setShowMenus(updatedShowMenus);
+    console.log("Ssssssssssssssssss")
   };
 
   const handleDelete = (id) => {
@@ -95,48 +96,100 @@ const Comments = (props) => {
         if (comment.post_id === props.id) {
           return (
             <div className="comment" key={idx}>
-              <img src={comment.profilePicture} alt="" />
-              <div className="info">
-                <div>
-                  {user.id === comment.user_id && (
-                    <div className="menu-container">
-                      <MoreHorizIcon onClick={() => toggleMenu(idx)} />
-                      {showMenus[idx] && (
-                        <div className="menu">
-                          <div
-                            className="menu-option"
-                            style={{ color: "blue" }}
-                            onClick={() =>
-                              setShowModals({ [comment.id]: true })
-                            } // Open the modal for this specific comment
-                          >
-                            Edit
-                          </div>
-                          <div
-                            className="menu-option"
-                            style={{ color: "red" }}
-                            onClick={() => handleDelete(comment.id)}
-                          >
-                            Delete
-                          </div>
+            <div className="info1">
+              <div className="com-sec1">
+            <div className="com-user-img">
+            <img src={comment.profilePicture} alt="" />
+                {user.id === comment.user_id && (
+                  <div className="menu-container">
+                    <div className="com-dots"><MoreHorizIcon onClick={() => toggleMenu(idx)} /></div>
+                    {showMenus[idx] && (
+                      <div className="menu">
+                        <div
+                          className="menu-option"
+                          style={{ color: "blue" }}
+                          onClick={() => setShowModals({ [comment.id]: true })} // Open the modal for this specific comment
+                        >
+                          Edit
                         </div>
-                      )}
-                    </div>
-                  )}
+                        <div
+                          className="menu-option"
+                          style={{ color: "red" }}
+                          onClick={() => handleDelete(comment.id)}
+                        >
+                          Delete
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              <div style={{paddingLeft:"12px"}}>{comment.username}</div>
                 </div>
-                <span>{comment.username}</span>
-                <p>{comment.content}</p>
               </div>
-              <span className="date">1 hour ago</span>
-              {showModals[comment.id] && (
-                <PostModal
-                  check="comments"
-                  id={comment.id}
-                  showFlag={showModals[comment.id]}
-                  handleclose={() => handleClose(comment.id)} // Pass the correct function
-                />
-              )}
+              <div className="com-sec">
+              <p>{comment.content}</p>
+              </div>
             </div>
+            {/* <span className="date">1 hour ago</span> */}
+            {showModals[comment.id] && (
+              <PostModal
+              check="comments"
+              id={comment.id}
+              showFlag={showModals[comment.id]}
+              handleclose={() => handleClose(comment.id)} // Pass the correct function
+              />
+            )}
+        
+          </div>
+            
+            
+            
+            
+            // <div className="comment" key={idx}>
+            //   <img src={comment.profilePicture} alt="" />
+            //   <div className="info">
+            //     <div>
+            //       {/* {console.log(comment.user_id ,"+++++++",user.id)} */}
+            //       {user.id === comment.user_id && (
+            //         <div className="menu-container">
+            //           <MoreHorizIcon onClick={() => toggleMenu(idx)} />
+            //           {showMenus[idx] && (
+            //             <div className="menu">
+            //               <div
+            //                 className="menu-option"
+            //                 style={{ color: "blue" }}
+            //                 onClick={() =>
+            //                   // setShowModals({ [comment.id]: true })
+            //                   setShowModals( true )
+            //                 } // Open the modal for this specific comment
+            //               >
+            //                 Edit
+            //               </div>
+            //               <div
+            //                 className="menu-option"
+            //                 style={{ color: "red" }}
+            //                 onClick={() => handleDelete(comment.id)}
+            //               >
+            //                 Delete
+            //               </div>
+            //             </div>
+            //           )}
+            //         </div>
+            //       )}
+            //     </div>
+            //     <span>{comment.username}</span>
+            //     <p>{comment.content}</p>
+            //   </div>
+            //   <span className="date">1 hour ago</span>
+            //   {showModals[comment.id] && (
+            //     <PostModal
+            //       check="comments"
+            //       id={comment.id}
+            //       showFlag={showModals[comment.id]}
+            //       handleclose={() => handleClose(comment.id)} // Pass the correct function
+            //     />
+            //   )}
+            // </div>
           );
         }
       })}

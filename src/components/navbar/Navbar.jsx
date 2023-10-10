@@ -40,15 +40,23 @@ import {
 
 import cookie from "react-cookies";
 import "./navbar.scss";
+import React, { useState } from "react";
+import WorkOutlineIcon from "@mui/icons-material/WorkOutline";
+import { StateContext } from "../../context/state";
+import { JobContext } from "../../context/stateJob";
 
 const Navbar = () => {
-  const authToken = cookie.load("auth");
+  const state = useContext(StateContext);
+  const stateJob = useContext(JobContext);
   const { toggle, darkMode } = useContext(DarkModeContext);
   const { currentUser, logout } = useContext(AuthContext);
   const navigate = useNavigate();
-
+  const authToken = cookie.load("auth");
   const handleSignOut = async () => {
     try {
+      stateJob.resetStateJob();
+      state.resetState();
+
       await logout();
       navigate("/login");
     } catch (error) {
@@ -220,124 +228,24 @@ const Navbar = () => {
     setIsNotificationsOpen(false);
   };
   return (
-    //   <div className="navbar">
-    //     <div className="left">
-    //       <Link to="/" style={{ textDecoration: "none" }}>
-    //         <span>lamasocial</span>
-    //       </Link>
-    //       <HomeOutlinedIcon />
-    //       {darkMode ? (
-    //         <WbSunnyOutlinedIcon onClick={toggle} />
-    //       ) : (
-    //         <DarkModeOutlinedIcon onClick={toggle} />
-    //       )}
-    //       <WorkOutlineIcon />
-    //       {/* <GridViewOutlinedIcon /> */}
-    //       <div className="search">
-    //         <SearchOutlinedIcon onClick={handleSearch} />
-
-    //         <input
-    //           type="text"
-    //           placeholder="Search..."
-    //           value={searchQuery}
-    //           onChange={(e) => setSearchQuery(e.target.value)}
-    //         />
-    //       </div>
-    //     </div>
-    //     <div className="right">
-    //       <PersonOutlinedIcon />
-    //       <EmailOutlinedIcon />
-    //       <NotificationsOutlinedIcon />
-    //       <div className="user">
-    //         <img src={currentUser.profilePic} alt="" />
-    //         <span>{currentUser.name}</span>
-    //       </div>
-    //       <button onClick={handleSignOut}>Sign Out</button>{" "}
-    //     </div>
-    //   </div>
-    // <div className="navbar">
-    //   <div className="left">
-    //     <Link to="/" style={{ textDecoration: "none" }}>
-    //       <span>lamasocial</span>
-    //     </Link>
-    //     <HomeOutlinedIcon />
-    //     {darkMode ? (
-    //       <WbSunnyOutlinedIcon onClick={toggle} />
-    //     ) : (
-    //       <DarkModeOutlinedIcon onClick={toggle} />
-    //     )}
-    //     <WorkOutlineIcon />
-    //     {/* <GridViewOutlinedIcon /> */}
-    //     <div className="search">
-    //       <SearchOutlinedIcon onClick={handleSearch} />
-    //       <input
-    //         type="text"
-    //         placeholder="Search..."
-    //         value={searchQuery}
-    //         onChange={(e) => setSearchQuery(e.target.value)}
-    //       />
-    //     </div>
-    //   </div>
-    //   <div className="right">
-    //     <PersonOutlinedIcon />
-    //     <EmailOutlinedIcon />
-    //     <NotificationsOutlinedIcon onClick={openNotifications} />{" "}
-    //     {/* Open notifications drawer */}
-    //     <div className="user">
-    //       <img src={currentUser.profilePic} alt="" />
-    //       <span>{currentUser.name}</span>
-    //     </div>
-    //     <button onClick={handleSignOut}>Sign Out</button>{" "}
-    //   </div>
-
-    //   {/* Notifications Drawer */}
-    //   <Drawer
-    //     anchor="right"
-    //     open={isNotificationsOpen}
-    //     onClose={closeNotifications}
-    //   >
-    //     <div
-    //       style={{
-    //         width: 300,
-    //         padding: "20px",
-    //         display: "flex",
-    //         flexDirection: "column",
-    //       }}
-    //     >
-    //       <h2>Notifications</h2>
-    //       <List>
-    //         {notifications.map((notification, index) => (
-    //           <ListItem key={index} style={{ marginBottom: "10px" }}>
-    //             <ListItemAvatar>
-    //               <Avatar
-    //                 alt={notification.senderName}
-    //                 src={notification.senderAvatar}
-    //               />
-    //             </ListItemAvatar>
-    //             <ListItemText
-    //               primary={notification.senderName}
-    //               secondary={notification.message}
-    //             />
-    //           </ListItem>
-    //         ))}
-    //       </List>
-    //     </div>
-    //   </Drawer>
-    // </div>
     <>
       {" "}
       <div className="navbar">
         <div className="left">
           <Link to="/" style={{ textDecoration: "none" }}>
-            <span>lamasocial</span>
+            <span>CareerConnect</span>
           </Link>
-          <HomeOutlinedIcon />
+          <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
+            <HomeOutlinedIcon />
+          </Link>
           {darkMode ? (
             <WbSunnyOutlinedIcon onClick={toggle} />
           ) : (
             <DarkModeOutlinedIcon onClick={toggle} />
           )}
-          <WorkOutlineIcon />
+          <Link to="/job" style={{ textDecoration: "none", color: "inherit" }}>
+            <WorkOutlineIcon />{" "}
+          </Link>
           <div className="search">
             <SearchOutlinedIcon onClick={handleSearch} />
             <input
@@ -350,13 +258,20 @@ const Navbar = () => {
         </div>
         <div className="right">
           <PersonOutlinedIcon />
-          <EmailOutlinedIcon />
+          <Link
+            to="/chats"
+            style={{ textDecoration: "none", color: "inherit" }}
+          >
+            <EmailOutlinedIcon />
+          </Link>
           <NotificationsOutlinedIcon onClick={openNotifications} />
           <div className="user">
             <img src={currentUser.profilePic} alt="" />
             <span>{currentUser.name}</span>
           </div>
-          <button onClick={handleSignOut}>Sign Out</button>
+          <button className="sign-out" onClick={handleSignOut}>
+            Sign Out
+          </button>{" "}
         </div>
 
         <Drawer

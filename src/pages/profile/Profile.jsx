@@ -7,42 +7,55 @@ import TwitterIcon from "@mui/icons-material/Twitter";
 import PlaceIcon from "@mui/icons-material/Place";
 import LanguageIcon from "@mui/icons-material/Language";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
+import AlternateEmailOutlinedIcon from "@mui/icons-material/AlternateEmailOutlined";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { StateContext } from "../../context/state";
+import PermContactCalendarIcon from "@mui/icons-material/PermContactCalendar";
 import Posts from "../../components/posts/Posts";
 import { useContext, useEffect, useState } from "react";
 import Post from "../../components/post/Post";
 const userAPI = "https://final-backend-nvf1.onrender.com/profile";
 const userPostsAPI = "https://final-backend-nvf1.onrender.com/home/userposts/2";
 // const userPostsAPI= "https://final-backend-nvf1.onrender.com/api/v1/users/2/posts"
-
+import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import cookie from "react-cookies";
-import { AuthContext } from "../../context/auth/authContext";
+import { useParams } from "react-router-dom";
+
+import { StateContext } from "../../context/state";
 
 const Profile = () => {
+  const state = useContext(StateContext);
+  const { userId } = useParams();
+  const authToken = cookie.load("auth");
+  useEffect(() => {
+    if (authToken === null) {
+      throw new Error("Authentication token not found.");
+    } else if (authToken != null) {
+      const headers = {
+        Authorization: `Bearer ${authToken}`,
+      };
+      axios
+        .get(
+          `https://final-backend-nvf1.onrender.com/home/userposts/${userId}`,
+          { headers }
+        )
+        .then((response) => {
+          state.setUserPosts(response.data);
+        })
+        .catch((error) => {
+          state.setError(error);
+        });
+    }
+  }, [userId, authToken]);
+
   const cookieToken = cookie.load("auth");
   const cookieUser = cookie.load("user"); // this is not a good practice
   const token = cookieToken;
   const user = cookieUser;
-  console.log("user from cookie", user);
 
   const location = useLocation().pathname;
   const [pageType, setPageType] = useState(location);
-  console.log(pageType);
-  const { currentUser, getUserPosts } = useContext(AuthContext);
-  const [userPosts, setUserPosts] = useState([]);
-
-  useEffect(() => {
-    if (currentUser.id) {
-      getUserPosts(currentUser.id)
-        .then((posts) => {
-          setUserPosts(posts);
-        })
-        .catch((error) => {
-          console.error("Error fetching user posts:", error);
-        });
-    }
-  }, [currentUser.id, getUserPosts]); // this to get the new posts if added
 
   return (
     <div className="profile">
@@ -52,67 +65,50 @@ const Profile = () => {
           alt=""
           className="cover"
         />
-        <img
-          src="https://images.pexels.com/photos/14028501/pexels-photo-14028501.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load"
-          alt=""
-          className="profilePic"
-        />
+        <img src={user.profilePicture || null} alt="" className="profilePic" />
       </div>
       <div className="profileContainer">
         <div className="uInfo">
-          <div className="top-right">
+          <div className="top">
+            <button>follow</button>
             <MoreVertIcon />
           </div>
-          <div className="left">
-            <a href="http://facebook.com">
-              {/* <FacebookTwoToneIcon fontSize="large" />
-            </a>
-            <a href="http://facebook.com">
-              <InstagramIcon fontSize="large" />
-            </a>
-            <a href="http://facebook.com">
-              <TwitterIcon fontSize="large" />
-            </a>
-            <a href="http://facebook.com">
-              <LinkedInIcon fontSize="large" />
-            </a>
-            <a href="http://facebook.com">
-              <PinterestIcon fontSize="large" /> */}
-            </a>
+          <div className="user-career">
+            <div>
+              <span>
+                {user.firstName} {user.lastName}
+              </span>
+            </div>
+            <div>{user.career}</div>
           </div>
-          <div className="center">
-            <span>
-              {user.firstName} {user.lastName}
-            </span>
-            {/* <span></span> */}
-            <div>{currentUser.bio}</div>
-            <div className="info">
-              <div className="item">
-                <PlaceIcon />
-                <span>{currentUser.city}</span>
+
+          <div className="bio">
+            <div>{user.city}</div>
+          </div>
+          <div className="contact-info">
+            <div className="con-info">Contact Info:</div>
+            <div className="contact-icons">
+              <div>
+                <AlternateEmailOutlinedIcon /> {user.email}
               </div>
-              <div className="item">
-                <LanguageIcon />
-                <span>{currentUser.career}</span>
+              <div>
+                <PermContactCalendarIcon />
+                {user.phoneNumber}
               </div>
             </div>
-            <button>follow</button>
           </div>
-          <div className="right">
-            <EmailOutlinedIcon />
-          </div>
-          {/* <div className="top-right">
-
-              < MoreVertIcon />
-              </div> */}
         </div>
-        {/* <Posts  check="userposts"/> */}
-
-        {userPosts.map((post) => (
+        <div className="uInfo-bio">
+          <div>
+            <div>About :</div>
+            <button className="resume">Resume</button>
+          </div>
+          <div>{user.bio}</div>
+        </div>
+        {state.userPosts.map((post) => (
           <Post post={post} key={post.id} />
         ))}
       </div>
-      ;
     </div>
   );
 };

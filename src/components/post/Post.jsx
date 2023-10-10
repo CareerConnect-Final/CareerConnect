@@ -12,8 +12,15 @@ import { StateContext } from "../../context/state";
 import PostModal from "../postModal/PostModal";
 import cookie from "react-cookies";
 import socketService from "../../socket/socket"; // Import the socket service
+import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 const Post = (props) => {
+  const navigate = useNavigate();
+
+  // const userID = useParams();
+  // console.log(userID.id)
+
   const user = cookie.load("user");
   const authToken = cookie.load("auth");
 
@@ -49,6 +56,7 @@ const Post = (props) => {
 
     if (userLike) {
       const likeId = userLike.id;
+
       axios
         .delete(
           `https://final-backend-nvf1.onrender.com/home/likes/${likeId}`,
@@ -100,6 +108,14 @@ const Post = (props) => {
         console.error("Error", error);
       });
   };
+
+  let userProfileId = (id) => {
+    state.setUserId(id);
+    // console.log(id)
+  };
+
+  // console.log(props.post)
+
   return (
     <div className="post">
       <div className="container">
@@ -111,12 +127,18 @@ const Post = (props) => {
                 to={`/profile/${props.post.user_id}`}
                 style={{ textDecoration: "none", color: "inherit" }}
               >
-                <span className="name">{props.post.username}</span>
+                <span
+                  onClick={userProfileId(props.post.user_id)}
+                  className="name"
+                >
+                  {props.post.username}
+                </span>
               </Link>
               <span className="date">1 min ago</span>
             </div>
           </div>
           {props.post.user_id === user.id && (
+            // {console.log(props.post.user_id ,"+++++++",user.id)}
             <div className="menu-container">
               <MoreHorizIcon onClick={toggleMenu} />
               {showMenu && (

@@ -130,6 +130,12 @@
           //     }
           //   }
           // }
+          .userInfo span{
+            width: 125px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
    
         }
       }
