@@ -248,6 +248,7 @@ export default function State(props) {
     setMyFriends([]);
     setallUsers([]);
     setFollowers([]);
+    setUserPosts([])
     setLoading(true);
     setUserProfile([])
     setError(null);
@@ -297,7 +298,7 @@ export default function State(props) {
     let newLikes = state.likes.filter((item) => item.id != id);
     setLikes(newLikes);
   };
-
+console.log(userPosts)
   const state = {
     posts: posts,
     setPosts: setPosts,
@@ -319,6 +320,7 @@ export default function State(props) {
     allUsers: allUsers,
     setallUsers: setallUsers,
     deletePost: deletePost,
+    setUserPosts:setUserPosts,
     editPost: editPost,
     acceptFriendRequest,
     declineFriendRequest,

@@ -34,38 +34,39 @@ const Share = () => {
   const user = cookie.load("user");
   const authToken = cookie.load("auth");
 
-  const handleAdd = () => {
-    // console.log("imageUpload--->", imageUpload)
-    // const imageRef = ref(storage, `${user.email}/posts/${imageUpload.name + v4()}`);
-
-    // uploadBytes(imageRef, imageUpload).then((snapshot) => {
-    //   getDownloadURL(snapshot.ref).then( (url) => {
-    const obj = {
-      user_id: user.id,
-      company_name: user.firstName,
-      job_title: titleContent,
-      job_city: cityContent,
-      job_field: fieldContent,
-      content: postContent,
-      // photo: "url",
-      profilePicture: user.profilePicture,
-    };
-    const headers = {
-      Authorization: `Bearer ${authToken}`,
-    };
-    axios
-      .post("https://final-backend-nvf1.onrender.com/careerjob/jobs", obj, {
-        headers,
-      })
-      .then((data) => {
-        setPostContent("");
-        setPhotoContent("");
-        newPost.addPost(data.data);
-        console.log(data.data);
-      })
-      .catch((error) => {
-        console.error("Error creating post:", error);
-      });
+ const handleAdd = () => {
+  // console.log("imageUpload--->", imageUpload)
+  // const imageRef = ref(storage, `${user.email}/posts/${imageUpload.name + v4()}`);
+ 
+  // uploadBytes(imageRef, imageUpload).then((snapshot) => {
+  //   getDownloadURL(snapshot.ref).then( (url) => {
+      const obj = {
+        user_id: user.id,
+        company_name: user.firstName,
+        job_title: titleContent,
+        job_city: cityContent,
+        job_field: fieldContent,
+        content: postContent,
+        // photo: "url", 
+        profilePicture: user.profilePicture,
+      };
+      const headers = {
+        Authorization: `Bearer ${authToken}`,
+      };
+      axios
+        .post("https://final-backend-nvf1.onrender.com/careerjob/jobs", obj,{headers})
+        .then((data) => {
+          setPostContent("");
+          setCityContent("");
+          setFieldContent("");
+          setTitleContent("");
+  
+          newPost.addPost(data.data);
+          console.log(data.data)
+        })
+        .catch((error) => {
+          console.error("Error creating post:", error);
+        });
     // });
     // });
   };
@@ -146,5 +147,6 @@ const Share = () => {
     </div>
   );
 };
+
 
 export default Share;

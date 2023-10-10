@@ -9,16 +9,15 @@ import LanguageIcon from "@mui/icons-material/Language";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import AlternateEmailOutlinedIcon from "@mui/icons-material/AlternateEmailOutlined";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { StateContext } from "../../context/state";
 import PermContactCalendarIcon from "@mui/icons-material/PermContactCalendar";
 import Posts from "../../components/posts/Posts";
 import { useContext, useEffect, useState } from "react";
 import Post from "../../components/post/Post";
-const userAPI = "https://final-backend-nvf1.onrender.com/profile";
-import { StateContext } from "../../context/state";
 import axios from "axios";
-
 import { useLocation, useNavigate } from "react-router-dom";
 import cookie from "react-cookies";
+import { useParams } from "react-router-dom";
 
 import {
   ref,
@@ -138,6 +137,27 @@ const Profile = () => {
     }
   };
 
+  useEffect(() => {
+    if (authToken === null) {
+      throw new Error("Authentication token not found.");
+    } else if (authToken != null) {
+      const headers = {
+        Authorization: `Bearer ${authToken}`,
+      };
+      axios
+        .get(
+          `https://final-backend-nvf1.onrender.com/home/userposts/${userId}`,
+          { headers }
+        )
+        .then((response) => {
+          state.setUserPosts(response.data);
+        })
+        .catch((error) => {
+          state.setError(error);
+        });
+    }
+  }, [userId, authToken]);
+
   return (
     <div className="profile">
       <div className="images">
@@ -149,38 +169,6 @@ const Profile = () => {
         <img src={user.profilePicture || null} alt="" className="profilePic" />
       </div>
       <div className="profileContainer">
-        {/* <div className="uInfo">
-          <div className="top-right">
-            <MoreVertIcon />
-          </div>
-          <div className="left">
-            <a href="http://facebook.com">
-            </a>
-          </div>
-          <div className="center">
-            <span>
-              {user.firstName} {user.lastName}
-            </span>
-
-                <div>{user.bio}</div>
-            <div className="info">
-              <div className="item">
-                <PlaceIcon />
-                <span>{user.city}</span>
-              </div>
-              <div className="item">
-                <LanguageIcon />
-                <span>{user.career}</span>
-              </div>
-            </div>
-            <button>follow</button>
-          </div>
-          <div className="right">
-            <EmailOutlinedIcon />
-          </div>
-
-        </div> */}
-
         <div className="uInfo">
           <div className="top">
             <button>follow</button>
@@ -219,9 +207,17 @@ const Profile = () => {
           <div>
             <div>About :</div>
             <div>
-              <button className="resume" onClick={handleShowCv}>
-                Resume
-              </button>
+              {user.id !== userId && user.role === "company" ? (
+                <button className="resume" onClick={handleShowCv}>
+                  Resume
+                </button>
+              ) : null}
+
+              {user.id === userId && user.role !== "company" ? (
+                <button className="resume" onClick={handleShowCv}>
+                  Resume
+                </button>
+              ): null}
             </div>
             <Button variant="primary" className="resume1" onClick={handleShow}>
               Add Resume
