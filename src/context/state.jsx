@@ -316,7 +316,6 @@ export default function State(props) {
     allUsers: allUsers,
     setallUsers: setallUsers,
     deletePost: deletePost,
-    setUserPosts: setUserPosts,
     editPost: editPost,
     acceptFriendRequest,
     declineFriendRequest,

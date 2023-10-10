@@ -38,7 +38,7 @@ import { AuthContext } from "./context/auth/authContext";
 import LoginPage from "./pages/loginPage/loginPage";
 import CVForm from "./components/CVForm/CVForm";
 import PrivateRoute from "./pages/loginPage/redirect";
-import AuthComponent from "./components/AuthComponent /AuthComponent ";
+// import AuthComponent from "./components/AuthComponent /AuthComponent ";
 import Main from "./components/Landing/src/Main";
 function AuthenticatedLayout() {
   const { darkMode } = useContext(DarkModeContext);
@@ -101,7 +101,7 @@ function App() {
 
         <Route path="/jobsearch" element={<JobSearch />} />
         <Route path="/landing" element={<Main />} />
-        <Route path="/AuthComponent" element={<AuthComponent />} />
+        {/* <Route path="/AuthComponent" element={<AuthComponent />} /> */}
 
         <Route path="/" element={<AuthenticatedLayout />}>
           <Route index element={<Home />} />

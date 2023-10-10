@@ -6,6 +6,7 @@ import { useState } from "react";
 import axios from "axios";
 import cookie from "react-cookies";
 import JobPost from "../JobPost/jobPost";
+import { DarkModeContext } from "../../context/darkModeContext";
 /////////////////////////////////////firebase//
 import {
   ref,
@@ -22,7 +23,8 @@ const JobSearch = () => {
   const [renderJobs, setRenderJobs] = useState(filter.jobPost);
   const [flag, setFlag] = useState(false)
   // setRenderJobs(filter.jobPost);
-
+  
+  const { darkMode } = useContext(DarkModeContext);
 
   const [searchBasedOn, setSearchBasedOn] = useState("Title"); 
   const [selectedTitle, setSelectedTitle] = useState(""); 
@@ -110,22 +112,26 @@ const JobSearch = () => {
     <>
     <div className="share">
       {user.role !== "company" && (
-        <div className="container">
+        <div className="search-container">
           <div className="top">
             {/* <img src={user.profilePicture} alt="" /> */}
             <form>
               <div className="jobsearch-card">
+                <div className="jobsearch-top">
+
                 <label htmlFor="dropdown">Filter by:</label>
                 <select
+                style={darkMode ?{backgroundColor:"#333333"}:{backgroundColor:"#F6F3F3"}}
                   id="dropdown"
                   value={searchBasedOn}
                   onChange={handleSearchBasedOn}
-                >
+                  >
                   <option value="Title">Title</option>
                   <option value="City">City</option>
                 </select>
+                </div>
                 {searchBasedOn == "Title" && (
-                  <div>
+                  <div className="sel-job">
                     {/* <label htmlFor="dropdown">Select Job Title:</label>
                     <select
                       id="dropdown"
@@ -162,7 +168,7 @@ const JobSearch = () => {
             </form>
           </div>
           <hr />
-          <div className="bottom">
+          <div className="bottom-search">
             <div className="right">
               <button onClick={handleSearch}>Search</button>
               {flag && 

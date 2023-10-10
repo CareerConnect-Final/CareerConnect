@@ -104,18 +104,40 @@ function AuthProvider(props) {
     }
   };
 
+  // const setLoginState = async (loggedIn, Token, User, error) => {
+  //   setIsLoggedIn(loggedIn);
+  //   setToken(Token);
+  //   setUser(User);
+  //   setError(error || null);
+  //   cookie.save("auth", Token);
+  //   cookie.save("user", User);
+  //   if (loggedIn) {
+  //     // Connect to Socket.io when the user logs in
+  //     socketService.connect(Token);
+  //   }
+  // };
   const setLoginState = async (loggedIn, Token, User, error) => {
     setIsLoggedIn(loggedIn);
     setToken(Token);
     setUser(User);
     setError(error || null);
-    cookie.save("auth", Token);
-    cookie.save("user", User);
+  
     if (loggedIn) {
       // Connect to Socket.io when the user logs in
       socketService.connect(Token);
     }
+  
+    // Save the authentication data in cookies
+    if (loggedIn) {
+      cookie.save("auth", Token);
+      cookie.save("user", User);
+    } else {
+      // If not logged in, clear the cookies
+      cookie.remove("auth");
+      cookie.remove("user");
+    }
   };
+  
   const logout = () => {
     socketService.disconnect();
     setLoginState(false, null, {});

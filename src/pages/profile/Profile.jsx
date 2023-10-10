@@ -170,8 +170,19 @@ const Profile = () => {
       <div className="profileContainer">
         <div className="uInfo">
           <div className="top">
-            <button>follow</button>
             <MoreVertIcon />
+          </div>
+          <div className="sub-top">
+            <button>follow</button>
+            {user.id == userId && user.role !== "company" ? (
+              <button
+                variant="primary"
+                className="resume1"
+                onClick={handleShow}
+              >
+                Add Cv
+              </button>
+            ) : null}
           </div>
           <div className="user-career">
             <div>
@@ -219,15 +230,7 @@ const Profile = () => {
               ) : null}
             </div>
             {/* {console.log(user.id , userId)} */}
-            {user.id == userId && user.role !== "company" ? (
-              <Button
-                variant="primary"
-                className="resume1"
-                onClick={handleShow}
-              >
-                Add Cv
-              </Button>
-            ) : null}
+           
             <Modal show={show} onHide={handleClose}>
               <Modal.Header closeButton>
                 <Modal.Title>Modal heading</Modal.Title>

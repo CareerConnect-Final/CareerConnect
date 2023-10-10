@@ -264,7 +264,7 @@ const Navbar = () => {
           </Link>
           <NotificationsOutlinedIcon onClick={openNotifications} />
           <div className="user">
-            <img src={currentUser.profilePic} alt="" />
+            <img src={currentUser.profilePicture} alt="" />
             <span>{currentUser.name}</span>
           </div>
           <button className="sign-out" onClick={handleSignOut}>
