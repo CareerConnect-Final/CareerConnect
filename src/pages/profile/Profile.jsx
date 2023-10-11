@@ -400,15 +400,6 @@ const Profile = () => {
                 </button>
               ) : null}
             </div>
-            {user.id == userId && user.role !== "company" ? (
-              <Button
-                variant="primary"
-                className="resume1"
-                onClick={handleShow}
-              >
-                Add Cv
-              </Button>
-            ) : null}
             <Modal show={show} onHide={handleClose}>
               <Modal.Header closeButton>
                 <Modal.Title>Modal heading</Modal.Title>
