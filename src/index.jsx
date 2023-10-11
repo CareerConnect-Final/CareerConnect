@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import 'bootstrap/dist/css/bootstrap.min.css';
+import "bootstrap/dist/css/bootstrap.min.css";
 import App from "./App";
 import AuthProvider from "./context/auth/authContext";
 import { DarkModeContextProvider } from "./context/darkModeContext";
@@ -9,15 +9,13 @@ import JobContext from "./context/stateJob";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
-    <DarkModeContextProvider>
+  <DarkModeContextProvider>
+    <StateContext>
       <AuthProvider>
-        <StateContext>
-          <JobContext>
-            <App />
-          </JobContext>
-        </StateContext>
+        <JobContext>
+          <App />
+        </JobContext>
       </AuthProvider>
-    </DarkModeContextProvider>
-  </React.StrictMode>
+    </StateContext>
+  </DarkModeContextProvider>
 );

@@ -329,12 +329,10 @@ export default function State(props) {
     addLike: addLike,
     userPosts: userPosts,
     userProfile: userProfile,
-    setUserPosts: setUserPosts,
     setUserProfile: setUserProfile,
     setUserId: setUserId,
     setError: setError,
     resetState: resetState,
-    // userid:userid
   };
   return (
     <StateContext.Provider value={state}>

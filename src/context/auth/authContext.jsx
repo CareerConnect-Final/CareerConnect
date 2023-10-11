@@ -3,10 +3,12 @@ import React from "react";
 import cookie from "react-cookies";
 import jwt_decode from "jwt-decode";
 import base64 from "base-64";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState, useContext } from "react";
+import { StateContext } from "../state";
 import socketService from "../../socket/socket"; // Import the socket service
 /* ---------------- */
 export const AuthContext = React.createContext();
+
 /* ---------------- */
 
 function AuthProvider(props) {
@@ -20,6 +22,7 @@ function AuthProvider(props) {
   const [error, setError] = useState(null);
   const [token, setToken] = useState(undefined);
   const [userPost, setUserPost] = useState({});
+  const [pass, setpass] = useState("");
 
   let signup = async (
     username,
@@ -66,6 +69,18 @@ function AuthProvider(props) {
       const res = await axios.post(url, obj);
       console.log(res.data);
       console.log("successful hit");
+      const r = await axios.post(
+        "https://api.chatengine.io/users/",
+        {
+          username: username,
+          secret: password,
+          email: email,
+          firstName: firstName || companyName,
+          lastName: lastName,
+        },
+        { headers: { "Private-Key": "c1341f0f-d5f3-44c3-baa5-344a4d649833" } }
+      );
+      console.log(r);
     } catch (e) {
       setLoginState(false, null, {}, e);
       console.error(e);
@@ -86,17 +101,20 @@ function AuthProvider(props) {
           },
         }
       );
-      validateToken(response.data.token, response.data);
+      validateToken(response.data.token, response.data, password);
+      setpass(password);
+      console.log(password);
+      console.log(pass);
       console.log(response.data);
     } catch (err) {
       console.log(err);
     }
   };
 
-  const validateToken = async (token, user) => {
+  const validateToken = async (token, user, password) => {
     try {
       let validUser = jwt_decode(token);
-      setLoginState(true, token, user);
+      setLoginState(true, token, user, password);
       console.log("validating the token", validUser);
     } catch (e) {
       setLoginState(false, null, {}, e);
@@ -104,13 +122,15 @@ function AuthProvider(props) {
     }
   };
 
-  const setLoginState = async (loggedIn, Token, User, error) => {
+  const setLoginState = async (loggedIn, Token, User, password, error) => {
     setIsLoggedIn(loggedIn);
     setToken(Token);
     setUser(User);
+    setpass(password);
     setError(error || null);
     cookie.save("auth", Token);
     cookie.save("user", User);
+    cookie.save("p", password);
     if (loggedIn) {
       // Connect to Socket.io when the user logs in
       socketService.connect(Token);
@@ -118,7 +138,7 @@ function AuthProvider(props) {
   };
   const logout = () => {
     socketService.disconnect();
-    setLoginState(false, null, {});
+    setLoginState(false, null, {}, "");
   };
 
   // +++++++++++++++++ get user posts+++++++++++++++++++++++
@@ -157,22 +177,18 @@ function AuthProvider(props) {
     const cookieUser = cookie.load("user"); // this is not a good practice
     const token = qs.get("token") || cookieToken;
     const user = qs.get("user") || cookieUser;
+    const coockiepass = cookie.load("p");
     console.log("user from cookie", user);
     console.log("hi");
-    validateToken(token, user);
+    validateToken(token, user, coockiepass);
 
     const savedSocketId = localStorage.getItem("socketId");
 
     if (isLoggedIn && savedSocketId) {
       socketService.connect(token, savedSocketId);
     } else if (isLoggedIn) {
-      // If no saved socket ID, just connect with the token
       socketService.connect(token);
     }
-
-    // socketService.onConnect(() => {
-    //   // Handle the socket connection here, if needed
-    // });
   }, []);
   //************************************************************************************************ */
 
@@ -188,6 +204,7 @@ function AuthProvider(props) {
     currentUser,
     logout,
     getUserPosts,
+    pass,
   };
 
   return (

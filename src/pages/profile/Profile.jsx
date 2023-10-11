@@ -40,8 +40,6 @@ const Profile = () => {
   const { userId } = useParams();
   console.log("====>>>>", userId);
 
-  const authToken = cookie.load("auth");
-
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
@@ -51,6 +49,7 @@ const Profile = () => {
   const cookieUser = cookie.load("user"); // this is not a good practice
   const token = cookieToken;
   const user = cookieUser;
+  const authToken = cookieToken;
 
   const location = useLocation().pathname;
   const [pageType, setPageType] = useState(location);

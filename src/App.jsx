@@ -25,6 +25,8 @@ import { StateContext } from "./context/state";
 import ChatsPage from "./components/chats/chats";
 import JobPage from "./pages/jobs/Job";
 import NPost from "./components/notiPost/post";
+import ApplicantsPage from "./pages/applications/applications";
+import ApplicantPage from "./pages/applications/application";
 // import "bootstrap/dist/css/bootstrap.min.css";
 // function App() {
 // const {currentUser} = useContext(AuthContext);
@@ -38,8 +40,8 @@ import { AuthContext } from "./context/auth/authContext";
 import LoginPage from "./pages/loginPage/loginPage";
 import CVForm from "./components/CVForm/CVForm";
 import PrivateRoute from "./pages/loginPage/redirect";
-import AuthComponent from "./components/AuthComponent /AuthComponent ";
-import Main from "./components/Landing/src/Main";
+// import AuthComponent from "./components/AuthComponent /AuthComponent ";
+// import Main from "./components/Landing/src/Main";
 function AuthenticatedLayout() {
   const { darkMode } = useContext(DarkModeContext);
 
@@ -65,6 +67,39 @@ function Cv() {
       <PrivateRoute />
       <Navbar />
       <Outlet />
+    </div>
+  );
+}
+
+function Apps() {
+  const { darkMode } = useContext(DarkModeContext);
+
+  return (
+    <div className={`theme-${darkMode ? "dark" : "light"}`}>
+      <PrivateRoute />
+      <Navbar />
+      <div style={{ display: "flex" }}>
+        <LeftBar />
+        <div style={{ flex: 6 }}>
+          <Outlet />
+        </div>
+      </div>
+    </div>
+  );
+}
+function Ap() {
+  const { darkMode } = useContext(DarkModeContext);
+
+  return (
+    <div className={`theme-${darkMode ? "dark" : "light"}`}>
+      <PrivateRoute />
+      <Navbar />
+      <div style={{ display: "flex" }}>
+        <LeftBar />
+        <div style={{ flex: 6 }}>
+          <Outlet />
+        </div>
+      </div>
     </div>
   );
 }
@@ -100,8 +135,8 @@ function App() {
         {/* <Route path="/reels" element={<ReelsPage />} /> */}
 
         <Route path="/jobsearch" element={<JobSearch />} />
-        <Route path="/landing" element={<Main />} />
-        <Route path="/AuthComponent" element={<AuthComponent />} />
+        {/* <Route path="/landing" element={<Main />} /> */}
+        {/* <Route path="/AuthComponent" element={<AuthComponent />} /> */}
 
         <Route path="/" element={<AuthenticatedLayout />}>
           <Route index element={<Home />} />
@@ -114,6 +149,12 @@ function App() {
         </Route>
         <Route path="/cv" element={<Cv />}>
           <Route index element={<CVForm />} />
+        </Route>
+        <Route path="/applicants/:jobId" element={<Apps />}>
+          <Route index element={<ApplicantsPage />} />
+        </Route>
+        <Route path="/applicant/:jobId/:sender_id" element={<Ap />}>
+          <Route index element={<ApplicantPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

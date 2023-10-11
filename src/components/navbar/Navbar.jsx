@@ -70,6 +70,7 @@ const Navbar = () => {
   const [seenNotifications, setSeenNotifications] = useState([]);
   const [unseenNotifications, setUnseenNotifications] = useState([]);
   const [showSeenNotifications, setShowSeenNotifications] = useState(false);
+  const [unseenNotificationCount, setUnseenNotificationCount] = useState(0);
 
   useEffect(() => {
     const fetchExistingNotifications = async () => {
@@ -185,6 +186,9 @@ const Navbar = () => {
             ...prevNotifications,
             notification,
           ]);
+          if (!notification.seen) {
+            setUnseenNotificationCount((count) => count + 1);
+          }
         });
       });
     }
@@ -197,6 +201,9 @@ const Navbar = () => {
             ...prevNotifications,
             notification,
           ]);
+          if (!notification.seen) {
+            setUnseenNotificationCount((count) => count + 1);
+          }
         });
       }
     };
@@ -262,7 +269,13 @@ const Navbar = () => {
           >
             <EmailOutlinedIcon />
           </Link>
-          <NotificationsOutlinedIcon onClick={openNotifications} />
+          <NotificationsOutlinedIcon onClick={openNotifications}>
+            {unseenNotificationCount > 0 && (
+              <span className="unseen-notification-count">
+                {unseenNotificationCount}
+              </span>
+            )}{" "}
+          </NotificationsOutlinedIcon>
           <div className="user">
             <img src={currentUser.profilePic} alt="" />
             <span>{currentUser.name}</span>
@@ -294,7 +307,7 @@ const Navbar = () => {
                 ? "Show Unseen Notifications"
                 : "Show Seen Notifications"}
             </Button>
-            <List>
+            {/* <List>
               {notifications
                 .filter((notification) =>
                   showSeenNotifications ? notification.seen : !notification.seen
@@ -309,6 +322,62 @@ const Navbar = () => {
                         />
                       </ListItemAvatar>
                     </Link>
+
+                    <ListItemText
+                      primary={notification.username}
+                      secondary={notification.message}
+                    />
+
+                    <ListItemSecondaryAction>
+                      <IconButton
+                        edge="end"
+                        aria-label="delete"
+                        onClick={() =>
+                          deleteSingleNotification(notification.id)
+                        }
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                      <IconButton
+                        edge="end"
+                        aria-label="mark-as-seen"
+                        onClick={() => markNotificationAsSeen(notification.id)}
+                      >
+                        <VisibilityIcon />
+                      </IconButton>
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                ))}
+            </List> */}
+            <List>
+              {notifications
+                .filter((notification) =>
+                  showSeenNotifications ? notification.seen : !notification.seen
+                )
+                .map((notification, index) => (
+                  <ListItem key={index} style={{ marginBottom: "10px" }}>
+                    {/* Conditionally render a link based on the action_type */}
+                    {notification.action_type === "post" ? (
+                      <Link to={`/post/${notification.post_id}`}>
+                        <ListItemAvatar>
+                          <Avatar
+                            alt={notification.senderName}
+                            src={notification.profilePicture}
+                          />
+                        </ListItemAvatar>
+                      </Link>
+                    ) : (
+                      <Link
+                        to={`/applicant/${notification.post_id}/${notification.sender_id}`}
+                      >
+                        <ListItemAvatar>
+                          <Avatar
+                            alt={notification.senderName}
+                            src={notification.profilePicture}
+                          />
+                        </ListItemAvatar>
+                      </Link>
+                    )}
 
                     <ListItemText
                       primary={notification.username}
