@@ -41,7 +41,7 @@ const Profile = () => {
 
   const [myCv, setMyCv] = useState("");
   const { userId } = useParams();
-  console.log("====>>>>", userId);
+  // console.log("====>>>>", userId);
 
   const authToken = cookie.load("auth");
 
@@ -143,31 +143,54 @@ const Profile = () => {
         });
     }
   };
+
+  const [isLoading, setIsLoading] = useState(true); // Initialize with true
+
   useEffect(() => {
-    if (authToken === null) {
-      throw new Error("Authentication token not found.");
+    if (authToken != null) {
+      const headers = {
+        Authorization: `Bearer ${authToken}`,
+      };
+  
+      axios
+        .get(`https://final-backend-nvf1.onrender.com/home/userposts/${userId}`, {
+          headers,
+        })
+        .then((response) => {
+          state.setUsersPosts(response.data);
+          setIsLoading(false); // Set isLoading to false when data is fetched
+        })
+        .catch((error) => {
+          state.setError(error);
+          setIsLoading(false); // Handle errors and still set isLoading to false
+        });
     }
-  
-    const headers = {
-      Authorization: `Bearer ${authToken}`,
-    };
-  
-    axios
-      .get(`https://final-backend-nvf1.onrender.com/home/userposts/${userId}`, {
-        headers,
-      })
-      .then((response) => {
-        console.log("API Response:", response.data);
-        state.setUserPosts(response.data);
-      })
-      .catch((error) => {
-        console.error("API Error:", error);
-        state.setError(error);
-      });
   }, [userId, authToken]);
-  // Trigger the fetch when userId changes
-  console.log(state.userPosts)
+
   
+  // useEffect(() => {
+  //   // Fetch user-specific posts based on the userId
+  //   if (authToken != null) {
+  //     const headers = {
+  //       Authorization: `Bearer ${authToken}`,
+  //     };
+
+  //     axios
+  //       .get(`https://final-backend-nvf1.onrender.com/home/userposts/${userId}`, {
+  //         headers,
+  //       })
+  //       .then((response) => {
+  //         console.log("")
+  //         state.setUserPosts(response.data);
+  //       })
+  //       .catch((error) => {
+  //         state.setError(error);
+  //       });
+  //   }
+
+
+
+  // }, [userId]); 
 
   useEffect(()=>{
     if (authToken != null) {
@@ -187,7 +210,7 @@ const Profile = () => {
         });
     }
   
-  },[authToken])
+  },[userId, authToken])
 
 
       // if (authToken != null) {
@@ -206,7 +229,7 @@ const Profile = () => {
     //       state.setError(error);
     //     });
     // }
-    console.log(state.userProfile)
+    // console.log(state.userProfile)
 //  const oneUser=state.allUsers.find((user)=>{user.id==userId})
 //  const oneUser = state.allUsers.find((user) => user.id === userId)
 //  console.log(oneUser)
@@ -223,7 +246,21 @@ const Profile = () => {
       <div className="profileContainer">
         <div className="uInfo">
           <div className="top">
-            <MoreVertIcon onClick={openModal} />
+          
+            {user.id ==state.userProfile.id ? (<MoreVertIcon onClick={openModal} />): null}
+            
+          </div>
+          <div className="sub-top">
+            <button>follow</button>
+            {user.id == userId && user.role !== "company" ? (
+              <button
+                variant="primary"
+                className="resume1"
+                onClick={handleShow}
+              >
+                Add Cv
+              </button>
+            ) : null}
           </div>
           <div className="sub-top">
             <button>follow</button>
@@ -314,12 +351,13 @@ const Profile = () => {
               </Modal.Footer>
             </Modal>{" "}
           </div>
+          {console.log(state.userProfile.bio)}
           <div>{state.userProfile.bio}</div>
         </div>
         {isModalOpen && (
           <ProfileModal isOpen={isModalOpen} closeModal={closeModal} />
         )}
-        {state.userPosts.map((post) => (
+        {state.usersPosts.map((post) => (
           <Post post={post} key={post.id} />
         ))}
       </div>
