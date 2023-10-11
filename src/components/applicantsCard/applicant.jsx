@@ -147,15 +147,15 @@ const ApplicantCard = ({ applicant }) => {
       <CardMedia
         component="img"
         sx={styles.media}
-        image="https://www.shutterstock.com/image-photo/mountains-under-mist-morning-amazing-260nw-1725825019.jpg"
+        image={applicant.user?.profilePicture}
         alt="Profile Picture"
       />
       <CardContent>
         <Typography variant="h6" component="div">
-          {applicant.user.firstName} {applicant.user.lastName}
+        {applicant.user?.username}
         </Typography>
         <Typography variant="body2" color="textSecondary">
-          {applicant.user.bio}
+          {applicant.user?.bio}
         </Typography>
       </CardContent>
       <div sx={styles.buttonContainer}>
