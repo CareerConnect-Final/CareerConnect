@@ -31,7 +31,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
 const Profile = () => {
-  const [resumeUpload, setResumeUpload] = useState(""); 
+  const [resumeUpload, setResumeUpload] = useState("");
   const [show, setShow] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -44,36 +44,40 @@ const Profile = () => {
   const handleShow = () => setShow(true);
   const state = useContext(StateContext);
 
-  const user = cookie.load("user"); 
-  console.log("------->",user)
-  
+  const cookieToken = cookie.load("auth");
+  const cookieUser = cookie.load("user"); // this is not a good practice
+  const token = cookieToken;
+  const user = cookieUser;
+
+  console.log("------->", user);
+
   // const location = useLocation().pathname;
   // const [pageType, setPageType] = useState(location);
   const [isFriend, setIsFriend] = useState(false);
   const [isFollowing, setIsFollowing] = useState(false);
   const [send, setSend] = useState({});
 
-//-------------------------------------------------------------------------
+  //-------------------------------------------------------------------------
   const isOwnProfile = user.id === userId;
 
   const handleFollowOrFriendRequest = () => {
     const headers = {
       Authorization: `Bearer ${authToken}`,
     };
-  
-    if (user.role === 'company') {
+
+    if (user.role === "company") {
       const endpoint = isFollowing
         ? `https://final-backend-nvf1.onrender.com/home/unfollow/${userId}`
         : `https://final-backend-nvf1.onrender.com/home/makefollow/${userId}`;
-  
+
       axios
         .post(endpoint, {}, { headers })
         .then((data) => {
           console.log(data.data);
           setIsFollowing(!isFollowing);
-          })
+        })
         .catch((error) => {
-          console.error('Error', error);
+          console.error("Error", error);
         });
     } else {
       // Logic for sending/canceling friend requests for users
@@ -84,66 +88,65 @@ const Profile = () => {
         receiver_id: userId,
         message: `${user.username} sent you a friend request`,
       };
-       axios
-        .post(`https://final-backend-nvf1.onrender.com/home/send-friend-request/${userId}`, obj, {
-          headers,
-        })
+      axios
+        .post(
+          `https://final-backend-nvf1.onrender.com/home/send-friend-request/${userId}`,
+          obj,
+          {
+            headers,
+          }
+        )
         .then((data) => {
           console.log(data.data);
         })
         .catch((error) => {
-          console.error('Error', error);
+          console.error("Error", error);
         });
-        setSend((prevRequests) => ({
-          ...prevRequests,
-          [userId]: !prevRequests[userId],
-        }));
+      setSend((prevRequests) => ({
+        ...prevRequests,
+        [userId]: !prevRequests[userId],
+      }));
     }
   };
-  
-  
-//--------------------------------------------------- ADD FRIEND AND FRIENS---------------------------------------------------  
-useEffect(() => {
-  const fetchFriendsList = async () => {
-    try {
-      const response = await axios.get(
-        'https://final-backend-nvf1.onrender.com/home/myfriends',
-        { headers: { Authorization: `Bearer ${authToken}` } }
-      );
-      const friendsList = response.data;
-  
-      console.log('Friends List:', friendsList);
-      console.log('User ID:', userId);
-  
-      const isUserFriend = friendsList.some((friend) => {
-        console.log('Friend ID:', friend.id);
-        // Directly compare friend's ID with userId
-        return friend.id.toString() === userId;
-      });
-  
-      setIsFriend((prevIsFriend) => {
-        console.log('Is User Friend:', isUserFriend);
-        console.log('Previous Friend State:', prevIsFriend);
-  
-        return isUserFriend;
-      });
-    } catch (error) {
-      console.error('Error fetching friends list:', error);
-    }
-  };
-  
-  fetchFriendsList();
-}, [userId, authToken]);
 
-useEffect(() => {
-  console.log('Updated Friend State:', isFriend);
-}, [isFriend]);
+  //--------------------------------------------------- ADD FRIEND AND FRIENS---------------------------------------------------
+  useEffect(() => {
+    const fetchFriendsList = async () => {
+      try {
+        const response = await axios.get(
+          "https://final-backend-nvf1.onrender.com/home/myfriends",
+          { headers: { Authorization: `Bearer ${authToken}` } }
+        );
+        const friendsList = response.data;
 
+        console.log("Friends List:", friendsList);
+        console.log("User ID:", userId);
 
+        const isUserFriend = friendsList.some((friend) => {
+          console.log("Friend ID:", friend.id);
+          // Directly compare friend's ID with userId
+          return friend.id.toString() === userId;
+        });
 
+        setIsFriend((prevIsFriend) => {
+          console.log("Is User Friend:", isUserFriend);
+          console.log("Previous Friend State:", prevIsFriend);
 
+          return isUserFriend;
+        });
+      } catch (error) {
+        console.error("Error fetching friends list:", error);
+      }
+    };
 
-//----------------------------------------------------------------------------------------------
+    fetchFriendsList();
+  }, [userId, authToken]);
+
+  useEffect(() => {
+    console.log("Updated Friend State:", isFriend);
+  }, [isFriend]);
+
+  //----------------------------------------------------------------------------------------------
 
   const handleAdd = () => {
     if (resumeUpload !== "") {
@@ -235,11 +238,14 @@ useEffect(() => {
       const headers = {
         Authorization: `Bearer ${authToken}`,
       };
-  
+
       axios
-        .get(`https://final-backend-nvf1.onrender.com/home/userposts/${userId}`, {
-          headers,
-        })
+        .get(
+          `https://final-backend-nvf1.onrender.com/home/userposts/${userId}`,
+          {
+            headers,
+          }
+        )
         .then((response) => {
           state.setUsersPosts(response.data);
           setIsLoading(false); // Set isLoading to false when data is fetched
@@ -251,7 +257,6 @@ useEffect(() => {
     }
   }, []);
 
-  
   // useEffect(() => {
   //   // Fetch user-specific posts based on the userId
   //   if (authToken != null) {
@@ -272,11 +277,9 @@ useEffect(() => {
   //       });
   //   }
 
+  // }, [userId]);
 
-
-  // }, [userId]); 
-
-  useEffect(()=>{
+  useEffect(() => {
     if (authToken != null) {
       const headers = {
         Authorization: `Bearer ${authToken}`,
@@ -293,30 +296,28 @@ useEffect(() => {
           state.setError(error);
         });
     }
-  
-  },[])
+  }, []);
 
+  // if (authToken != null) {
+  //   const headers = {
+  //     Authorization: `Bearer ${authToken}`,
+  //   };
 
-      // if (authToken != null) {
-    //   const headers = {
-    //     Authorization: `Bearer ${authToken}`,
-    //   };
-
-    //   axios
-    //     .get(`https://final-backend-nvf1.onrender.com/home/users/${userId}`, {
-    //       headers,
-    //     })
-    //     .then((response) => {
-    //       state.setUsers(response.data);
-    //     })
-    //     .catch((error) => {
-    //       state.setError(error);
-    //     });
-    // }
-    // console.log(state.userProfile)
-//  const oneUser=state.allUsers.find((user)=>{user.id==userId})
-//  const oneUser = state.allUsers.find((user) => user.id === userId)
-//  console.log(oneUser)
+  //   axios
+  //     .get(`https://final-backend-nvf1.onrender.com/home/users/${userId}`, {
+  //       headers,
+  //     })
+  //     .then((response) => {
+  //       state.setUsers(response.data);
+  //     })
+  //     .catch((error) => {
+  //       state.setError(error);
+  //     });
+  // }
+  // console.log(state.userProfile)
+  //  const oneUser=state.allUsers.find((user)=>{user.id==userId})
+  //  const oneUser = state.allUsers.find((user) => user.id === userId)
+  //  console.log(oneUser)
   return (
     <div className="profile">
       <div className="images">
@@ -325,21 +326,29 @@ useEffect(() => {
           alt=""
           className="cover"
         />
-        <img src={state.userProfile.profilePicture || null} alt="" className="profilePic" />
+        <img
+          src={state.userProfile.profilePicture || null}
+          alt=""
+          className="profilePic"
+        />
       </div>
       <div className="profileContainer">
         <div className="uInfo">
           <div className="top">
-          
-            {user?.id ==state.userProfile.id ? (<MoreVertIcon onClick={openModal} />): null}
-            
+            {user?.id == state.userProfile.id ? (
+              <MoreVertIcon onClick={openModal} />
+            ) : null}
           </div>
           <div className="sub-top">
-          {!isOwnProfile && (
-            <button onClick={handleFollowOrFriendRequest}>
-              {isFriend ? 'Friends' : (user.role === 'company' ? 'Follow' : 'Add Friend')}
-            </button>
-          )}
+            {!isOwnProfile && (
+              <button onClick={handleFollowOrFriendRequest}>
+                {isFriend
+                  ? "Friends"
+                  : user.role === "company"
+                  ? "Follow"
+                  : "Add Friend"}
+              </button>
+            )}
             {user?.id == userId && user?.role !== "company" ? (
               <button
                 variant="primary"
@@ -391,9 +400,15 @@ useEffect(() => {
                 </button>
               ) : null}
             </div>
-            {user.id == userId && user.role !== "company" ? (<Button variant="primary" className="resume1" onClick={handleShow}>
-              Add Cv
-            </Button>) : null}
+            {user.id == userId && user.role !== "company" ? (
+              <Button
+                variant="primary"
+                className="resume1"
+                onClick={handleShow}
+              >
+                Add Cv
+              </Button>
+            ) : null}
             <Modal show={show} onHide={handleClose}>
               <Modal.Header closeButton>
                 <Modal.Title>Modal heading</Modal.Title>
@@ -440,27 +455,25 @@ useEffect(() => {
 
 export default Profile;
 
+// useEffect(() => {
+//   if (authToken === null) {
+//     throw new Error("Authentication token not found.");
+//   } else if (authToken != null) {
+//     const headers = {
+//       Authorization: `Bearer ${authToken}`,
+//     };
+//     axios
+//       .get(
+//         `https://final-backend-nvf1.onrender.com/home/userposts/${userId}`,
+//         { headers }
+//       )
+//       .then((response) => {
+//         state.setUserPosts(response.data);
+//       })
+//       .catch((error) => {
+//         state.setError(error);
+//       });
+//   }
+// }, [userId, authToken]);
 
-
-  // useEffect(() => {
-  //   if (authToken === null) {
-  //     throw new Error("Authentication token not found.");
-  //   } else if (authToken != null) {
-  //     const headers = {
-  //       Authorization: `Bearer ${authToken}`,
-  //     };
-  //     axios
-  //       .get(
-  //         `https://final-backend-nvf1.onrender.com/home/userposts/${userId}`,
-  //         { headers }
-  //       )
-  //       .then((response) => {
-  //         state.setUserPosts(response.data);
-  //       })
-  //       .catch((error) => {
-  //         state.setError(error);
-  //       });
-  //   }
-  // }, [userId, authToken]);
-
-  // state.userProfile.profilePicture
+// state.userProfile.profilePicture
