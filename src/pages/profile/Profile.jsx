@@ -1,9 +1,5 @@
 import "./profile.scss";
-import FacebookTwoToneIcon from "@mui/icons-material/FacebookTwoTone";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
-import InstagramIcon from "@mui/icons-material/Instagram";
-import PinterestIcon from "@mui/icons-material/Pinterest";
-import TwitterIcon from "@mui/icons-material/Twitter";
 import PlaceIcon from "@mui/icons-material/Place";
 import LanguageIcon from "@mui/icons-material/Language";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
@@ -18,7 +14,6 @@ import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import cookie from "react-cookies";
 import { useParams } from "react-router-dom";
-
 import {
   ref,
   uploadBytes,
@@ -34,27 +29,115 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
 const Profile = () => {
-  const [resumeUpload, setResumeUpload] = useState(""); ///
+  const [resumeUpload, setResumeUpload] = useState(""); 
   const [show, setShow] = useState(false);
   const [myCv, setMyCv] = useState("");
   const { userId } = useParams();
-  console.log("====>>>>", userId);
-
   const authToken = cookie.load("auth");
-
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-
   const state = useContext(StateContext);
-
   const cookieToken = cookie.load("auth");
-  const cookieUser = cookie.load("user"); // this is not a good practice
+  const cookieUser = cookie.load("user"); 
   const token = cookieToken;
   const user = cookieUser;
-
   const location = useLocation().pathname;
   const [pageType, setPageType] = useState(location);
-  // console.log(pageType)
+  const [isFriend, setIsFriend] = useState(false);
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [send, setSend] = useState({});
+
+//-------------------------------------------------------------------------
+  const isOwnProfile = user.id === userId;
+
+  const handleFollowOrFriendRequest = () => {
+    const headers = {
+      Authorization: `Bearer ${authToken}`,
+    };
+  
+    if (user.role === 'company') {
+      const endpoint = isFollowing
+        ? `https://final-backend-nvf1.onrender.com/home/unfollow/${userId}`
+        : `https://final-backend-nvf1.onrender.com/home/makefollow/${userId}`;
+  
+      axios
+        .post(endpoint, {}, { headers })
+        .then((data) => {
+          console.log(data.data);
+          setIsFollowing(!isFollowing);
+          })
+        .catch((error) => {
+          console.error('Error', error);
+        });
+    } else {
+      // Logic for sending/canceling friend requests for users
+      const obj = {
+        sender_id: user.id,
+        username: userToken.username,
+        profilePicture: userToken.profilePicture,
+        receiver_id: userId,
+        message: `${userToken.username} sent you a friend request`,
+      };
+       axios
+        .post(`https://final-backend-nvf1.onrender.com/home/send-friend-request/${userId}`, obj, {
+          headers,
+        })
+        .then((data) => {
+          console.log(data.data);
+        })
+        .catch((error) => {
+          console.error('Error', error);
+        });
+        setSend((prevRequests) => ({
+          ...prevRequests,
+          [userId]: !prevRequests[userId],
+        }));
+    }
+  };
+  
+  
+//--------------------------------------------------- ADD FRIEND AND FRIENS---------------------------------------------------  
+useEffect(() => {
+  const fetchFriendsList = async () => {
+    try {
+      const response = await axios.get(
+        'https://final-backend-nvf1.onrender.com/home/myfriends',
+        { headers: { Authorization: `Bearer ${authToken}` } }
+      );
+      const friendsList = response.data;
+  
+      console.log('Friends List:', friendsList);
+      console.log('User ID:', userId);
+  
+      const isUserFriend = friendsList.some((friend) => {
+        console.log('Friend ID:', friend.id);
+        // Directly compare friend's ID with userId
+        return friend.id.toString() === userId;
+      });
+  
+      setIsFriend((prevIsFriend) => {
+        console.log('Is User Friend:', isUserFriend);
+        console.log('Previous Friend State:', prevIsFriend);
+  
+        return isUserFriend;
+      });
+    } catch (error) {
+      console.error('Error fetching friends list:', error);
+    }
+  };
+  
+  fetchFriendsList();
+}, [userId, authToken]);
+
+useEffect(() => {
+  console.log('Updated Friend State:', isFriend);
+}, [isFriend]);
+
+
+
+
+
+//----------------------------------------------------------------------------------------------
 
   const handleAdd = () => {
     if (resumeUpload !== "") {
@@ -82,8 +165,6 @@ const Profile = () => {
                 headers,
               })
               .then((data) => {
-                // setResumeUpload("");
-                // state.addResume(data.data);
                 console.log("ccdcdcdcsdcdscllllllllD", data.data);
               })
               .catch((error) => {
@@ -170,7 +251,11 @@ const Profile = () => {
       <div className="profileContainer">
         <div className="uInfo">
           <div className="top">
-            <button>follow</button>
+          {!isOwnProfile && (
+            <button onClick={handleFollowOrFriendRequest}>
+              {isFriend ? 'Friends' : (user.role === 'company' ? 'Follow' : 'Add Friend')}
+            </button>
+          )}
             <MoreVertIcon />
           </div>
           <div className="user-career">
@@ -197,10 +282,6 @@ const Profile = () => {
               </div>
             </div>
           </div>
-
-          {/* <div className="right">
-            <EmailOutlinedIcon />
-          </div> */}
         </div>
         <div className="uInfo-bio">
           <div>
@@ -218,7 +299,6 @@ const Profile = () => {
                 </button>
               ): null}
             </div>
-            {/* {console.log(user.id , userId)} */}
             {user.id == userId && user.role !== "company" ? (<Button variant="primary" className="resume1" onClick={handleShow}>
               Add Cv
             </Button>) : null}

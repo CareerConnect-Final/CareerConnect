@@ -10,16 +10,14 @@ import cookie from "react-cookies";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+
 const RightBar = () => {
   const { userId } = useParams();
   const userToken = cookie.load("user");
   const authToken = cookie.load("auth");
   const location = useLocation().pathname.slice(1);
   const [pageType, setPageType] = useState(location);
-  
-  {console.log(pageType)}
   const [send, setSend] = useState({});
-  // console.log(pageType);
   const state = useContext(StateContext);
   const stateJob = useContext(JobContext);
   const headers = {
@@ -33,7 +31,6 @@ const RightBar = () => {
       receiver_id: userId,
       message: `${userToken.username} sent you a friend request`,
     };
-    console.log(userId);
     axios
       .post(
         `https://final-backend-nvf1.onrender.com/home/send-friend-request/${userId}`,
@@ -54,18 +51,18 @@ const RightBar = () => {
       [userId]: !prevRequests[userId],
     }));
   };
-
   const handleSendFollow = (userId) => {
     const obj = {};
+
+    const isFollowing = send[userId];
+    const endpoint = isFollowing
+    ? `https://final-backend-nvf1.onrender.com/home/unfollow/${userId}`
+    : `https://final-backend-nvf1.onrender.com/home/makefollow/${userId}`;
+
     axios
       .post(
-        `https://final-backend-nvf1.onrender.com/home/makefollow/${userId}`,
-        obj,
-
-        {
-          headers,
-        }
-      )
+        endpoint,
+        obj,{headers,})
       .then((data) => {
         console.log(data.data);
       })
@@ -78,10 +75,29 @@ const RightBar = () => {
       [userId]: !prevRequests[userId],
     }));
   };
+  const handleUnfollow = (companyId) => {
+    const encodedCompanyId = encodeURIComponent(companyId);
+    const endpoint = `https://final-backend-nvf1.onrender.com/home/unfollow/${encodedCompanyId}`;
+  
+    axios
+      .delete(endpoint, { headers })
+      .then((data) => {
+        console.log(data.data);
+      })
+      .catch((error) => {
+        console.error("Error", error);
+      });
+  
+    setSend((prevRequests) => ({
+      ...prevRequests,
+      [companyId]: false, 
+    }));
+  };
+  
+  
+  
   const { friendRequests, acceptFriendRequest, declineFriendRequest } =
     useContext(StateContext);
-  // console.log(pageType)
-
   return (
     <>
       {pageType === "job" && userToken.role === "company" && (
@@ -108,8 +124,7 @@ const RightBar = () => {
                         >
                           <span>{user.username}</span>
                         </Link>
-                      </div>
-     
+                      </div>   
                     </div>
                   );
                 }
@@ -118,10 +133,6 @@ const RightBar = () => {
             <div className="item">
               <span>Followers</span>
               {stateJob.followers.map((user) => {
-                //  if (
-                //    user.role === "user" && userToken.id!==user.id&&
-                //    !state.myFriends.find((friend) => friend.id === user.id)
-                //  )
                 {
                   return (
                     <div key={user.id} className="user">
@@ -141,11 +152,8 @@ const RightBar = () => {
                     </div>
                   );
                 }
-                // return null; // Exclude users who are already friends
               })}
             </div>
-
-      
           </div>
         </div>
       )}
@@ -153,7 +161,6 @@ const RightBar = () => {
         <div className="rightBar">
           <div className="container">
             <div className="item">
-              {/* {console.log(stateJob.youFollow.find((follower) => follower.company_name === "facebook1"))} */}
               <span>Related Companies</span>
               {stateJob.allUsers.map((user) => {
                 if (
@@ -183,7 +190,7 @@ const RightBar = () => {
                             id="send"
                             onClick={() => handleSendFollow(user.id)}
                           >
-                            Unfollow
+                            Followed
                           </button>
                         ) : (
                           <button
@@ -199,14 +206,13 @@ const RightBar = () => {
                 }
               })}
             </div>
- 
-
+            {pageType === "job" && userToken.role === "user" && (
+  <div className="rightBar">
+    <div className="container">
             <div className="item">
-              {/* {console.log(stateJob.youFollow.find((follower) => follower.company_name === "facebook1"))} */}
               <span>Compnies You Follow</span>
               {stateJob.allUsers.map((user) => {
                 if (
-                  // user.career === "web developer" &&
                   user.role == "company" &&
                   stateJob.youFollow.find(
                     (follower) => follower.receiver_id === user.id
@@ -225,13 +231,23 @@ const RightBar = () => {
                         >
                           <span>{user.username}</span>
                         </Link>
-                      </div>
-    
+                      </div>  
+                      <div className="buttons2">
+                  <button
+                    id="unfollow"
+                    onClick={() => handleUnfollow(user.id)}
+                  >
+                    Unfollow
+                  </button>
+                </div> 
                     </div>
                   );
                 }
               })}
             </div>
+            </div>
+        </div>
+      )}
           </div>
         </div>
       )}
@@ -242,8 +258,7 @@ const RightBar = () => {
             <div className="item">
               <span>Friends requests</span>
               {console.log(friendRequests)}
-              {friendRequests.map((request) =>
-            
+              {friendRequests.map((request) =>       
                 request.status === "pending" &&
                 userToken.id !== request.sender_id ? (
                   <div key={request.id} className="user">
@@ -316,10 +331,7 @@ const RightBar = () => {
                 }
                 return null; // Exclude users who are already friends
               })}
-            </div>
-
-            {/* {send[user.id] ? "Pending" : "Add Friend"} */}
-      
+            </div>      
           </div>
         </div>
       )}
@@ -347,22 +359,15 @@ const RightBar = () => {
                         >
                           <span>{user.username}</span>
                         </Link>
-                      </div>
-          
+                      </div>       
                     </div>
                   );
                 }
               })}
             </div>
-     
             <div className="item">
               <span>Followers</span>
-              {/* {console.log(state.followers)} */}
-              {state.followers.map((user) => {
-                //  if (
-                //    user.role === "user" && userToken.id!==user.id&&
-                //    !state.myFriends.find((friend) => friend.id === user.id)
-                //  )
+              {state.followers.map((user) => {             
                 {
                   return (
                     <div key={user.id} className="user">
@@ -378,131 +383,16 @@ const RightBar = () => {
                           <span>{user.username}</span>
                         </Link>
                       </div>
-         
                     </div>
                   );
                 }
                 return null; // Exclude users who are already friends
               })}
             </div>
-
-            {/* {send[user.id] ? "Pending" : "Add Friend"} */}
-          </div>
+         </div>
         </div>
       )}
     {console.log(userId)}
-      {/* {pageType === `profile/${userId}` &&(
-        <div className="rightBar">
-          <div className="container">
-            <div className="item">
-              <span>People with same career</span>
-              {stateJob.allUsers.map((user) => {
-                if (
-                  user.career === "web developer" &&
-                  userToken.career === "web developer" &&
-                  user.role == "user"
-                ) {
-                  return (
-                    <div key={user.id} className="user">
-                      <div className="userInfo">
-                        <img
-                          src={user.profilePicture}
-                          alt=""
-                        />
-                           <Link
-                          to={`/profile/${user.id}`}
-                          style={{ textDecoration: "none", color: "inherit" }}
-                        >
-                          <span>{user.username}</span>
-                        </Link>
-                      </div>
-        
-                    </div>
-                  );
-                }
-              })}
-            </div>
-            <div className="item">
-              <span>Followers</span>
-              {stateJob.followers.map((user) => {
-                //  if (
-                //    user.role === "user" && userToken.id!==user.id&&
-                //    !state.myFriends.find((friend) => friend.id === user.id)
-                //  )
-                {
-                  return (
-                    <div key={user.id} className="user">
-                      <div className="userInfo">
-                        <img
-                          src={user.profilePicture}
-                          alt=""
-                        />
-                             <Link
-                          to={`/profile/${user.id}`}
-                          style={{ textDecoration: "none", color: "inherit" }}
-                        >
-                          <span>{user.username}</span>
-                        </Link>
-                      </div>
-        
-                    </div>
-                  );
-                }
-                // return null; // Exclude users who are already friends
-              })}
-            
-            </div>
-
-   
-          </div>
-        </div>
-      )} */}
-
-{/* {pageType === `profile/${userId}` && (
-  <div className="rightBar">
-    <div className="container">
-      <div className="item">
-        <span>People with the same career</span>
-        {stateJob.allUsers.map((user) => {
-          if (
-            user.career === "web developer" &&
-            userToken.career === "web developer" &&
-            user.role == "user"
-          ) {
-            return (
-              <div key={user.id} className="user">
-                <div className="userInfo">
-                  <img
-                    src={user.profilePicture}
-                    alt=""
-                  />
-                  <Link
-                    to={`/profile/${user.id}`}
-                    style={{ textDecoration: "none", color: "inherit" }}
-                  >
-                    <span>{user.username}</span>
-                  </Link>
-                </div>
-              </div>
-            );
-          }
-          return null;
-        })}
-      </div>
-      <div className="item">
-        <span>Followers</span>
-        {stateJob.followers && stateJob.followers.map((user) => {
-          // Your mapping logic here
-        })}
-      </div>
-    </div>
-  </div>
-)} */}
-
-
-
-
-
     </>
   );
 };

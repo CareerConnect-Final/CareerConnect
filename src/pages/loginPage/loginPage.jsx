@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/auth/authContext";
+import './loginPage.scss'
 import {
   Box,
   Button,
@@ -72,7 +73,7 @@ function LoginPage(props) {
   let isRegister = pageType === "register";
   const [loading, setLoading] = useState(false);
   const [globalError, setGlobalError] = useState([]);
-
+ 
   const { login, signup } = useContext(AuthContext); // or   const authContext = useContext(AuthContext); and to access the shared states ==> authContext.somthing
 
   const { palette } = useTheme();
@@ -146,14 +147,18 @@ function LoginPage(props) {
   /* */
   return (
     <>
+      <div className="center-containerr">
+  <div className="form-containerr">
+    <div className="custom-containerr">
       <Container maxWidth="sm">
         {" "}
         <Typography
           fontWeight="bold"
           textAlign="center"
           paddingTop="1rem"
-          fontSize="clamp(1rem, 2rem, 2.25rem)"
-          color="primary"
+          fontSize="clamp(1.5rem, 2.5rem, 3rem)"
+          className="hover-effectt"
+          color="teal"
           onClick={() => navigate("/")}
           sx={{
             "&:hover": {
@@ -162,7 +167,7 @@ function LoginPage(props) {
             },
           }}
         >
-          hi mom!
+          WELCOME!
         </Typography>
         {globalError.length ? (
           <ErrorAlert errors={globalError}></ErrorAlert>
@@ -182,12 +187,13 @@ function LoginPage(props) {
             resetForm,
             setFieldValue,
           }) => (
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className="custom-formm">
               <Box
                 display="grid"
                 gap="30px"
                 padding="1.5rem"
                 gridTemplateColumns="repeat(4, minmax(0, 1fr))"
+                className="grid-boxx"
                 sx={{
                   "& > div": { gridColumn: isNonMobile ? undefined : "span 4" },
                 }}
@@ -203,7 +209,8 @@ function LoginPage(props) {
                   name="username"
                   error={Boolean(touched.username) && Boolean(errors.username)}
                   helperText={touched.username && errors.username}
-                  sx={{ gridColumn: "span 4" }}
+                  className="custom-text-fieldd"
+                  sx={{ gridColumn: "span 4", fontWeight:"500px"}}
                 />
                 <TextField
                   label="Password"
@@ -361,28 +368,18 @@ function LoginPage(props) {
                       />
                     </>
                     <FormControl fullWidth sx={{ gridColumn: "span 2" }}>
-                      {/* <InputLabel htmlFor="profilePicture-label">
-                        Profile Picture
-                      </InputLabel> */}
+                      
                       <Box
                         display="flex"
                         alignItems="center"
                         justifyContent="space-between"
                       >
-                        {/* ///////////////// */}
                         <input
                           type="file"
                           id="profilePicture"
                           name="profilePicture"
                           accept="image/*"
                           style={{ display: "none" }}
-                          // onChange={(event) => {
-                          //   setFieldValue(
-                          //     "profilePicture",
-                          //     event.currentTarget.files[0]
-                          //   );
-                          // }}
-                          // onBlur={handleBlur}
                           onChange={(event) => {
                             setFieldValue(
                               "profilePicture",
@@ -398,10 +395,9 @@ function LoginPage(props) {
                             display: "flex",
                             alignItems: "center",
                             cursor: "pointer",
-                            maxHeight: "74px",
                           }}
                           onClick={() => {
-                            document.getElementById("profilePicture").click(); /////////////////
+                            document.getElementById("profilePicture").click(); 
                           }}
                         >
                           <Typography
@@ -426,15 +422,11 @@ function LoginPage(props) {
                     </FormControl>
                     {/* Cover Image */}
                     <FormControl fullWidth sx={{ gridColumn: "span 2" }}>
-                      {/* <InputLabel htmlFor="imageForCover-label">
-                        Cover Image
-                      </InputLabel> */}
                       <Box
                         display="flex"
                         alignItems="center"
                         justifyContent="space-between"
                       >
-                        {/* //////////////// */}
                         <input
                           type="file"
                           id="imageForCover"
@@ -457,7 +449,6 @@ function LoginPage(props) {
                             display: "flex",
                             alignItems: "center",
                             cursor: "pointer",
-                            maxHeight: "74px",
                           }}
                           onClick={() => {
                             document.getElementById("imageForCover").click();
@@ -488,11 +479,12 @@ function LoginPage(props) {
               </Box>
 
               {/* BUTTONS */}
-              <Box padding="0 1.5rem 1.5rem 1.5rem">
+              <Box padding="0 1.5rem 1.5rem 1.5rem" className="button-boxx">
                 <Button
                   fullWidth
                   type="submit"
                   disabled={loading}
+                  className="custom-buttonn"
                   sx={{
                     m: "2rem 0",
                     p: "0.8rem",
@@ -516,6 +508,7 @@ function LoginPage(props) {
                     navigate(isLogin ? "/register" : "/login");
                     resetForm();
                   }}
+                  className="custom-linkk"
                   sx={{
                     textDecoration: "underline",
                     color: palette.primary.main,
@@ -533,6 +526,9 @@ function LoginPage(props) {
           )}
         </Formik>
       </Container>
+      </div>
+  </div>
+</div>
     </>
   );
 }

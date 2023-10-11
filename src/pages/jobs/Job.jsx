@@ -1,4 +1,3 @@
-// import Stories from "../../components/stories/Stories"
 import JobPosts from "../../components/JobPosts/jobPosts";
 import Share from "../../components/shareJob/ShareJob";
 import JobSearch from "../../components/JobSearch/JobSearch";
@@ -53,7 +52,6 @@ const JobPage = () => {
           headers,
         })
         .then((response) => {
-          console.log("data come comeeeeeeee ")
           state.setYouFollow(response.data);
         })
         .catch((error) => {
@@ -110,7 +108,6 @@ const JobPage = () => {
         })
         .then((response) => {
           state.setJobPosts(response.data);
-          // console.log(response.data);
         })
         .catch((error) => {
           state.setError(error);
@@ -125,7 +122,6 @@ const JobPage = () => {
       axios
         .get("https://final-backend-nvf1.onrender.com/home/users", { headers })
         .then((response) => {
-          // console.log("job users from job job ")
           state.setAllUsers(response.data);
         })
         .catch((error) => {
@@ -143,21 +139,16 @@ const JobPage = () => {
             headers,
           })
           .then((response) => {
-            // console.log("data come comeeeeeeee ")
             state.setFollowers(response.data);
-            // console.log(state.followers)
           })
           .catch((error) => {
             state.setError(error);
           });
         }
-
-   
   }, []);
 
   return (
     <div className="home">
-      {/* <Stories/> */}
       {user.role === "company" &&
       (<>
             <Share />
