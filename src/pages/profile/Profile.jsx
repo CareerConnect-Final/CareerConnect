@@ -165,7 +165,7 @@ const Profile = () => {
           setIsLoading(false); // Handle errors and still set isLoading to false
         });
     }
-  }, [userId, authToken]);
+  }, []);
 
   
   // useEffect(() => {
@@ -210,7 +210,7 @@ const Profile = () => {
         });
     }
   
-  },[userId, authToken])
+  },[])
 
 
       // if (authToken != null) {
