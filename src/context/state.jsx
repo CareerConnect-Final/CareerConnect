@@ -1,16 +1,21 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import cookie from "react-cookies";
+
 export const StateContext = React.createContext();
 export default function State(props) {
   const [posts, setPosts] = useState([]);
+  const [companyPosts, setCompanyPosts] = useState([]);
   const [comments, setComments] = useState([]);
+  // const [userData, setComments] = useState([]);
   const [likes, setLikes] = useState([]);
   const [reels, setReels] = useState([]);
+  const [story, setStory] = useState([]);
   const [resume, setResume] = useState([]);
+  const [usersPosts, setUsersPosts] = useState([]);
   const [friendRequests, setFriendRequests] = useState([]);
   const [myFriends, setMyFriends] = useState([]);
-  const [userData, setUserData] = useState([]);
+  const [users, setUsers] = useState([]);
   const [userPosts, setUserPosts] = useState([]);
   const [userProfile, setUserProfile] = useState([]);
   const [allUsers, setallUsers] = useState([]);
@@ -24,7 +29,6 @@ export default function State(props) {
 
   const authToken = cookie.load("auth");
   const user = cookie.load("user");
-
 
   const acceptFriendRequest = async (receiver_id) => {
     try {
@@ -57,40 +61,54 @@ export default function State(props) {
     }
   };
 
-  const addReel = (newReel) => {///
+  // const addStory = (newPost) => {
+  //   setPosts([newPost, ...posts]);
+  // };
+
+  const addReel = (newReel) => {
+    ///
     setReels([newReel, ...reels]);
   };
 
-  const addResume = (newReel) => {///
-    setResume([newReel]);
-    console.log("setResume==>",reels)
+  const addResume = (newCv) => {
+    ///
+    setResume([newCv]);
   };
   
-  const setUserId = (id) => {
-  };
-  
-  useEffect(() => {
-    if (authToken === null) {
-      throw new Error("Authentication token not found.");
-    } else if (authToken != null) {
-      const headers = {
-        Authorization: `Bearer ${authToken}`,
-      };
-      axios
-      .get(`https://final-backend-nvf1.onrender.com/home/userposts/${user.id}`, {
-        headers,
-      })
-      .then((response) => {
-        setUserPosts(response.data);
-      })
-      .catch((error) => {
-        setError(error);
-      });
-    }
-},[])
 
+  const setUserId = (id) => {
+    // setUserid(id);
+  };
+
+  // useEffect(() => {
+  //   if (authToken === null) {
+  //     throw new Error("Authentication token not found.");
+  //   } else if (authToken != null) {
+  //     const headers = {
+  //       Authorization: `Bearer ${authToken}`,
+  //     };
+  //     axios
+  //       .get(
+  //         `https://final-backend-nvf1.onrender.com/home/userposts/${user.id}`,
+  //         {
+  //           headers,
+  //         }
+  //       )
+  //       .then((response) => {
+  //         setUserPosts(response.data);
+  //       })
+  //       .catch((error) => {
+  //         setError(error);
+  //       });
+  //   }
+  // }, []);
+
+ 
 
   const resetState = () => {
+ 
+    cookie.remove('auth')
+    cookie.remove('user')
     setPosts([]);
     setComments([]);
     setLikes([]);
@@ -98,16 +116,19 @@ export default function State(props) {
     setMyFriends([]);
     setallUsers([]);
     setFollowers([]);
-    setUserPosts([])
+    
     setLoading(true);
-    setUserProfile([])
+    setUserProfile([]);
     setError(null);
     setUserPosts([])
+    // setUserid(0)
   };
-
   const addPost = (newPost) => {
     setPosts([newPost, ...posts]);
   };
+  // const addCompanyPost = (newPost) => {
+  //   setCompanyPosts([newPost, ...posts]);
+  // };
 
   const addLike = (newLike) => {
     setLikes([newLike, ...likes]);
@@ -125,6 +146,16 @@ export default function State(props) {
       });
     });
   };
+  const editUsers = (editedUser) => {
+    setallUsers((prevData) => {
+      return prevData.map((user) => {
+        if (user.id === editedUser.id) {
+          return editedUser;
+        }
+        return user;
+      });
+    });
+  };
   const editComments = (editedcomment) => {
     setComments((prevComment) => {
       return prevComment.map((comment) => {
@@ -136,30 +167,37 @@ export default function State(props) {
     });
   };
   const deletePost = (id) => {
-    let newPosts = state.posts.filter((item) => item.id != id);
+    let newPosts = posts.filter((item) => item.id != id);
     setPosts(newPosts);
   };
   const deleteComment = (id) => {
-    let newComments = state.comments.filter((item) => item.id != id);
+    let newComments = comments.filter((item) => item.id != id);
     setComments(newComments);
   };
   const deleteLike = (id) => {
-    let newLikes = state.likes.filter((item) => item.id != id);
+    let newLikes = likes.filter((item) => item.id != id);
     setLikes(newLikes);
   };
-console.log(userPosts)
+
+
+
+  // console.log(userProfile);
   const state = {
     posts: posts,
     setPosts: setPosts,
+    companyPosts:companyPosts,
+    setCompanyPosts:setCompanyPosts,
     comments: comments,
     setComments: setComments,
     likes: likes,
-    addReel:addReel,
-    addResume:addResume,
-    resume:resume,
-    setResume:setResume,
-    setReels:setReels,
-    reels:reels,
+    addReel: addReel,
+    addResume: addResume,
+    resume: resume,
+    setResume: setResume,
+    setReels: setReels,
+    reels: reels,
+    story:story,
+    setStory:setStory,
     setLikes: setLikes,
     followers: followers,
     setFollowers: setFollowers,
@@ -169,7 +207,7 @@ console.log(userPosts)
     allUsers: allUsers,
     setallUsers: setallUsers,
     deletePost: deletePost,
-    setUserPosts:setUserPosts,
+    editUsers:editUsers,
     editPost: editPost,
     acceptFriendRequest,
     declineFriendRequest,
@@ -180,15 +218,15 @@ console.log(userPosts)
     editComments: editComments,
     addComment: addComment,
     addLike: addLike,
-    userPosts:userPosts,
-    userProfile:userProfile,
-    setUserPosts:setUserPosts,
-    setUserProfile:setUserProfile,
-    setUserId:setUserId,
+    usersPosts: usersPosts,
+    setUsersPosts:setUsersPosts,
+    userProfile: userProfile,
+    setUserProfile: setUserProfile,
+    setUserId: setUserId,
     setError: setError,
     resetState: resetState,
-    isFriend: isFriend,
-    setIsFriend: setIsFriend,  };
+    // userid:userid
+  };
   return (
     <StateContext.Provider value={state}>
       {props.children}

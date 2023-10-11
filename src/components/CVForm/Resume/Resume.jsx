@@ -27,7 +27,6 @@ const Resume = forwardRef((props, ref) => {
     achievement: information[sections.achievement],
     education: information[sections.education],
     basicInfo: information[sections.basicInfo],
-
     other: information[sections.other],
   };
 
@@ -81,7 +80,7 @@ const Resume = forwardRef((props, ref) => {
               )}
               {item.location ? (
                 <p className={styles.date}>
-                  <MapPin /> Remote
+                  <MapPin /> <p className={styles.title}>{item.location}</p>
                 </p>
               ) : (
                 <span />
@@ -322,6 +321,13 @@ const Resume = forwardRef((props, ref) => {
             {info.basicInfo?.detail?.phone ? (
               <a className={styles.link}>
                 <Phone /> {info.basicInfo?.detail?.phone}
+              </a>
+            ) : (
+              <span />
+            )}
+            {info.basicInfo?.detail?.adress ? (
+              <a className={styles.link}>
+                <MapPin /> {info.basicInfo?.detail?.adress}
               </a>
             ) : (
               <span />

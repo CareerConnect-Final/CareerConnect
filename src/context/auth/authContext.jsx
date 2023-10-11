@@ -4,6 +4,7 @@ import cookie from "react-cookies";
 import jwt_decode from "jwt-decode";
 import base64 from "base-64";
 import { createContext, useEffect, useState } from "react";
+import socketService from "../../socket/socket"; // Import the socket service
 /* ---------------- */
 export const AuthContext = React.createContext();
 /* ---------------- */
@@ -103,16 +104,60 @@ function AuthProvider(props) {
     }
   };
 
-  const setLoginState = async (loggedIn, Token, User, error) => {
-    setIsLoggedIn(loggedIn);
-    setToken(Token);
-    setUser(User);
-    setError(error || null);
+  // const setLoginState = async (loggedIn, Token, User, error) => {
+  //   setIsLoggedIn(loggedIn);
+  //   setToken(Token);
+  //   setUser(User);
+  //   setError(error || null);
+  //   cookie.save("auth", Token);
+  //   cookie.save("user", User);
+  //   if (loggedIn) {
+  //     // Connect to Socket.io when the user logs in
+  //     socketService.connect(Token);
+  //   }
+  // };
+const setLoginState = async (loggedIn, Token, User, error) => {
+  setIsLoggedIn(loggedIn);
+  setToken(Token);
+  setUser(User);
+  setError(error || null);
+
+  if (loggedIn) {
+    // Connect to Socket.io when the user logs in
+    socketService.connect(Token);
+  }
+
+  // Save the authentication data in cookies
+  if (loggedIn) {
     cookie.save("auth", Token);
     cookie.save("user", User);
-  };
+  } else {
+    // If not logged in, clear the cookies
+    cookie.remove("auth");
+    cookie.remove("user");
+  }
+};
+
+  
   const logout = () => {
-    setLoginState(false, null, {});
+    socketService.disconnect();
+    setLoginState(false, null, {id:500,   username: "john",
+    password: "Anas1234$",
+    role: "company",
+    firstName: "amazon",
+    lastName: "ami",
+    email: "amazon.alsmadi411@gmail.com",
+    dateOfBirth: "04-11-1994",
+    country: "syria",
+    city: "Daraa",
+    phoneNumber: "0797675634",
+    address: "usa",
+    gender: "male",
+    profilePicture: "https://www.state.gov/wp-content/uploads/2019/04/Japan-2107x1406.jpg",
+    imageForCover: "cover.png",
+    career: "it company",
+    bio: "winter is coming",
+    employed: false});
   };
 
   // +++++++++++++++++ get user posts+++++++++++++++++++++++
@@ -154,7 +199,24 @@ function AuthProvider(props) {
     console.log("user from cookie", user);
     console.log("hi");
     validateToken(token, user);
+
+    const savedSocketId = localStorage.getItem("socketId");
+
+    if (isLoggedIn && savedSocketId) {
+
+      socketService.connect(token, savedSocketId);
+    } else if (isLoggedIn) {
+      // If no saved socket ID, just connect with the token
+      socketService.connect(token);
+    }
+
+    // socketService.onConnect(() => {
+    //   // Handle the socket connection here, if needed
+    // });
   }, []);
+  //************************************************************************************************ */
+
+  //************************************************************************************************ */
 
   const sharedStates = {
     isLoggedIn,

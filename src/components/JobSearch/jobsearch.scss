@@ -10,12 +10,15 @@
     color: themed("textColor");
     margin-bottom: 20px;
 
-    .container {
+    .search-container {
       padding: 20px;
+      display: flex;
+      flex-direction: column;
+      // align-items: ;
       .top {
-        display: flex;
-        align-items: center;
-        gap: 20px;
+        // display: flex;
+        // align-items: center;
+        // gap: 20px;
         img {
           width: 40px;
           height: 40px;
@@ -40,7 +43,7 @@
         background-color: themed("border");
       }
 
-      .bottom {
+      .bottom-search {
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -66,6 +69,9 @@
           }
         }
         .right {
+          display: flex;
+          justify-content: space-between;
+          width: 100%;
           button {
             border: none;
             padding: 5px;
@@ -75,6 +81,14 @@
             border-radius: 3px;
           }
         }
+      }
+      .jobsearch-top{
+        display: flex;
+        justify-content: space-between;
+      }
+      #dropdown{
+        border: solid 1px;
+        border-radius: 5px;
       }
     }
   }

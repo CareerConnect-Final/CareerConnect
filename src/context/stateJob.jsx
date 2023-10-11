@@ -22,6 +22,7 @@ export default function State(props) {
 
   const [error, setError] = useState(null);
   const authToken = cookie.load("auth");
+  const user = cookie.load("user");
 
   const acceptFriendRequest = async (receiver_id) => {
     try {
@@ -64,8 +65,6 @@ export default function State(props) {
   //       Authorization: `Bearer ${authToken}`,
   //     };
 
-     
-        
   //     axios
   //       .get("https://final-backend-nvf1.onrender.com/home/friendsreq", {
   //         headers,
@@ -88,6 +87,27 @@ export default function State(props) {
   //         setError(error);
   //       });
   //   }
+  //   if (authToken === null) {
+  //     throw new Error("Authentication token not found.");
+  //   } else if (authToken != null) {
+  //     const headers = {
+  //       Authorization: `Bearer ${authToken}`,
+  //     };
+  //     axios
+  //       .get(
+  //         "https://final-backend-nvf1.onrender.com/careerjob/followdcompanies",
+  //         {
+  //           headers,
+  //         }
+  //       )
+  //       .then((response) => {
+  //         // console.log("data come comeeeeeeee ");
+  //         setYouFollow(response.data);
+  //       })
+  //       .catch((error) => {
+  //         setError(error);
+  //       });
+  //   }
 
   //   if (authToken === null) {
   //     throw new Error("Authentication token not found.");
@@ -97,7 +117,9 @@ export default function State(props) {
   //     };
 
   //     axios
-  //       .get("https://final-backend-nvf1.onrender.com/careerjob/likes", { headers })
+  //       .get("https://final-backend-nvf1.onrender.com/careerjob/likes", {
+  //         headers,
+  //       })
   //       .then((response) => {
   //         setLikes(response.data);
   //       })
@@ -131,18 +153,54 @@ export default function State(props) {
   //     };
 
   //     axios
-  //       .get("https://final-backend-nvf1.onrender.com/careerjob/jobs", { headers })
+  //       .get("https://final-backend-nvf1.onrender.com/careerjob/jobs", {
+  //         headers,
+  //       })
   //       .then((response) => {
   //         setJobPosts(response.data);
-  //         console.log(response.data)
+  //         // console.log(response.data);
   //       })
   //       .catch((error) => {
   //         setError(error);
   //       });
-  //     }
+  //   }
+  //   if (authToken === null) {
+  //     throw new Error("Authentication token not found.");
+  //   } else if (authToken != null) {
+  //     const headers = {
+  //       Authorization: `Bearer ${authToken}`,
+  //     };
+  //     axios
+  //       .get("https://final-backend-nvf1.onrender.com/home/users", { headers })
+  //       .then((response) => {
+  //         // console.log("job users from job job ")
+  //         setAllUsers(response.data);
+  //       })
+  //       .catch((error) => {
+  //         setError(error);
+  //       });
+  //   }
+  //   if (authToken === null) {
+  //     throw new Error("Authentication token not found.");
+  //   } else if (authToken != null) {
+  //     const headers = {
+  //       Authorization: `Bearer ${authToken}`,
+  //     };
+  //     axios
+  //       .get("https://final-backend-nvf1.onrender.com/home/followers", {
+  //         headers,
+  //       })
+  //       .then((response) => {
+  //         // console.log("data come comeeeeeeee ")
+  //         setFollowers(response.data);
+  //         // console.log(followers)
+  //       })
+  //       .catch((error) => {
+  //        setError(error);
+  //       });
+  //   }
+  // },[] );
 
-  //   // .get("https://final-backend-nvf1.onrender.com/home/comments", { headers })
-  // }, []);
 
 
 
@@ -190,18 +248,18 @@ export default function State(props) {
     setError(null);
   };
   const deletePost = (id) => {
-    let newPosts = state.jobPost.filter((item) => item.id != id);
+    let newPosts = jobPost.filter((item) => item.id != id);
     setJobPosts(newPosts);
   };
   const deleteComment = (id) => {
-    let newComments = state.comments.filter((item) => item.id != id);
+    let newComments = comments.filter((item) => item.id != id);
     setComments(newComments);
   };
   const deleteLike = (id) => {
-    let newLikes = state.likes.filter((item) => item.id != id);
+    let newLikes = likes.filter((item) => item.id != id);
     setLikes(newLikes);
   };
-  console.log(followers)
+  // console.log(followers)
 
   const state = {
     jobPost: jobPost,

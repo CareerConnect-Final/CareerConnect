@@ -38,10 +38,25 @@ import { v4 } from "uuid";
 
 function LoginPage(props) {
   const user=cookie.load("user")
+  const [profilePhotoUrl, setProfilePhotoUrl] = useState("");
+  const [coverPhotoUrl, setCoverPhotoUrl] = useState("");
 
-
-
-
+  const handleAddProfilePhoto = (e) => {
+    const imageRef = ref(storage, `profile/${e.name + v4()}`);
+    uploadBytes(imageRef, e).then((snapshot) => {
+    getDownloadURL(snapshot.ref).then( (url) => {
+      setProfilePhotoUrl(url)
+    })
+  })
+  }
+  const handleAddCoverPhoto = (e) => {
+    const imageRef = ref(storage, `cover/${e.name + v4()}`);
+    uploadBytes(imageRef, e).then((snapshot) => {
+    getDownloadURL(snapshot.ref).then( (url) => {
+      setCoverPhotoUrl(url)
+    })
+  })
+  }
 
   const initialValuesRegister = {
     firstName: "",
@@ -95,8 +110,8 @@ function LoginPage(props) {
         phoneNumber,
         address,
         gender,
-        profilePicture,
-        imageForCover,
+        profilePicture= profilePhotoUrl,
+        imageForCover= coverPhotoUrl,
         career,
         bio,
         companyName,
@@ -128,17 +143,37 @@ function LoginPage(props) {
     setLoading(false);
   };
 
-  const loginHandler = async (values, onSubmitProps) => {
-    setLoading(true);
-    try {
-      const { username, password } = values;
-      const loggedInResponse = await login(username, password);
-      onSubmitProps.resetForm();
-    } catch (err) {
-      console.error(err);
-    }
-    setLoading(false);
-  };
+  // const loginHandler = async (values, onSubmitProps) => {
+  //   setLoading(true);
+  //   try {
+  //     const { username, password } = values;
+  //     const loggedInResponse = await login(username, password);
+  //     onSubmitProps.resetForm();
+  //     window.location.reload();
+
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  //   setLoading(false);
+  // };
+
+
+  
+    const loginHandler = async (values, onSubmitProps) => {
+      setLoading(true);
+      try {
+        const { username, password } = values;
+        await login(username, password);
+        onSubmitProps.resetForm();
+        
+        // Navigate to the home page and reload
+        navigate("/");
+        window.location.reload();
+      } catch (err) {
+        console.error(err);
+      }
+      setLoading(false);
+    };
 
   const handleFormSubmit = async (values, onSubmitProps) => {
     if (isRegister) await registerHandler(values, onSubmitProps);
@@ -381,10 +416,8 @@ function LoginPage(props) {
                           accept="image/*"
                           style={{ display: "none" }}
                           onChange={(event) => {
-                            setFieldValue(
-                              "profilePicture",
-                              event.currentTarget.files[0]
-                            );
+                            // setProfileImageUpload(event.currentTarget.files[0]);
+                            handleAddProfilePhoto(event.currentTarget.files[0]);
                           }}
                         />
                         <Paper
@@ -434,10 +467,7 @@ function LoginPage(props) {
                           accept="image/*"
                           style={{ display: "none" }}
                           onChange={(event) => {
-                            setFieldValue(
-                              "imageForCover",
-                              event.currentTarget.files[0]
-                            );
+                            handleAddCoverPhoto(event.currentTarget.files[0]);
                           }}
                           onBlur={handleBlur}
                         />
@@ -489,12 +519,12 @@ function LoginPage(props) {
                     m: "2rem 0",
                     p: "0.8rem",
                     backgroundColor: palette.primary.main,
-                    color: palette.background.alt,
+                    color: "white",
                     "&:hover": { color: palette.primary.main },
                   }}
                 >
                   {loading ? (
-                    <CircularProgress size={22} />
+                    <CircularProgress  size={22} />
                   ) : isLogin ? (
                     "LOGIN"
                   ) : (

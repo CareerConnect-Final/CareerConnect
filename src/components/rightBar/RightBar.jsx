@@ -17,6 +17,8 @@ const RightBar = () => {
   const authToken = cookie.load("auth");
   const location = useLocation().pathname.slice(1);
   const [pageType, setPageType] = useState(location);
+
+  // {console.log(pageType)}
   const [send, setSend] = useState({});
   const state = useContext(StateContext);
   const stateJob = useContext(JobContext);
@@ -25,11 +27,11 @@ const RightBar = () => {
   };
   const handleSendFriendRequest = (userId) => {
     const obj = {
-      sender_id: userToken.id,
-      username: userToken.username,
-      profilePicture: userToken.profilePicture,
+      sender_id: userToken?.id,
+      username: userToken?.username,
+      profilePicture: userToken?.profilePicture,
       receiver_id: userId,
-      message: `${userToken.username} sent you a friend request`,
+      message: `${userToken?.username} sent you a friend request`,
     };
     axios
       .post(
@@ -100,22 +102,20 @@ const RightBar = () => {
     useContext(StateContext);
   return (
     <>
-      {pageType === "job" && userToken.role === "company" && (
+      {pageType === "job" && userToken?.role === "company" && (
         <div className="rightBar">
           <div className="container">
             <div className="item">
               <span>People with same career</span>
               {stateJob.allUsers.map((user) => {
                 if (
-                  user.career === "web developer" &&
-                  userToken.career === "web developer" &&
-                  user.role == "user"
+                  user.career === userToken.career && user.role == "user"
                 ) {
                   return (
                     <div key={user.id} className="user">
                       <div className="userInfo">
                         <img
-                          src={user.profilePicture}
+                          src={user?.profilePicture}
                           alt=""
                         />
                       <Link
@@ -124,7 +124,7 @@ const RightBar = () => {
                         >
                           <span>{user.username}</span>
                         </Link>
-                      </div>   
+                      </div>
                     </div>
                   );
                 }
@@ -137,18 +137,14 @@ const RightBar = () => {
                   return (
                     <div key={user.id} className="user">
                       <div className="userInfo">
-                        <img
-                          src={user.profilePicture}
-                          alt=""
-                        />
-                      <Link
+                        <img src={user.profilePicture} alt="" />
+                        <Link
                           to={`/profile/${user.id}`}
                           style={{ textDecoration: "none", color: "inherit" }}
                         >
                           <span>{user.username}</span>
                         </Link>
                       </div>
-      
                     </div>
                   );
                 }
@@ -157,14 +153,14 @@ const RightBar = () => {
           </div>
         </div>
       )}
-      {pageType === "job" && userToken.role === "user" && (
+      {pageType === "job" && userToken?.role === "user" && (
         <div className="rightBar">
           <div className="container">
             <div className="item">
               <span>Related Companies</span>
               {stateJob.allUsers.map((user) => {
                 if (
-                  user.career === "web developer" &&
+                  user.career === userToken.career &&
                   user.role == "company" &&
                   !stateJob.youFollow.find(
                     (follower) => follower.receiver_id === user.id
@@ -173,10 +169,7 @@ const RightBar = () => {
                   return (
                     <div key={user.id} className="user">
                       <div className="userInfo">
-                        <img
-                          src={user.profilePicture}
-                          alt=""
-                        />
+                        <img src={user.profilePicture} alt="" />
                         <Link
                           to={`/profile/${user.id}`}
                           style={{ textDecoration: "none", color: "inherit" }}
@@ -221,11 +214,8 @@ const RightBar = () => {
                   return (
                     <div key={user.id} className="user">
                       <div className="userInfo">
-                        <img
-                          src={user.profilePicture}
-                          alt=""
-                        />
-                       <Link
+                        <img src={user.profilePicture} alt="" />
+                        <Link
                           to={`/profile/${user.id}`}
                           style={{ textDecoration: "none", color: "inherit" }}
                         >
@@ -251,8 +241,8 @@ const RightBar = () => {
           </div>
         </div>
       )}
-
-      {pageType === "" && userToken.role === "user" && (
+  
+      {pageType === "" && userToken?.role === "user" && (
         <div className="rightBar">
           <div className="container">
             <div className="item">
@@ -260,16 +250,16 @@ const RightBar = () => {
               {console.log(friendRequests)}
               {friendRequests.map((request) =>       
                 request.status === "pending" &&
-                userToken.id !== request.sender_id ? (
+                userToken?.id !== request.sender_id ? (
                   <div key={request.id} className="user">
                     <div className="userInfo">
                       <img src={request.profilePicture} alt="" />
                       <Link
-                          to={`/profile/${request.sender_id}`}
-                          style={{ textDecoration: "none", color: "inherit" }}
-                        >
-                          <span>{request.username}</span>
-                        </Link>
+                        to={`/profile/${request.sender_id}`}
+                        style={{ textDecoration: "none", color: "inherit" }}
+                      >
+                        <span>{request.username}</span>
+                      </Link>
                     </div>
                     <div className="buttons">
                       <button
@@ -292,16 +282,13 @@ const RightBar = () => {
               {state.allUsers.map((user) => {
                 if (
                   user.role === "user" &&
-                  userToken.id !== user.id &&
+                  userToken?.id !== user.id &&
                   !state.myFriends.find((friend) => friend.id === user.id)
                 ) {
                   return (
                     <div key={user.id} className="user">
                       <div className="userInfo">
-                        <img
-                          src={user.profilePicture}
-                          alt=""
-                        />
+                        <img src={user.profilePicture} alt="" />
                         <Link
                           to={`/profile/${user.id}`}
                           style={{ textDecoration: "none", color: "inherit" }}
@@ -331,40 +318,36 @@ const RightBar = () => {
                 }
                 return null; // Exclude users who are already friends
               })}
-            </div>      
+            </div>
+
+            {/* {send[user.id] ? "Pending" : "Add Friend"} */}
           </div>
         </div>
       )}
-      {pageType === "" && userToken.role === "company" && (
+      {pageType === "" && userToken?.role === "company" && (
         <div className="rightBar">
           <div className="container">
             <div className="item">
               <span>People with same career</span>
               {state.allUsers.map((user) => {
-                if (
-                  user.career === "web developer" &&
-                  userToken.career === "web developer" &&
-                  user.role == "user"
-                ) {
+                if (user.career === userToken.career && user.role == "user") {
                   return (
                     <div key={user.id} className="user">
                       <div className="userInfo">
-                        <img
-                          src={user.profilePicture}
-                          alt=""
-                        />
-                            <Link
+                        <img src={user.profilePicture} alt="" />
+                        <Link
                           to={`/profile/${user.id}`}
                           style={{ textDecoration: "none", color: "inherit" }}
                         >
                           <span>{user.username}</span>
                         </Link>
-                      </div>       
+                      </div>
                     </div>
                   );
                 }
               })}
             </div>
+
             <div className="item">
               <span>Followers</span>
               {state.followers.map((user) => {             
@@ -372,11 +355,8 @@ const RightBar = () => {
                   return (
                     <div key={user.id} className="user">
                       <div className="userInfo">
-                        <img
-                          src={user.profilePicture}
-                          alt=""
-                        />
-                              <Link
+                        <img src={user.profilePicture} alt="" />
+                        <Link
                           to={`/profile/${user.id}`}
                           style={{ textDecoration: "none", color: "inherit" }}
                         >
@@ -392,10 +372,116 @@ const RightBar = () => {
          </div>
         </div>
       )}
-    {console.log(userId)}
+      {/* {console.log(userId)} */}
+      {/* {pageType === `profile/${userId}` &&(
+        <div className="rightBar">
+          <div className="container">
+            <div className="item">
+              <span>People with same career</span>
+              {stateJob.allUsers.map((user) => {
+                if (
+                  user.career === "web developer" &&
+                  userToken.career === "web developer" &&
+                  user.role == "user"
+                ) {
+                  return (
+                    <div key={user.id} className="user">
+                      <div className="userInfo">
+                        <img
+                          src={user.profilePicture}
+                          alt=""
+                        />
+                           <Link
+                          to={`/profile/${user.id}`}
+                          style={{ textDecoration: "none", color: "inherit" }}
+                        >
+                          <span>{user.username}</span>
+                        </Link>
+                      </div>
+        
+                    </div>
+                  );
+                }
+              })}
+            </div>
+            <div className="item">
+              <span>Followers</span>
+              {stateJob.followers.map((user) => {
+                //  if (
+                //    user.role === "user" && userToken.id!==user.id&&
+                //    !state.myFriends.find((friend) => friend.id === user.id)
+                //  )
+                {
+                  return (
+                    <div key={user.id} className="user">
+                      <div className="userInfo">
+                        <img
+                          src={user.profilePicture}
+                          alt=""
+                        />
+                             <Link
+                          to={`/profile/${user.id}`}
+                          style={{ textDecoration: "none", color: "inherit" }}
+                        >
+                          <span>{user.username}</span>
+                        </Link>
+                      </div>
+        
+                    </div>
+                  );
+                }
+                // return null; // Exclude users who are already friends
+              })}
+            
+            </div>
+
+   
+          </div>
+        </div>
+      )} */}
+
+      {/* {pageType === `profile/${userId}` && (
+  <div className="rightBar">
+    <div className="container">
+      <div className="item">
+        <span>People with the same career</span>
+        {stateJob.allUsers.map((user) => {
+          if (
+            user.career === "web developer" &&
+            userToken.career === "web developer" &&
+            user.role == "user"
+          ) {
+            return (
+              <div key={user.id} className="user">
+                <div className="userInfo">
+                  <img
+                    src={user.profilePicture}
+                    alt=""
+                  />
+                  <Link
+                    to={`/profile/${user.id}`}
+                    style={{ textDecoration: "none", color: "inherit" }}
+                  >
+                    <span>{user.username}</span>
+                  </Link>
+                </div>
+              </div>
+            );
+          }
+          return null;
+        })}
+      </div>
+      <div className="item">
+        <span>Followers</span>
+        {stateJob.followers && stateJob.followers.map((user) => {
+          // Your mapping logic here
+        })}
+      </div>
+    </div>
+  </div>
+)} */}
     </>
   );
 };
 
 export default RightBar;
-

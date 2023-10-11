@@ -10,7 +10,7 @@ import cookie from "react-cookies";
 const JobPage = () => {
   const user = cookie.load("user");
   const authToken = cookie.load("auth");
-  const state = useContext(JobContext);
+  const stateJob = useContext(JobContext);
   useEffect(() => {
     if (authToken === null) {
       throw new Error("Authentication token not found.");
@@ -24,10 +24,10 @@ const JobPage = () => {
           headers,
         })
         .then((response) => {
-          state.setFriendRequests(response.data);
+          stateJob.setFriendRequests(response.data);
         })
         .catch((error) => {
-          state.setError(error);
+          stateJob.setError(error);
         });
 
       axios
@@ -35,10 +35,10 @@ const JobPage = () => {
           headers,
         })
         .then((response) => {
-          state.setMyFriends(response.data);
+          stateJob.setMyFriends(response.data);
         })
         .catch((error) => {
-          state.setError(error);
+          stateJob.setError(error);
         });
     }
     if (authToken === null) {
@@ -48,16 +48,20 @@ const JobPage = () => {
         Authorization: `Bearer ${authToken}`,
       };
       axios
-        .get("https://final-backend-nvf1.onrender.com/careerjob/followdcompanies", {
-          headers,
-        })
+        .get(
+          "https://final-backend-nvf1.onrender.com/careerjob/followdcompanies",
+          {
+            headers,
+          }
+        )
         .then((response) => {
-          state.setYouFollow(response.data);
+          console.log("data come comeeeeeeee ");
+          stateJob.setYouFollow(response.data);
         })
         .catch((error) => {
-          state.setError(error);
+          stateJob.setError(error);
         });
-      }
+    }
 
     if (authToken === null) {
       throw new Error("Authentication token not found.");
@@ -71,10 +75,10 @@ const JobPage = () => {
           headers,
         })
         .then((response) => {
-          state.setLikes(response.data);
+          stateJob.setLikes(response.data);
         })
         .catch((error) => {
-          state.setError(error);
+          stateJob.setError(error);
         });
     }
     if (authToken === null) {
@@ -89,10 +93,10 @@ const JobPage = () => {
           headers,
         })
         .then((response) => {
-          state.setComments(response.data);
+          stateJob.setComments(response.data);
         })
         .catch((error) => {
-          state.setError(error);
+          stateJob.setError(error);
         });
     }
     if (authToken === null) {
@@ -107,10 +111,11 @@ const JobPage = () => {
           headers,
         })
         .then((response) => {
-          state.setJobPosts(response.data);
+          stateJob.setJobPosts(response.data);
+          // console.log(response.data);
         })
         .catch((error) => {
-          state.setError(error);
+          stateJob.setError(error);
         });
     }
     if (authToken === null) {
@@ -122,41 +127,45 @@ const JobPage = () => {
       axios
         .get("https://final-backend-nvf1.onrender.com/home/users", { headers })
         .then((response) => {
-          state.setAllUsers(response.data);
+          // console.log("job users from job job ")
+          stateJob.setAllUsers(response.data);
         })
         .catch((error) => {
-          state.setError(error);
+          stateJob.setError(error);
         });
-      }
-      if (authToken === null) {
-        throw new Error("Authentication token not found.");
-      } else if (authToken != null) {
-        const headers = {
-          Authorization: `Bearer ${authToken}`,
-        };
-        axios
-          .get("https://final-backend-nvf1.onrender.com/home/followers", {
-            headers,
-          })
-          .then((response) => {
-            state.setFollowers(response.data);
-          })
-          .catch((error) => {
-            state.setError(error);
-          });
-        }
+    }
+    if (authToken === null) {
+      throw new Error("Authentication token not found.");
+    } else if (authToken != null) {
+      const headers = {
+        Authorization: `Bearer ${authToken}`,
+      };
+      axios
+        .get("https://final-backend-nvf1.onrender.com/home/followers", {
+          headers,
+        })
+        .then((response) => {
+          // console.log("data come comeeeeeeee ")
+          stateJob.setFollowers(response.data);
+          // console.log(stateJob.followers)
+        })
+        .catch((error) => {
+          stateJob.setError(error);
+        });
+    }
   }, []);
 
   return (
     <div className="home">
-      {user.role === "company" &&
+      {/* <Stories/> */}
+      {user?.role === "company" &&
       (<>
             <Share />
             <JobPosts />
         </>
       )
       }
-      {user.role !== "company" &&
+      {user?.role !== "company" &&
             <JobSearch />
       }
     </div>
