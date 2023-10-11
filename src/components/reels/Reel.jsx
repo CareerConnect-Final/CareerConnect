@@ -1,6 +1,8 @@
 import React, { useRef, useState, useEffect, useContext } from "react";
 import cookie from "react-cookies";
 import { StateContext } from "../../context/state";
+import { Link } from "react-router-dom";
+
 import axios from "axios";
 import "./reel.scss";
 import { AuthContext } from "../../context/auth/authContext";
@@ -125,6 +127,22 @@ export default function Reel(props) {
           </Button>
         </Modal.Footer>
       </Modal>
+
+
+       {/* <div className="user">
+              <div className="userInfo">
+                  <img
+                    src={props.profilePicture}
+                    alt=""
+                  />
+                <Link
+                    to={`/profile/${user.id}`}
+                    style={{ textDecoration: "none", color: "inherit" }}
+                  >
+                    <span>{props.username}</span>
+                    </Link>
+                    </div>
+                    </div> */}
 
       <video
         loop
