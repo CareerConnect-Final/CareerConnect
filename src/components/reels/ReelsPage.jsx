@@ -37,8 +37,9 @@ const ReelsPage = () => {
               <Reel
                 key={i}
                 url={list.video}
+                username={list.username}
+                profilePicture={list.profilePicture}
                 reelId={list.id}
-                user={list.username}
               />
             ))}
           </div>

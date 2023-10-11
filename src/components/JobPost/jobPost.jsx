@@ -7,9 +7,10 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { Link } from "react-router-dom";
 import CommentsJob from "../jobComments/CommentsJob";
 import { useState, useContext, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import {JobContext}  from "../../context/stateJob";
-// import PostModal from "../postModal/PostModal";
+import { JobContext } from "../../context/stateJob";
+import socketService from "../../socket/socket";
 import cookie from "react-cookies";
 import JobModal from "../jobModal/jobModal";
 
@@ -18,7 +19,7 @@ const JobPosts = (props) => {
   const authToken = cookie.load("auth");
 
   const state = useContext(JobContext);
-
+  const navigate = useNavigate();
   const [commentOpen, setCommentOpen] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -40,7 +41,7 @@ const JobPosts = (props) => {
     setShowModal(false);
   };
   const handleLikeClick = () => {
-    console.log(state.likes)
+    console.log(state.likes);
     const userLike = state.likes.find(
       (like) => like.job_id === props.post.id && user?.id === like.user_id
     );
@@ -48,11 +49,11 @@ const JobPosts = (props) => {
     const headers = {
       Authorization: `Bearer ${authToken}`,
     };
-    
+
     if (userLike) {
       const likeId = userLike.id;
-      console.log(likeId)
-      console.log(userLike.id)
+      console.log(likeId);
+      console.log(userLike.id);
       const headers = {
         Authorization: `Bearer ${authToken}`,
       };
@@ -79,23 +80,22 @@ const JobPosts = (props) => {
           headers,
         })
         .then((data) => {
-          state.addLike(data.data); 
-
-
+          state.addLike(data.data);
         })
         .catch((error) => {
           console.error("Error", error);
         });
     }
   };
-  
+
   const handleDelete = (id) => {
-    
     const headers = {
       Authorization: `Bearer ${authToken}`,
     };
     axios
-      .delete(`https://final-backend-nvf1.onrender.com/careerjob/jobs/${id}`,{headers})
+      .delete(`https://final-backend-nvf1.onrender.com/careerjob/jobs/${id}`, {
+        headers,
+      })
       .then(() => {
         state.deletePost(id);
         // console.log('delete job post')
@@ -104,18 +104,96 @@ const JobPosts = (props) => {
         console.error("Error", error);
       });
   };
+  /*-------------------------------------------------------------------- */
+  const isCompany = user.role == "company";
+  const isOwner = props.post.user_id == user.id;
+  const [applicants, setApplicants] = useState([]); // State to store applicants
+  const [showApplicantsList, setShowApplicantsList] = useState(false);
+  const [myCv, setMyCv] = useState("");
 
+  const handleGetCVAndApply = (e) => {
+    const userId = user.id;
+    console.log("====>>>>", userId);
 
+    if (authToken === null) {
+      throw new Error("Authentication token not found.");
+    } else if (authToken != null) {
+      const headers = {
+        Authorization: `Bearer ${authToken}`,
+      };
 
-  // console.log(props.post)
+      axios
+        .get(`https://final-backend-nvf1.onrender.com/home/cv/${userId}`, {
+          headers,
+        })
+        .then((response) => {
+          setMyCv(response.data);
+          console.log("====>>>>", userId);
+          console.log("cdcdcdcdcdc", response.data);
+          console.log("cdcdcdcdcdc", myCv);
+          handleApply(myCv);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  };
+
+  const handleApply = (cvData) => {
+    // Receive cvData as an argument
+    const jobId = props.post.id;
+
+    const headers = {
+      Authorization: `Bearer ${authToken}`,
+    };
+
+    const userCvData = {
+      cv_link: cvData, // Now you have access to cvData
+      // Include any other necessary fields from userCv
+    };
+
+    axios
+      .post(
+        `https://final-backend-nvf1.onrender.com/home/applyjob/${jobId}`,
+        userCvData,
+        {
+          headers,
+        }
+      )
+      .then((response) => {
+        // Handle the response here, e.g., show a success message
+        console.log("Applied successfully:", response.data);
+      })
+      .catch((error) => {
+        // Handle errors, e.g., show an error message
+        console.error("Error while applying:", error);
+      });
+    const sentData = {
+      senderId: user.id,
+      senderName: user.username,
+      profilePicture: user.profilePicture,
+      receiverId: props.post.user_id,
+      message: `${user.username} has applied to your job post`,
+      jobPostId: jobId,
+    };
+    socketService.socket.emit("applyJob", sentData);
+  };
+
+  const handleShowApplicants = () => {
+    const jobId = props.post.id; // The ID of the job for which you want to fetch applicants
+
+    if (isCompany && isOwner) {
+      navigate(`/applicants/${jobId}`);
+    }
+  };
+
   return (
     <div className="post">
       <div className="container">
         <div className="user">
           <div className="userInfo">
-           {user ? <img src={props.post.profilePicture} alt="" /> :""}
+            {user ? <img src={props.post.profilePicture} alt="" /> : ""}
             <div className="details">
-           
               <Link
                 to={`/profile/${props.post.user_id}`}
                 style={{ textDecoration: "none", color: "inherit" }}
@@ -151,59 +229,66 @@ const JobPosts = (props) => {
         </div>
 
         <div className="content-job">
-
-         <div className="cont-cont">
-         <div className="cont-post"> Title : </div> 
-         <p>{ props.post.job_title}</p>
-         </div>
-         <div className="cont-cont">
-         <div className="cont-post"> Field : </div> 
-         <p>{props.post.job_field}</p>
-         </div>
-         <div className="cont-cont">
-         <div className="cont-post"> City : </div> 
-         <p>{props.post.job_city}</p>
-         </div>
-         <div className="cont-cont">
-         <div className="cont-post1"> Description : </div> 
-         <p>{props.post.content}</p>
-         </div>
-
+          <div className="cont-cont">
+            <div className="cont-post"> Title : </div>
+            <p>{props.post.job_title}</p>
+          </div>
+          <div className="cont-cont">
+            <div className="cont-post"> Field : </div>
+            <p>{props.post.job_field}</p>
+          </div>
+          <div className="cont-cont">
+            <div className="cont-post"> City : </div>
+            <p>{props.post.job_city}</p>
+          </div>
+          <div className="cont-cont">
+            <div className="cont-post1"> Description : </div>
+            <p>{props.post.content}</p>
+          </div>
 
           <img
-            src={props.post.photo
+            src={
+              props.post.photo
               // "https://images.pexels.com/photos/4881619/pexels-photo-4881619.jpeg?auto=compress&cs=tinysrgb&w=1600"
             }
             alt=""
           />
         </div>
         <div className="info">
-        <div className="share-pst">
-            
-           
-          <div className="item" onClick={handleLikeClick}>
-            {state.likes.filter(
-              (like) =>
-                like.job_id === props.post.id && user?.id === like.user_id
-            ).length > 0 ? (
-              <FavoriteOutlinedIcon style={{ color: "red" }} />
-            ) : (
-              <FavoriteBorderOutlinedIcon />
-            )}
+          <div className="share-pst">
+            <div className="item" onClick={handleLikeClick}>
+              {state.likes.filter(
+                (like) =>
+                  like.job_id === props.post.id && user?.id === like.user_id
+              ).length > 0 ? (
+                <FavoriteOutlinedIcon style={{ color: "red" }} />
+              ) : (
+                <FavoriteBorderOutlinedIcon />
+              )}
 
-            {likesCount}
-          </div>
-          <div className="item" onClick={() => setCommentOpen(!commentOpen)}>
-            <TextsmsOutlinedIcon />
-            {commentCount}
-          </div>
-          <div className="item">
-            <ShareOutlinedIcon />
-            Share
-          </div>
+              {likesCount}
+            </div>
+            <div className="item" onClick={() => setCommentOpen(!commentOpen)}>
+              <TextsmsOutlinedIcon />
+              {commentCount}
+            </div>
+            <div className="item">
+              <ShareOutlinedIcon />
+              Share
+            </div>
           </div>
           <div className="aply-btn">
-            <button> Apply</button>
+            {!isCompany && !isOwner ? (
+              <button onClick={() => handleGetCVAndApply()}>Apply</button>
+            ) : null}
+          </div>
+
+          <div className="aply-btn">
+            {isCompany && isOwner ? (
+              <button onClick={() => handleShowApplicants()}>
+                Show Applicants
+              </button>
+            ) : null}
           </div>
         </div>
         {commentOpen && (
