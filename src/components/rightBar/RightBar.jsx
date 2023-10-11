@@ -17,7 +17,7 @@ const RightBar = () => {
   const location = useLocation().pathname.slice(1);
   const [pageType, setPageType] = useState(location);
   
-  {console.log(pageType)}
+  // {console.log(pageType)}
   const [send, setSend] = useState({});
   // console.log(pageType);
   const state = useContext(StateContext);
@@ -241,7 +241,7 @@ const RightBar = () => {
           <div className="container">
             <div className="item">
               <span>Friends requests</span>
-              {console.log(friendRequests)}
+              {/* {console.log(friendRequests)} */}
               {friendRequests.map((request) =>
             
                 request.status === "pending" &&

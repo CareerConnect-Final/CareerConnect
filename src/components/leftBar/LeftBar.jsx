@@ -45,15 +45,21 @@ const LeftBar = () => {
     <div className="leftBar">
       <div className="container">
         <div className="menu">
-          <div className="user">
-            <img src={user.profilePicture} alt="" />
-            <Link
-              to={`/profile/${user.id}`}
-              style={{ textDecoration: "none", color: "inherit" }}
-            >
-              <span>{user.username}</span>
-            </Link>
-          </div>
+        <div className="user">
+  {user ? (
+    <>
+      <img src={user.profilePicture || null} alt="" />
+      <Link
+        to={`/profile/${user.id}`}
+        style={{ textDecoration: "none", color: "inherit" }}
+      >
+        <span>{user.username}</span>
+      </Link>
+    </>
+  ) : (
+    <span>Guest User</span>
+  )}
+</div>
           <div className="item" onClick={toggleFriendsList}>
             <img src={Friends} alt="" />
             <span>Friends</span>
