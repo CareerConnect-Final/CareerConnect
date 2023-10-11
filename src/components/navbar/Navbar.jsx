@@ -44,10 +44,13 @@ import { StateContext } from "../../context/state";
 import { JobContext } from "../../context/stateJob";
 
 const Navbar = () => {
+  const user= cookie.load("user")
   const state = useContext(StateContext);
   const stateJob = useContext(JobContext);
   const { toggle, darkMode } = useContext(DarkModeContext);
   const { currentUser, logout } = useContext(AuthContext);
+  const [search, setSearch] = useState("");
+  const [userNames, setUserNames] = useState([]);
   const navigate = useNavigate();
   const authToken = cookie.load("auth");
   const handleSignOut = async () => {
@@ -56,7 +59,8 @@ const Navbar = () => {
       state.resetState();
 
       await logout();
-      navigate("/login");
+
+        navigate("/login");
     } catch (error) {
       console.error("Error signing out:", error);
     }
@@ -96,7 +100,9 @@ const Navbar = () => {
 
     fetchExistingNotifications();
   }, []); // Empty dependency array means this effect runs once when the component mounts
-
+  const handleChange = (e) => {
+    setSearch(e.target.value);
+  };
   useEffect(() => {
     // Split notifications into seen and unseen
     const seen = [];
@@ -209,19 +215,32 @@ const Navbar = () => {
     };
   }, []);
 
-  const [searchQuery, setSearchQuery] = useState("");
-  const [users, setUsers] = useState([]);
-
   const handleSearch = async () => {
-    try {
-      const response = await axios.get(
-        `https://final-backend-nvf1.onrender.com/home/users`
-      );
+    if (authToken === null) {
+      throw new Error("Authentication token not found.");
+    } else {
+      try {
+        const headers = {
+          Authorization: `Bearer ${authToken}`,
+        };
 
-      setUsers(response.data);
-      users.map((user) => console.log(user.username));
-    } catch (error) {
-      console.error("Error searching users:", error);
+        const response = await axios.get(
+          `https://final-backend-nvf1.onrender.com/home/users`,
+          {
+            headers,
+          }
+        );
+
+        setUserNames(response.data);
+        state.setLoading(false);
+      } catch (error) {
+        console.error("Error searching users:", error);
+      }
+      //   // setUsers(response.data);
+      //   // users.map((user) => console.log(user.username));
+      // } catch (error) {
+      //   console.error("Error searching users:", error);
+      // }
     }
   };
   const openNotifications = () => {
@@ -232,6 +251,7 @@ const Navbar = () => {
   const closeNotifications = () => {
     setIsNotificationsOpen(false);
   };
+
   return (
     <>
       {" "}
@@ -251,14 +271,44 @@ const Navbar = () => {
           <Link to="/job" style={{ textDecoration: "none", color: "inherit" }}>
             <WorkOutlineIcon />{" "}
           </Link>
-          <div className="search">
-            <SearchOutlinedIcon onClick={handleSearch} />
+          <div className="search" onClick={handleSearch}>
+            <SearchOutlinedIcon />
+
             <input
               type="text"
               placeholder="Search..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              value={search}
+              onChange={handleChange}
             />
+            {/* {console.log(search)} */}
+            {search && (
+              <div className="search-results">
+                {userNames
+                  .filter((user) =>
+                    user.username.toLowerCase().includes(search.toLowerCase())
+                  )
+                  .map((user) => (
+                    <ul key={user.id} className="list-group">
+                      <Link
+                        to={`/profile/${user.id}`}
+                        style={{ textDecoration: "none", color: "inherit" }}
+                      >
+                        {" "}
+                        <li className="search-result-item list-group-item">
+                          {user.username}
+                        </li>{" "}
+                      </Link>
+
+                      <img
+                        src={user.profilePicture}
+                        alt={`Profile Picture of ${user.username}`}
+                        className="user-photo"
+                      />
+        
+                    </ul>
+                  ))}
+              </div>
+            )}
           </div>
         </div>
         <div className="right">
@@ -277,8 +327,8 @@ const Navbar = () => {
             )}{" "}
           </NotificationsOutlinedIcon>
           <div className="user">
-            <img src={currentUser.profilePic} alt="" />
-            <span>{currentUser.name}</span>
+            <img src={currentUser?.profilePicture} alt="" />
+            <span>{currentUser?.name}</span>
           </div>
           <button className="sign-out" onClick={handleSignOut}>
             Sign Out

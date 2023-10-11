@@ -41,7 +41,7 @@ import LoginPage from "./pages/loginPage/loginPage";
 import CVForm from "./components/CVForm/CVForm";
 import PrivateRoute from "./pages/loginPage/redirect";
 // import AuthComponent from "./components/AuthComponent /AuthComponent ";
-// import Main from "./components/Landing/src/Main";
+import Main from "./components/Landing/src/Main";
 function AuthenticatedLayout() {
   const { darkMode } = useContext(DarkModeContext);
 
@@ -67,6 +67,39 @@ function Cv() {
       <PrivateRoute />
       <Navbar />
       <Outlet />
+    </div>
+  );
+}
+function Prof() {
+  const { darkMode } = useContext(DarkModeContext);
+
+  return (
+    <div className={`theme-${darkMode ? "dark" : "light"}`}>
+      {/* <PrivateRoute /> */}
+      <Navbar />
+      <div style={{ display: "flex" }}>
+        <LeftBar />
+        <div style={{ flex: 6 }}>
+          <Outlet />
+        </div>
+      </div>
+    </div>
+  );
+}
+function Jobs() {
+  const { darkMode } = useContext(DarkModeContext);
+
+  return (
+    <div className={`theme-${darkMode ? "dark" : "light"}`}>
+      <PrivateRoute />
+      <Navbar />
+      <div style={{ display: "flex" }}>
+        <LeftBar />
+        <div style={{ flex: 6 }}>
+          <Outlet />
+        </div>
+        <RightBar />
+      </div>
     </div>
   );
 }
@@ -132,15 +165,12 @@ function App() {
           path="/register"
           element={!isLoggedIn ? <LoginPage /> : <Navigate to="/" />}
         />
-        {/* <Route path="/reels" element={<ReelsPage />} /> */}
 
         <Route path="/jobsearch" element={<JobSearch />} />
-        {/* <Route path="/landing" element={<Main />} /> */}
-        {/* <Route path="/AuthComponent" element={<AuthComponent />} /> */}
-
+        <Route path="/landing" element={<Main />} />
         <Route path="/" element={<AuthenticatedLayout />}>
           <Route index element={<Home />} />
-          <Route path="/profile/:userId" element={<Profile />} />
+          {/* <Route path="/profile/:userId" element={<Profile />} /> */}
           <Route path="/chats" element={<ChatsPage />} />
           <Route path="/job" element={<JobPage />} />
           <Route path="/post/:postId" element={<NPost />} />
@@ -155,6 +185,12 @@ function App() {
         </Route>
         <Route path="/applicant/:jobId/:sender_id" element={<Ap />}>
           <Route index element={<ApplicantPage />} />
+        </Route>
+        <Route path="/profile/:userId" element={<Prof />}>
+          <Route index element={<Profile />} />
+        </Route>
+        <Route path="/job" element={<Jobs />}>
+          <Route index element={<JobPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

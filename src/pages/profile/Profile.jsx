@@ -1,9 +1,5 @@
 import "./profile.scss";
-import FacebookTwoToneIcon from "@mui/icons-material/FacebookTwoTone";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
-import InstagramIcon from "@mui/icons-material/Instagram";
-import PinterestIcon from "@mui/icons-material/Pinterest";
-import TwitterIcon from "@mui/icons-material/Twitter";
 import PlaceIcon from "@mui/icons-material/Place";
 import LanguageIcon from "@mui/icons-material/Language";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
@@ -15,9 +11,10 @@ import Posts from "../../components/posts/Posts";
 import { useContext, useEffect, useState } from "react";
 import Post from "../../components/post/Post";
 import axios from "axios";
-import { useLocation, useNavigate } from "react-router-dom";
+// import { useLocation, useNavigate } from "react-router-dom";
 import cookie from "react-cookies";
 import { useParams } from "react-router-dom";
+import ProfileModal from "./ProfileModal";
 
 import {
   ref,
@@ -34,26 +31,122 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
 const Profile = () => {
-  const [resumeUpload, setResumeUpload] = useState(""); ///
+  const [resumeUpload, setResumeUpload] = useState("");
   const [show, setShow] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const [myCv, setMyCv] = useState("");
   const { userId } = useParams();
-  console.log("====>>>>", userId);
+  // console.log("====>>>>", userId);
 
+  const authToken = cookie.load("auth");
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-
   const state = useContext(StateContext);
 
   const cookieToken = cookie.load("auth");
   const cookieUser = cookie.load("user"); // this is not a good practice
   const token = cookieToken;
   const user = cookieUser;
-  const authToken = cookieToken;
 
-  const location = useLocation().pathname;
-  const [pageType, setPageType] = useState(location);
-  // console.log(pageType)
+  console.log("------->", user);
+
+  // const location = useLocation().pathname;
+  // const [pageType, setPageType] = useState(location);
+  const [isFriend, setIsFriend] = useState(false);
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [send, setSend] = useState({});
+
+  //-------------------------------------------------------------------------
+  const isOwnProfile = user.id === userId;
+
+  const handleFollowOrFriendRequest = () => {
+    const headers = {
+      Authorization: `Bearer ${authToken}`,
+    };
+
+    if (user.role === "company") {
+      const endpoint = isFollowing
+        ? `https://final-backend-nvf1.onrender.com/home/unfollow/${userId}`
+        : `https://final-backend-nvf1.onrender.com/home/makefollow/${userId}`;
+
+      axios
+        .post(endpoint, {}, { headers })
+        .then((data) => {
+          console.log(data.data);
+          setIsFollowing(!isFollowing);
+        })
+        .catch((error) => {
+          console.error("Error", error);
+        });
+    } else {
+      // Logic for sending/canceling friend requests for users
+      const obj = {
+        sender_id: user.id,
+        username: user.username,
+        profilePicture: user.profilePicture,
+        receiver_id: userId,
+        message: `${user.username} sent you a friend request`,
+      };
+      axios
+        .post(
+          `https://final-backend-nvf1.onrender.com/home/send-friend-request/${userId}`,
+          obj,
+          {
+            headers,
+          }
+        )
+        .then((data) => {
+          console.log(data.data);
+        })
+        .catch((error) => {
+          console.error("Error", error);
+        });
+      setSend((prevRequests) => ({
+        ...prevRequests,
+        [userId]: !prevRequests[userId],
+      }));
+    }
+  };
+
+  //--------------------------------------------------- ADD FRIEND AND FRIENS---------------------------------------------------
+  useEffect(() => {
+    const fetchFriendsList = async () => {
+      try {
+        const response = await axios.get(
+          "https://final-backend-nvf1.onrender.com/home/myfriends",
+          { headers: { Authorization: `Bearer ${authToken}` } }
+        );
+        const friendsList = response.data;
+
+        console.log("Friends List:", friendsList);
+        console.log("User ID:", userId);
+
+        const isUserFriend = friendsList.some((friend) => {
+          console.log("Friend ID:", friend.id);
+          // Directly compare friend's ID with userId
+          return friend.id.toString() === userId;
+        });
+
+        setIsFriend((prevIsFriend) => {
+          console.log("Is User Friend:", isUserFriend);
+          console.log("Previous Friend State:", prevIsFriend);
+
+          return isUserFriend;
+        });
+      } catch (error) {
+        console.error("Error fetching friends list:", error);
+      }
+    };
+
+    fetchFriendsList();
+  }, [userId, authToken]);
+
+  useEffect(() => {
+    console.log("Updated Friend State:", isFriend);
+  }, [isFriend]);
+
+  //----------------------------------------------------------------------------------------------
 
   const handleAdd = () => {
     if (resumeUpload !== "") {
@@ -81,8 +174,6 @@ const Profile = () => {
                 headers,
               })
               .then((data) => {
-                // setResumeUpload("");
-                // state.addResume(data.data);
                 console.log("ccdcdcdcsdcdscllllllllD", data.data);
               })
               .catch((error) => {
@@ -93,7 +184,12 @@ const Profile = () => {
       }
     }
   };
-
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
   const handleFileInputChange = (event) => {
     setResumeUpload(event.target.files[0]);
   };
@@ -135,27 +231,93 @@ const Profile = () => {
     }
   };
 
+  const [isLoading, setIsLoading] = useState(true); // Initialize with true
+
   useEffect(() => {
-    if (authToken === null) {
-      throw new Error("Authentication token not found.");
-    } else if (authToken != null) {
+    if (authToken != null) {
       const headers = {
         Authorization: `Bearer ${authToken}`,
       };
+
       axios
         .get(
           `https://final-backend-nvf1.onrender.com/home/userposts/${userId}`,
-          { headers }
+          {
+            headers,
+          }
         )
         .then((response) => {
-          state.setUserPosts(response.data);
+          state.setUsersPosts(response.data);
+          setIsLoading(false); // Set isLoading to false when data is fetched
+        })
+        .catch((error) => {
+          state.setError(error);
+          setIsLoading(false); // Handle errors and still set isLoading to false
+        });
+    }
+  }, []);
+
+  // useEffect(() => {
+  //   // Fetch user-specific posts based on the userId
+  //   if (authToken != null) {
+  //     const headers = {
+  //       Authorization: `Bearer ${authToken}`,
+  //     };
+
+  //     axios
+  //       .get(`https://final-backend-nvf1.onrender.com/home/userposts/${userId}`, {
+  //         headers,
+  //       })
+  //       .then((response) => {
+  //         console.log("")
+  //         state.setUserPosts(response.data);
+  //       })
+  //       .catch((error) => {
+  //         state.setError(error);
+  //       });
+  //   }
+
+  // }, [userId]);
+
+  useEffect(() => {
+    if (authToken != null) {
+      const headers = {
+        Authorization: `Bearer ${authToken}`,
+      };
+
+      axios
+        .get(`https://final-backend-nvf1.onrender.com/home/users/${userId}`, {
+          headers,
+        })
+        .then((response) => {
+          state.setUserProfile(response.data);
         })
         .catch((error) => {
           state.setError(error);
         });
     }
-  }, [userId, authToken]);
+  }, []);
 
+  // if (authToken != null) {
+  //   const headers = {
+  //     Authorization: `Bearer ${authToken}`,
+  //   };
+
+  //   axios
+  //     .get(`https://final-backend-nvf1.onrender.com/home/users/${userId}`, {
+  //       headers,
+  //     })
+  //     .then((response) => {
+  //       state.setUsers(response.data);
+  //     })
+  //     .catch((error) => {
+  //       state.setError(error);
+  //     });
+  // }
+  // console.log(state.userProfile)
+  //  const oneUser=state.allUsers.find((user)=>{user.id==userId})
+  //  const oneUser = state.allUsers.find((user) => user.id === userId)
+  //  console.log(oneUser)
   return (
     <div className="profile">
       <div className="images">
@@ -164,60 +326,80 @@ const Profile = () => {
           alt=""
           className="cover"
         />
-        <img src={user.profilePicture || null} alt="" className="profilePic" />
+        <img
+          src={state.userProfile.profilePicture || null}
+          alt=""
+          className="profilePic"
+        />
       </div>
       <div className="profileContainer">
         <div className="uInfo">
           <div className="top">
-            <button>follow</button>
-            <MoreVertIcon />
+            {user?.id == state.userProfile.id ? (
+              <MoreVertIcon onClick={openModal} />
+            ) : null}
+          </div>
+          <div className="sub-top">
+            {!isOwnProfile && (
+              <button onClick={handleFollowOrFriendRequest}>
+                {isFriend
+                  ? "Friends"
+                  : user.role === "company"
+                  ? "Follow"
+                  : "Add Friend"}
+              </button>
+            )}
+            {user?.id == userId && user?.role !== "company" ? (
+              <button
+                variant="primary"
+                className="resume1"
+                onClick={handleShow}
+              >
+                Add Cv
+              </button>
+            ) : null}
           </div>
           <div className="user-career">
             <div>
               <span>
-                {user.firstName} {user.lastName}
+                {state.userProfile.firstName} {state.userProfile.lastName}
               </span>
             </div>
-            <div>{user.career}</div>
+            <div>{state.userProfile.career}</div>
           </div>
 
           <div className="bio">
-            <div>{user.city}</div>
+            <div>{state.userProfile.city}</div>
           </div>
           <div className="contact-info">
             <div className="con-info">Contact Info:</div>
             <div className="contact-icons">
               <div>
-                <AlternateEmailOutlinedIcon /> {user.email}
+                <AlternateEmailOutlinedIcon /> {state.userProfile.email}
               </div>
               <div>
                 <PermContactCalendarIcon />
-                {user.phoneNumber}
+                {state.userProfile.phoneNumber}
               </div>
             </div>
           </div>
-
-          {/* <div className="right">
-            <EmailOutlinedIcon />
-          </div> */}
         </div>
         <div className="uInfo-bio">
           <div>
-            <div>About :</div>
+            <div>About : </div>
             <div>
-              {user.id != userId && user.role === "company" ? (
+              {user?.id != userId && user?.role === "company" ? (
                 <button className="resume" onClick={handleShowCv}>
                   Resume
                 </button>
               ) : null}
 
-              {user.id == userId && user.role !== "company" ? (
+              {user?.id == userId && user?.role !== "company" ? (
                 <button className="resume" onClick={handleShowCv}>
                   Resume
                 </button>
               ) : null}
             </div>
-            {/* {console.log(user.id , userId)} */}
             {user.id == userId && user.role !== "company" ? (
               <Button
                 variant="primary"
@@ -257,9 +439,13 @@ const Profile = () => {
               </Modal.Footer>
             </Modal>{" "}
           </div>
-          <div>{user.bio}</div>
+          {console.log(state.userProfile.bio)}
+          <div>{state.userProfile.bio}</div>
         </div>
-        {state.userPosts.map((post) => (
+        {isModalOpen && (
+          <ProfileModal isOpen={isModalOpen} closeModal={closeModal} />
+        )}
+        {state.usersPosts.map((post) => (
           <Post post={post} key={post.id} />
         ))}
       </div>
@@ -268,3 +454,26 @@ const Profile = () => {
 };
 
 export default Profile;
+
+// useEffect(() => {
+//   if (authToken === null) {
+//     throw new Error("Authentication token not found.");
+//   } else if (authToken != null) {
+//     const headers = {
+//       Authorization: `Bearer ${authToken}`,
+//     };
+//     axios
+//       .get(
+//         `https://final-backend-nvf1.onrender.com/home/userposts/${userId}`,
+//         { headers }
+//       )
+//       .then((response) => {
+//         state.setUserPosts(response.data);
+//       })
+//       .catch((error) => {
+//         state.setError(error);
+//       });
+//   }
+// }, [userId, authToken]);
+
+// state.userProfile.profilePicture

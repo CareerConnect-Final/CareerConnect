@@ -1,4 +1,3 @@
-// import Stories from "../../components/stories/Stories"
 import JobPosts from "../../components/JobPosts/jobPosts";
 import Share from "../../components/shareJob/ShareJob";
 import JobSearch from "../../components/JobSearch/JobSearch";
@@ -11,7 +10,7 @@ import cookie from "react-cookies";
 const JobPage = () => {
   const user = cookie.load("user");
   const authToken = cookie.load("auth");
-  const state = useContext(JobContext);
+  const stateJob = useContext(JobContext);
   useEffect(() => {
     if (authToken === null) {
       throw new Error("Authentication token not found.");
@@ -25,10 +24,10 @@ const JobPage = () => {
           headers,
         })
         .then((response) => {
-          state.setFriendRequests(response.data);
+          stateJob.setFriendRequests(response.data);
         })
         .catch((error) => {
-          state.setError(error);
+          stateJob.setError(error);
         });
 
       axios
@@ -36,10 +35,10 @@ const JobPage = () => {
           headers,
         })
         .then((response) => {
-          state.setMyFriends(response.data);
+          stateJob.setMyFriends(response.data);
         })
         .catch((error) => {
-          state.setError(error);
+          stateJob.setError(error);
         });
     }
     if (authToken === null) {
@@ -57,10 +56,10 @@ const JobPage = () => {
         )
         .then((response) => {
           console.log("data come comeeeeeeee ");
-          state.setYouFollow(response.data);
+          stateJob.setYouFollow(response.data);
         })
         .catch((error) => {
-          state.setError(error);
+          stateJob.setError(error);
         });
     }
 
@@ -76,10 +75,10 @@ const JobPage = () => {
           headers,
         })
         .then((response) => {
-          state.setLikes(response.data);
+          stateJob.setLikes(response.data);
         })
         .catch((error) => {
-          state.setError(error);
+          stateJob.setError(error);
         });
     }
     if (authToken === null) {
@@ -94,10 +93,10 @@ const JobPage = () => {
           headers,
         })
         .then((response) => {
-          state.setComments(response.data);
+          stateJob.setComments(response.data);
         })
         .catch((error) => {
-          state.setError(error);
+          stateJob.setError(error);
         });
     }
     if (authToken === null) {
@@ -112,11 +111,11 @@ const JobPage = () => {
           headers,
         })
         .then((response) => {
-          state.setJobPosts(response.data);
+          stateJob.setJobPosts(response.data);
           // console.log(response.data);
         })
         .catch((error) => {
-          state.setError(error);
+          stateJob.setError(error);
         });
     }
     if (authToken === null) {
@@ -129,10 +128,10 @@ const JobPage = () => {
         .get("https://final-backend-nvf1.onrender.com/home/users", { headers })
         .then((response) => {
           // console.log("job users from job job ")
-          state.setAllUsers(response.data);
+          stateJob.setAllUsers(response.data);
         })
         .catch((error) => {
-          state.setError(error);
+          stateJob.setError(error);
         });
     }
     if (authToken === null) {
@@ -147,11 +146,11 @@ const JobPage = () => {
         })
         .then((response) => {
           // console.log("data come comeeeeeeee ")
-          state.setFollowers(response.data);
-          // console.log(state.followers)
+          stateJob.setFollowers(response.data);
+          // console.log(stateJob.followers)
         })
         .catch((error) => {
-          state.setError(error);
+          stateJob.setError(error);
         });
     }
   }, []);
@@ -159,14 +158,14 @@ const JobPage = () => {
   return (
     <div className="home">
       {/* <Stories/> */}
-      {user.role === "company" &&
+      {user?.role === "company" &&
       (<>
             <Share />
             <JobPosts />
         </>
       )
       }
-      {user.role !== "company" &&
+      {user?.role !== "company" &&
             <JobSearch />
       }
     </div>

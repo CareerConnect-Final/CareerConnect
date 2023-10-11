@@ -135,6 +135,14 @@ function AuthProvider(props) {
       // Connect to Socket.io when the user logs in
       socketService.connect(Token);
     }
+    if (loggedIn) {
+      cookie.save("auth", Token);
+      cookie.save("user", User);
+    } else {
+      // If not logged in, clear the cookies
+      cookie.remove("auth");
+      cookie.remove("user");
+    }
   };
   const logout = () => {
     socketService.disconnect();
