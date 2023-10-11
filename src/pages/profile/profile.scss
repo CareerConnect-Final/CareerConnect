@@ -133,11 +133,17 @@
         }
 
         .top{
-          display: flex;
-          gap: 22rem;
-          // justify-content: space-between;
+          position: absolute;
+          top: 20px;
+          right: 16px;
         }
-        .top button{
+        .sub-top{
+          width: 100%;
+          display: flex;
+          justify-content: space-between;
+          margin-top: 15px;
+        }
+        .sub-top button{
           border: none;
           padding: 5px;
           color: white;

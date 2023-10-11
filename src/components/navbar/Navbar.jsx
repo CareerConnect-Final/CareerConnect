@@ -44,6 +44,7 @@ import { StateContext } from "../../context/state";
 import { JobContext } from "../../context/stateJob";
 
 const Navbar = () => {
+  const user= cookie.load("user")
   const state = useContext(StateContext);
   const stateJob = useContext(JobContext);
   const { toggle, darkMode } = useContext(DarkModeContext);
@@ -58,7 +59,8 @@ const Navbar = () => {
       state.resetState();
 
       await logout();
-      navigate("/login");
+
+        navigate("/login");
     } catch (error) {
       console.error("Error signing out:", error);
     }
@@ -312,8 +314,8 @@ const Navbar = () => {
           </Link>
           <NotificationsOutlinedIcon onClick={openNotifications} />
           <div className="user">
-            <img src={currentUser.profilePic} alt="" />
-            <span>{currentUser.name}</span>
+            <img src={currentUser?.profilePicture} alt="" />
+            <span>{currentUser?.name}</span>
           </div>
           <button className="sign-out" onClick={handleSignOut}>
             Sign Out

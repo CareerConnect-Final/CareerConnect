@@ -159,14 +159,14 @@ const JobPage = () => {
   return (
     <div className="home">
       {/* <Stories/> */}
-      {user.role === "company" &&
+      {user?.role === "company" &&
       (<>
             <Share />
             <JobPosts />
         </>
       )
       }
-      {user.role !== "company" &&
+      {user?.role !== "company" &&
             <JobSearch />
       }
     </div>

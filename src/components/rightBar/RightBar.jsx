@@ -27,11 +27,11 @@ const RightBar = () => {
   };
   const handleSendFriendRequest = (userId) => {
     const obj = {
-      sender_id: userToken.id,
-      username: userToken.username,
-      profilePicture: userToken.profilePicture,
+      sender_id: userToken?.id,
+      username: userToken?.username,
+      profilePicture: userToken?.profilePicture,
       receiver_id: userId,
-      message: `${userToken.username} sent you a friend request`,
+      message: `${userToken?.username} sent you a friend request`,
     };
     console.log(userId);
     axios
@@ -84,7 +84,7 @@ const RightBar = () => {
 
   return (
     <>
-      {pageType === "job" && userToken.role === "company" && (
+      {pageType === "job" && userToken?.role === "company" && (
         <div className="rightBar">
           <div className="container">
             <div className="item">
@@ -92,14 +92,14 @@ const RightBar = () => {
               {stateJob.allUsers.map((user) => {
                 if (
                   user.career === "web developer" &&
-                  userToken.career === "web developer" &&
+                  userToken?.career === "web developer" &&
                   user.role == "user"
                 ) {
                   return (
                     <div key={user.id} className="user">
                       <div className="userInfo">
                         <img
-                          src={user.profilePicture}
+                          src={user?.profilePicture}
                           alt=""
                         />
                       <Link
@@ -149,7 +149,7 @@ const RightBar = () => {
           </div>
         </div>
       )}
-      {pageType === "job" && userToken.role === "user" && (
+      {pageType === "job" && userToken?.role === "user" && (
         <div className="rightBar">
           <div className="container">
             <div className="item">
@@ -235,8 +235,8 @@ const RightBar = () => {
           </div>
         </div>
       )}
-
-      {pageType === "" && userToken.role === "user" && (
+  
+      {pageType === "" && userToken?.role === "user" && (
         <div className="rightBar">
           <div className="container">
             <div className="item">
@@ -245,7 +245,7 @@ const RightBar = () => {
               {friendRequests.map((request) =>
             
                 request.status === "pending" &&
-                userToken.id !== request.sender_id ? (
+                userToken?.id !== request.sender_id ? (
                   <div key={request.id} className="user">
                     <div className="userInfo">
                       <img src={request.profilePicture} alt="" />
@@ -277,7 +277,7 @@ const RightBar = () => {
               {state.allUsers.map((user) => {
                 if (
                   user.role === "user" &&
-                  userToken.id !== user.id &&
+                  userToken?.id !== user.id &&
                   !state.myFriends.find((friend) => friend.id === user.id)
                 ) {
                   return (
@@ -323,7 +323,7 @@ const RightBar = () => {
           </div>
         </div>
       )}
-      {pageType === "" && userToken.role === "company" && (
+      {pageType === "" && userToken?.role === "company" && (
         <div className="rightBar">
           <div className="container">
             <div className="item">

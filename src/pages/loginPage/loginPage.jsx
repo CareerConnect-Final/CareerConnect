@@ -197,7 +197,7 @@ function LoginPage(props) {
             },
           }}
         >
-          hi mom!
+          WELCOME!
         </Typography>
         {globalError.length ? (
           <ErrorAlert errors={globalError}></ErrorAlert>
@@ -520,12 +520,12 @@ function LoginPage(props) {
                     m: "2rem 0",
                     p: "0.8rem",
                     backgroundColor: palette.primary.main,
-                    color: palette.background.alt,
+                    color: "white",
                     "&:hover": { color: palette.primary.main },
                   }}
                 >
                   {loading ? (
-                    <CircularProgress size={22} />
+                    <CircularProgress  size={22} />
                   ) : isLogin ? (
                     "LOGIN"
                   ) : (

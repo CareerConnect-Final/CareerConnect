@@ -15,7 +15,7 @@ import Posts from "../../components/posts/Posts";
 import { useContext, useEffect, useState } from "react";
 import Post from "../../components/post/Post";
 import axios from "axios";
-import { useLocation, useNavigate } from "react-router-dom";
+// import { useLocation, useNavigate } from "react-router-dom";
 import cookie from "react-cookies";
 import { useParams } from "react-router-dom";
 import ProfileModal from "./ProfileModal";
@@ -52,11 +52,11 @@ const Profile = () => {
 
 
   const user = cookie.load("user"); // this is not a good practice
-  
+  console.log("------->",user)
   
 
-  const location = useLocation().pathname;
-  const [pageType, setPageType] = useState(location);
+  // const location = useLocation().pathname;
+  // const [pageType, setPageType] = useState(location);
   // console.log(pageType)
 
   const handleAdd = () => {
@@ -246,9 +246,21 @@ const Profile = () => {
       <div className="profileContainer">
         <div className="uInfo">
           <div className="top">
-            <button>follow</button>
-            {user.id ==state.userProfile.id ? (<MoreVertIcon onClick={openModal} />): null}
+          
+            {user?.id ==state.userProfile.id ? (<MoreVertIcon onClick={openModal} />): null}
             
+          </div>
+          <div className="sub-top">
+            <button>follow</button>
+            {user?.id == userId && user?.role !== "company" ? (
+              <button
+                variant="primary"
+                className="resume1"
+                onClick={handleShow}
+              >
+                Add Cv
+              </button>
+            ) : null}
           </div>
           <div className="user-career">
             <div>
@@ -283,28 +295,20 @@ const Profile = () => {
           <div>
             <div>About : </div>
             <div>
-              {user.id != userId && user.role === "company" ? (
+              {user?.id != userId && user?.role === "company" ? (
                 <button className="resume" onClick={handleShowCv}>
                   Resume
                 </button>
               ) : null}
 
-              {user.id == userId && user.role !== "company" ? (
+              {user?.id == userId && user?.role !== "company" ? (
                 <button className="resume" onClick={handleShowCv}>
                   Resume
                 </button>
               ) : null}
             </div>
             {/* {console.log(user.id , userId)} */}
-            {user.id == userId && user.role !== "company" ? (
-              <Button
-                variant="primary"
-                className="resume1"
-                onClick={handleShow}
-              >
-                Add Cv
-              </Button>
-            ) : null}
+           
             <Modal show={show} onHide={handleClose}>
               <Modal.Header closeButton>
                 <Modal.Title>Modal heading</Modal.Title>

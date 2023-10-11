@@ -42,7 +42,7 @@ const JobPosts = (props) => {
   const handleLikeClick = () => {
     console.log(state.likes)
     const userLike = state.likes.find(
-      (like) => like.job_id === props.post.id && user.id === like.user_id
+      (like) => like.job_id === props.post.id && user?.id === like.user_id
     );
 
     const headers = {
@@ -113,7 +113,7 @@ const JobPosts = (props) => {
       <div className="container">
         <div className="user">
           <div className="userInfo">
-            <img src={props.post.profilePicture} alt="" />
+           {user ? <img src={props.post.profilePicture} alt="" /> :""}
             <div className="details">
            
               <Link
@@ -125,7 +125,7 @@ const JobPosts = (props) => {
               <span className="date">1 min ago</span>
             </div>
           </div>
-          {props.post.user_id === user.id && (
+          {props.post.user_id === user?.id && (
             <div className="menu-container">
               <MoreHorizIcon onClick={toggleMenu} />
               {showMenu && (
@@ -184,7 +184,7 @@ const JobPosts = (props) => {
           <div className="item" onClick={handleLikeClick}>
             {state.likes.filter(
               (like) =>
-                like.job_id === props.post.id && user.id === like.user_id
+                like.job_id === props.post.id && user?.id === like.user_id
             ).length > 0 ? (
               <FavoriteOutlinedIcon style={{ color: "red" }} />
             ) : (

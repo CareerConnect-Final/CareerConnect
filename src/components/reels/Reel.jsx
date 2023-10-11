@@ -62,7 +62,7 @@ export default function Reel(props) {
       console.log(videoUpload.name);
     const videoRef = ref(
       storage,
-      `${user.email}/reels/${videoUpload.name + v4()}`
+      `${user?.email}/reels/${videoUpload.name + v4()}`
     );
     uploadBytes(videoRef, videoUpload).then((snapshot) => {
       getDownloadURL(snapshot.ref).then((url) => {
