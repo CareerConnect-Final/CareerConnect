@@ -13,13 +13,13 @@ const ProfileModal = ({ isOpen, closeModal }) => {
 
   // Initialize user data with default values from cookies
   const [userData, setUserData] = useState({
-    username: user.username || "",
-    firstName: user.firstName || "",
-    lastName: user.lastName || "",
-    email: user.email || "",
-    phoneNumber: user.phoneNumber || "",
-    career: user.career || "",
-    bio: user.bio || "",
+    username: user?.username || "",
+    firstName: user?.firstName || "",
+    lastName: user?.lastName || "",
+    email: user?.email || "",
+    phoneNumber: user?.phoneNumber || "",
+    career: user?.career || "",
+    bio: user?.bio || "",
   });
 
   const handleInputChange = (e) => {
@@ -29,7 +29,7 @@ const ProfileModal = ({ isOpen, closeModal }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const url = `https://final-backend-nvf1.onrender.com/home/users/${user.id}`;
+    const url = `https://final-backend-nvf1.onrender.com/home/users/${user?.id}`;
     const { bio, email, firstName, lastName, phoneNumber, career } = userData;
 
     const data = {

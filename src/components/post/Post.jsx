@@ -47,7 +47,7 @@ const Post = (props) => {
   };
   const handleLikeClick = () => {
     const userLike = state.likes.find(
-      (like) => like.post_id === props.post.id && user.id === like.user_id
+      (like) => like.post_id === props.post.id && user?.id === like.user_id
     );
 
     const headers = {
@@ -137,7 +137,7 @@ const Post = (props) => {
               <span className="date">1 min ago</span>
             </div>
           </div>
-          {props.post.user_id === user.id && (
+          {props.post.user_id === user?.id && (
             // {console.log(props.post.user_id ,"+++++++",user.id)}
             <div className="menu-container">
               <MoreHorizIcon onClick={toggleMenu} />
@@ -177,7 +177,7 @@ const Post = (props) => {
           <div className="item" onClick={handleLikeClick}>
             {state.likes.filter(
               (like) =>
-                like.post_id === props.post.id && user.id === like.user_id
+                like.post_id === props.post.id && user?.id === like.user_id
             ).length > 0 ? (
               <FavoriteOutlinedIcon style={{ color: "red" }} />
             ) : (

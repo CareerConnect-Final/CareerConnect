@@ -132,15 +132,15 @@ const ShareReels = () => {
     console.log(videoUpload.name);
     const videoRef = ref(
       storage,
-      `${user.email}/reels/${videoUpload.name + v4()}`
+      `${user?.email}/reels/${videoUpload.name + v4()}`
     );
     uploadBytes(videoRef, videoUpload).then((snapshot) => {
       getDownloadURL(snapshot.ref).then((url) => {
         const obj = {
-          user_id: user.id,
-          username: user.firstName,
+          user_id: user?.id,
+          username: user?.firstName,
           video: url,
-          profilePicture: user.profilePicture,
+          profilePicture: user?.profilePicture,
         };
 
         console.log("url==>", url);
@@ -234,7 +234,7 @@ const ShareReels = () => {
         />
         <label htmlFor="file">
           <div className="item">
-            <img src={user.profilePicture} alt="" />
+            {user ?<img src={user.profilePicture} alt="" />:""}
             <span>Add Story</span>
           </div>
         </label>

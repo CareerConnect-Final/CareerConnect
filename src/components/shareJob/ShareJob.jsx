@@ -42,14 +42,14 @@ const Share = () => {
     // uploadBytes(imageRef, imageUpload).then((snapshot) => {
     //   getDownloadURL(snapshot.ref).then( (url) => {
     const obj = {
-      user_id: user.id,
-      company_name: user.firstName,
+      user_id: user?.id,
+      company_name: user?.firstName,
       job_title: titleContent,
       job_city: cityContent,
       job_field: fieldContent,
       content: postContent,
       // photo: "url",
-      profilePicture: user.profilePicture,
+      profilePicture: user?.profilePicture,
     };
     const headers = {
       Authorization: `Bearer ${authToken}`,
@@ -88,7 +88,7 @@ const Share = () => {
       <div className="container">
         <div className="top">
           <div className="top-img">
-            <img src={user.profilePicture} alt="" />
+            <img src={user?.profilePicture} alt="" />
           </div>
           <div className="top-inpt">
             {darkMode ? (
