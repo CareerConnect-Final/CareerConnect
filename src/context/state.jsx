@@ -38,7 +38,13 @@ export default function State(props) {
         {
           headers: { Authorization: `Bearer ${authToken}` },
         }
+        
       );
+      
+      setFriendRequests((prevRequests) => {
+
+        return prevRequests.filter((request) => request.receiver_id !== receiver_id);
+      });
       window.location.reload();
     } catch (error) {
       console.error("Error accepting friend request:", error);
@@ -55,6 +61,11 @@ export default function State(props) {
           headers: { Authorization: `Bearer ${authToken}` },
         }
       );
+      setFriendRequests((prevRequests) => {
+        // Update friendRequests state based on the response
+        // You need to modify this logic based on your API response structure
+        return prevRequests.filter((request) => request.receiver_id !== receiver_id);
+      });
       window.location.reload();
     } catch (error) {
       console.error("Error declining friend request:", error);
