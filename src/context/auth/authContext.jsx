@@ -141,7 +141,23 @@ const setLoginState = async (loggedIn, Token, User, error) => {
   
   const logout = () => {
     socketService.disconnect();
-    setLoginState(false, null, {});
+    setLoginState(false, null, {id:500,   username: "john",
+    password: "Anas1234$",
+    role: "company",
+    firstName: "amazon",
+    lastName: "ami",
+    email: "amazon.alsmadi411@gmail.com",
+    dateOfBirth: "04-11-1994",
+    country: "syria",
+    city: "Daraa",
+    phoneNumber: "0797675634",
+    address: "usa",
+    gender: "male",
+    profilePicture: "https://www.state.gov/wp-content/uploads/2019/04/Japan-2107x1406.jpg",
+    imageForCover: "cover.png",
+    career: "it company",
+    bio: "winter is coming",
+    employed: false});
   };
 
   // +++++++++++++++++ get user posts+++++++++++++++++++++++

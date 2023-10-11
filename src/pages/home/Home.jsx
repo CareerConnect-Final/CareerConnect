@@ -81,7 +81,7 @@ useEffect(() => {
     //   .catch((error) => {
     //     setError(error);
     //   });
-    if (user.role === "user") {
+    if (user?.role === "user") {
       // If the user's role is "user," hit the "/home/homeposts" route
       axios
         .get("https://final-backend-nvf1.onrender.com/home/homeposts", {
@@ -93,7 +93,7 @@ useEffect(() => {
         .catch((error) => {
           state.setError(error);
         });
-    } else if (user.role === "company") {
+    } else if (user?.role === "company") {
       // If the user's role is "company," hit the "/home/posts" route
       axios
         .get("https://final-backend-nvf1.onrender.com/home/posts", {

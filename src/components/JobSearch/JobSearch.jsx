@@ -111,7 +111,7 @@ const JobSearch = () => {
   return (
     <>
     <div className="share">
-      {user.role !== "company" && (
+      {user?.role !== "company" && (
         <div className="search-container">
           <div className="top">
             {/* <img src={user.profilePicture} alt="" /> */}

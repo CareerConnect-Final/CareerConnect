@@ -247,24 +247,12 @@ const Profile = () => {
         <div className="uInfo">
           <div className="top">
           
-            {user.id ==state.userProfile.id ? (<MoreVertIcon onClick={openModal} />): null}
+            {user?.id ==state.userProfile.id ? (<MoreVertIcon onClick={openModal} />): null}
             
           </div>
           <div className="sub-top">
             <button>follow</button>
-            {user.id == userId && user.role !== "company" ? (
-              <button
-                variant="primary"
-                className="resume1"
-                onClick={handleShow}
-              >
-                Add Cv
-              </button>
-            ) : null}
-          </div>
-          <div className="sub-top">
-            <button>follow</button>
-            {user.id == userId && user.role !== "company" ? (
+            {user?.id == userId && user?.role !== "company" ? (
               <button
                 variant="primary"
                 className="resume1"
@@ -307,13 +295,13 @@ const Profile = () => {
           <div>
             <div>About : </div>
             <div>
-              {user.id != userId && user.role === "company" ? (
+              {user?.id != userId && user?.role === "company" ? (
                 <button className="resume" onClick={handleShowCv}>
                   Resume
                 </button>
               ) : null}
 
-              {user.id == userId && user.role !== "company" ? (
+              {user?.id == userId && user?.role !== "company" ? (
                 <button className="resume" onClick={handleShowCv}>
                   Resume
                 </button>

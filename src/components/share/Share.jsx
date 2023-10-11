@@ -29,15 +29,15 @@ const Share = () => {
  const user=cookie.load("user")
  const handleAdd = () => {
   // console.log("imageUpload--->", imageUpload)
-  const imageRef = ref(storage, `${user.email}/posts/${imageUpload.name + v4()}`);
+  const imageRef = ref(storage, `${user?.email}/posts/${imageUpload.name + v4()}`);
   uploadBytes(imageRef, imageUpload).then((snapshot) => {
     getDownloadURL(snapshot.ref).then( (url) => {
       const obj = {
-        user_id: user.id,
-        username: user.username,
+        user_id: user?.id,
+        username: user?.username,
         content: postContent,
         photo: url,
-        profilePicture: user.profilePicture,
+        profilePicture: user?.profilePicture,
       };
       axios
         .post("https://final-backend-nvf1.onrender.com/api/v1/posts", obj)
@@ -75,10 +75,10 @@ const handleImageInputChange = (event) => {
     <div className="share">
       <div className="container">
         <div className="top">
-          <img src={user.profilePicture} alt="" />
+          {user ?<img src={user.profilePicture } alt="" />:""}
           <input
             type="text"
-            placeholder={`What's on your mind ${user.username}?`}
+            placeholder={`What's on your mind ${user?.username}?`}
             value={postContent}
             onChange={(e) => setPostContent(e.target.value)}
           />
