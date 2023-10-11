@@ -15,7 +15,7 @@ import Posts from "../../components/posts/Posts";
 import { useContext, useEffect, useState } from "react";
 import Post from "../../components/post/Post";
 import axios from "axios";
-import { useLocation, useNavigate } from "react-router-dom";
+// import { useLocation, useNavigate } from "react-router-dom";
 import cookie from "react-cookies";
 import { useParams } from "react-router-dom";
 import ProfileModal from "./ProfileModal";
@@ -52,11 +52,11 @@ const Profile = () => {
 
 
   const user = cookie.load("user"); // this is not a good practice
-  
+  console.log("------->",user)
   
 
-  const location = useLocation().pathname;
-  const [pageType, setPageType] = useState(location);
+  // const location = useLocation().pathname;
+  // const [pageType, setPageType] = useState(location);
   // console.log(pageType)
 
   const handleAdd = () => {
@@ -144,27 +144,30 @@ const Profile = () => {
     }
   };
   useEffect(() => {
-    // Fetch user-specific posts based on the userId
-    if (authToken != null) {
-      const headers = {
-        Authorization: `Bearer ${authToken}`,
-      };
-
-      axios
-        .get(`https://final-backend-nvf1.onrender.com/home/userposts/${userId}`, {
-          headers,
-        })
-        .then((response) => {
-          state.setUserPosts(response.data);
-        })
-        .catch((error) => {
-          state.setError(error);
-        });
+    if (authToken === null) {
+      throw new Error("Authentication token not found.");
     }
-
-
-
-  }, [userId]); // Trigger the fetch when userId changes
+  
+    const headers = {
+      Authorization: `Bearer ${authToken}`,
+    };
+  
+    axios
+      .get(`https://final-backend-nvf1.onrender.com/home/userposts/${userId}`, {
+        headers,
+      })
+      .then((response) => {
+        console.log("API Response:", response.data);
+        state.setUserPosts(response.data);
+      })
+      .catch((error) => {
+        console.error("API Error:", error);
+        state.setError(error);
+      });
+  }, [userId, authToken]);
+  // Trigger the fetch when userId changes
+  console.log(state.userPosts)
+  
 
   useEffect(()=>{
     if (authToken != null) {
@@ -220,7 +223,6 @@ const Profile = () => {
       <div className="profileContainer">
         <div className="uInfo">
           <div className="top">
-            <button>follow</button>
             <MoreVertIcon onClick={openModal} />
           </div>
           <div className="sub-top">
